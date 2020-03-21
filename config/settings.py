@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_extensions',
     'rest_framework',
+    'django_heroku',
 
     # Project-specific
     'users',
