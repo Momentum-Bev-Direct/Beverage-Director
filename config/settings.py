@@ -33,11 +33,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bevdir',
 
     # Third-party
     'registration',
     'debug_toolbar',
     'django_extensions',
+    'rest_framework',
 
     # Project-specific
     'users',
