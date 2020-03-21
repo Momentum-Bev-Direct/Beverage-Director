@@ -138,3 +138,7 @@ REGISTRATION_EMAIL_HTML = True
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_ACTIVATION_DAYS = 7
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Configure Django App for Heroku.
+import django_heroku
+django_heroku.settings(locals())

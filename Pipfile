@@ -11,6 +11,9 @@ werkzeug = "*"
 django-environ = "*"
 django-registration-redux = "*"
 djangorestframework = "*"
+psycopg2 = "*"
+django-heroku = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
