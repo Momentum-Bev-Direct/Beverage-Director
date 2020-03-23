@@ -40,3 +40,6 @@ class GeneralModelViewSet(viewsets.ModelViewSet):
   permission_classes = (AllowAny)
 
   
+#SCRAPING
+#Beautiful Soup
+#Look up management commands. 
