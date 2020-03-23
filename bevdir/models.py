@@ -1,8 +1,137 @@
 from django.db import models
 from users.models import User
-# Create your models here.
 
-class Cocktail(models.Model):
-    name = models.CharField(max_length=30)
+#MANUALLY ENTER FOR NOW. EVENTUALLY POPULATE THIS DATA WITH A SCRAPE OR IMPORT FUNCTION:
+SPIRITS_LIST = [
+    {
+        'NC_Code':'00-005',
+        'collection':'Boutique Collection',
+        'category': 'bourbon',
+        'brandname':'Hookers house Bourbon',
+        'age':'NA',
+        'proof':100,
+        'size':.75,
+        'unit':'L',
+        'mxb_price': '$51.40',
+    },
+    {
+        'NC_Code':'00-810',
+        'collection':'Boutique Collection',
+        'category': 'Tequila & Mezcal',
+        'brandname':'Jose Cuervo Reserva de Familia',
+        'age':'NA',
+        'proof':80,
+        'size':.75,
+        'unit':'L',
+        'mxb_price': '$193.70',
+    },
+    {
+        'NC_Code':'42-916',
+        'collection':'Imported',
+        'category': 'Gin',
+        'brandname':'Beefeater',
+        'age':'NA',
+        'proof': 94,
+        'size': 1.75,
+        'unit':'L',
+        'mxb_price': '$48.70',
+    },
+    {
+        'NC_Code':'43-251',
+        'collection':'Domestic',
+        'category': 'Vodka',
+        'brandname':'The Aperican Vodka',
+        'age':'NA',
+        'proof': 80,
+        'size': 1.75,
+        'unit':'L',
+        'mxb_price': '$20.20',
+    },
+    {
+        'NC_Code':'56-784',
+        'collection':'Domestic',
+        'category': 'Cordials/ Liqueurs/ Specialties',
+        'brandname':'Hatfield & McCoy The Devil\'s Fire Moonshine',
+        'age':'NA',
+        'proof': '80',
+        'size': .75,
+        'unit':'L',
+        'mxb_price': '$31.70',
+    },
+    {
+        'NC_Code':'19-745',
+        'collection':'Special',
+        'category':'Special',
+        'brandname':'Cragganmore Distillers Edition 12Y',
+        'age':'12Y',
+        'proof': '80',
+        'size': .75,
+        'unit':'L',
+        'mxb_price': '$88.70',
+    },
+  
+]
+
+BRANDNAMES = tuple([(spirit['brandname'], spirit['brandname']) for spirit in SPIRITS_LIST])
+
+class Spirit(models.Model):
+    brandname = models.CharField(max_length=100, choices=BRANDNAMES)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+
+    def __str__(self):
+        return f'{self.brandname}'
+
+    @property
+    def info (self):
+        spirit_info = {}
+        for spirit in SPIRITS_LIST:
+            if spirit['brandname'] == self.brandname:
+                spirit_info = spirit
+        return spirit_info
+
+class MiscIngredient(models.Model):
+    name = models.CharField(max_length=100)
+    cost_per_unit = models.IntegerField(default=0)
+    notes = models.TextField(max_length=500)
+    
+    def __str__(self):
+        return f'{self.name}'
+
+
+class Rating(models.Model):
+    stars = models.IntegerField(default=0, null=True, blank=True)
+    user = models.ForeignKey(User, related_name='ratings', on_delete=models.CASCADE)
+    spirits = models.ForeignKey(Spirit, related_name='ratings', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user.username} {stars} stars'
+
+class Cocktail(models.Model):
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    spirits = models.ManyToManyField(Spirit, related_name='cocktails')
+    misc = models.ManyToManyField(MiscIngredient, related_name='cocktails')
+    target_profit = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    @property
+    def total_cost(self):
+        """
+        create list of costs of all ingredients and sum values. will require string/int methods to snip off punctuation
+        """
+        pass
+
+    @property
+    def recommended_price(self):
+        """
+        product of target_profit and total_cost
+        """
+        pass
+
+
+
