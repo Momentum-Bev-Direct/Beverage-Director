@@ -8,6 +8,7 @@ router.register('cocktail', views.CocktailViewSet)
 
 
 urlpatterns = [
-    path('', include(router.urls),)
+    path('', include(router.urls),),
+    
 
 ]
