@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from .models import Cocktail, Spirit, MiscIngredient, Rating
 from .serializers import CocktailSerializer, SpiritSerializer, MiscIngredientSerializer, RatingSerializer, UserSerializer
 from users.models import User
+from config import urls
 
 
 class CocktailViewSet(viewsets.ModelViewSet):
@@ -24,3 +25,10 @@ class RatingViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+def base_launch(request):
+    return render(request, 'base.html')
+
+def drink_builder(request):
+    return render(request, 'core/drink_builder.html')
+

@@ -1,5 +1,6 @@
 
 from django.contrib import admin
+from bevdir import views
 from django.conf import settings
 from django.urls import include, path
 
@@ -7,6 +8,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('registration.backends.default.urls')),
     path('api/', include('bevdir.urls')),
+    path('drinkbuilder/', views.drink_builder, name='drink-builder'),
+    
 ]
 
 if settings.DEBUG:

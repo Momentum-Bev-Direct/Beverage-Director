@@ -11,6 +11,7 @@ router.register('rating', views.RatingViewSet)
 router.register('user', views.UserViewSet)
 
 urlpatterns = [
-    path('', include(router.urls),)
+    path('', include(router.urls),),
+    
 
 ]
