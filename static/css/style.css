@@ -86,7 +86,7 @@ body {
     flex-direction: column;
     border: 1px solid black;
     padding: 1rem;
-    margin: 1rem 0;
+    margin: 1rem;
 
 }
 .ingredient-title-line {
@@ -124,4 +124,5 @@ body {
     justify-content: center;
     font-size: 1rem;
     padding: .5rem;
+    margin: 0 3rem;
 }
