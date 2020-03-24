@@ -12,10 +12,10 @@ const cocktails = {{ cocktails|safe }}
 <div id='homeapp'>
 <h2>Your Drink Menu</h2>
 <div v-bind:title="message" v-for="cocktail in cocktails">
-  <div>
-  <h3 >[[ cocktail.name ]]</h3>
-  <p>Cost/Loss: [[ cocktail.total_cost ]]</p>
-  <p>Recommended: [[ cocktail.recommended_price ]]</p>
+  <div v-bind:id="cocktail.id">
+    <h3 >[[ cocktail.name ]]</h3>
+    <p>Cost/Loss: [[ cocktail.total_cost ]]</p>
+    <p>Recommended: [[ cocktail.recommended_price ]]</p>
   </div>
 </div>
 </div>
