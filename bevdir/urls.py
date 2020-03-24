@@ -9,9 +9,11 @@ router.register('spirit', views.SpiritViewSet)
 router.register('misc', views.MiscIngredientViewSet)
 router.register('rating', views.RatingViewSet)
 router.register('user', views.UserViewSet)
+router.register('shot', views.ShotViewSet)
+router.register('portion', views.PortionViewSet)
 
 urlpatterns = [
     path('', include(router.urls),),
-    
+
 
 ]
