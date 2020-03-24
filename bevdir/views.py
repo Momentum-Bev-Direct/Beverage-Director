@@ -4,6 +4,7 @@ from .models import Cocktail, Spirit, MiscIngredient, Rating, Shot, Portion
 from .serializers import CocktailSerializer, SpiritSerializer, MiscIngredientSerializer, RatingSerializer, UserSerializer, ShotSerializer, PortionSerializer
 from users.models import User
 from config import urls
+import json
 
 
 class CocktailViewSet(viewsets.ModelViewSet):
@@ -40,6 +41,17 @@ class PortionViewSet(viewsets.ModelViewSet):
     queryset = Portion.objects.all()
     serializer_class = PortionSerializer
 
+
+def homepage(request):
+    cocktails = Cocktail.objects.all()
+    cocktails_dataset = [{
+        "name":cocktail.name,
+        "total_cost":cocktail.total_cost,
+        "recommended_price":cocktail.recommended_price
+        } for cocktail in cocktails]
+    context= {}
+    context["cocktails"]=json.dumps(cocktails_dataset)
+    return render(request, 'bevdir/home.html', context)
 
 def base_launch(request):
     return render(request, 'base.html')
