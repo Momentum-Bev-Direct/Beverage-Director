@@ -69,7 +69,7 @@ SPIRITS_LIST = [
         'unit':'L',
         'mxb_price': '$88.70',
     },
-  
+
 ]
 
 BRANDNAMES = tuple([(spirit['brandname'], spirit['brandname']) for spirit in SPIRITS_LIST])
@@ -78,7 +78,7 @@ class Spirit(models.Model):
     brandname = models.CharField(max_length=100, choices=BRANDNAMES)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
 
     def __str__(self):
         return f'{self.brandname}'
@@ -95,7 +95,7 @@ class MiscIngredient(models.Model):
     name = models.CharField(max_length=100)
     cost_per_unit = models.IntegerField(default=0)
     notes = models.TextField(max_length=500)
-    
+
     def __str__(self):
         return f'{self.name}'
 
@@ -133,5 +133,20 @@ class Cocktail(models.Model):
         """
         pass
 
+class Shot(models.Model):
+    volume = models.IntegerField(default=0)
+    cocktail= models.ForeignKey(Cocktail, related_name='shots', on_delete=models.CASCADE)
+    spirit = models.ForeignKey(Spirit, related_name='shots', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.volume} of {self.spirit.brandname} for {self.cocktail.name}'
+
+class Portion(models.Model):
+    amount = models.IntegerField(default=0)
+    unit = models.CharField(max_length=10)
+    cocktail= models.ForeignKey(Cocktail, related_name='portions', on_delete=models.CASCADE)
+    misc_ingredient = models.ForeignKey(MiscIngredient, related_name='misc_ingredients', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.volume} of {self.spirit.brandname} for {self.cocktail.name}'
 

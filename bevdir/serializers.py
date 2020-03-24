@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Cocktail, Spirit, MiscIngredient, Rating
+from .models import Cocktail, Spirit, MiscIngredient, Rating, Shot, Portion
 from users.models import User
 
 class CocktailSerializer(serializers.ModelSerializer):
@@ -25,4 +25,14 @@ class MiscIngredientSerializer(serializers.ModelSerializer):
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
+        fields = '__all__'
+
+class ShotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shot
+        fields = '__all__'
+
+class PortionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Portion
         fields = '__all__'
