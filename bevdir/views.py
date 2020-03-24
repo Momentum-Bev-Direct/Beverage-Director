@@ -30,5 +30,5 @@ def base_launch(request):
     return render(request, 'base.html')
 
 def drink_builder(request):
-    return render(request, 'core/drink_builder.html')
+    return render(request, 'bevdir/drink_builder.html')
 
