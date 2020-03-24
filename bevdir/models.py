@@ -94,7 +94,7 @@ class Spirit(models.Model):
 class MiscIngredient(models.Model):
     name = models.CharField(max_length=100)
     cost_per_unit = models.IntegerField(default=0)
-    notes = models.TextField(max_length=500)
+    notes = models.TextField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -121,17 +121,14 @@ class Cocktail(models.Model):
 
     @property
     def total_cost(self):
-        """
-        create list of costs of all ingredients and sum values. will require string/int methods to snip off punctuation
-        """
-        pass
+        return 'NEED'
 
     @property
     def recommended_price(self):
         """
         product of target_profit and total_cost
         """
-        pass
+        return 'NEED'
 
 class Shot(models.Model):
     volume = models.IntegerField(default=0)

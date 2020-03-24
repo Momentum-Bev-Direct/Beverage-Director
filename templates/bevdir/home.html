@@ -1,1 +1,10 @@
 {% extends 'base.html' %}
+{% block title %}
+    BevDev Home
+{% endblock %}
+
+{% block content %}
+<script type='text/javascript'>
+const cocktails = {{ cocktails|safe }}
+</script>
+{% endblock %}
