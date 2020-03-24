@@ -1,1 +1,44 @@
 {% extends 'base.html' %}
+{% block title %}
+    BevDev Home
+{% endblock %}
+
+{% block content %}
+
+<script type='text/javascript'>
+const cocktails = {{ cocktails|safe }}
+</script>
+
+<div id='homeapp'>
+<h2>Your Drink Menu</h2>
+<div v-bind:title="message" v-for="cocktail in cocktails">
+  <div>
+  <h3 >[[ cocktail.name ]]</h3>
+  <p>Cost/Loss: [[ cocktail.total_cost ]]</p>
+  <p>Recommended: [[ cocktail.recommended_price ]]</p>
+  </div>
+</div>
+</div>
+
+<script>
+let app = new Vue({
+  delimiters: ['[[', ']]'],
+  el: '#homeapp',
+  data: {
+    message: 'click to view/edit',
+    cocktails: cocktails,
+  },
+  methods: {
+    deleteCocktail: function(id) {
+      console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
+    },
+    editCoctail: function(id) {
+      console.log(`Haha, youre trying to edit cocktail ${id} but I didnt listen`)
+    }
+  }
+})
+
+</script>
+
+
+{% endblock %}
