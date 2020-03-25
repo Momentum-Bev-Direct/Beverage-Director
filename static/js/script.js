@@ -26,19 +26,3 @@ fetch('/api/spirit')
         console.log(data)
     })
 
-// fetch('https://swapi.co/api/people/?page=3')
-//   .then(function (response) { return response.json()})
-//   .then(function (data) {
-//     console.log(data)
-//     starWarsCharacters = data
-//     const character = starWarsCharacters.results[9]
-//     const characterHeading = document.createElement('h1')
-//     characterHeading.innerText = character.name
-//     container.appendChild(characterHeading)
-//     characterHeading.classList.add('name-heading')
-//     const speciesKey = document.createElement('h2')
-//     speciesKey.innerText = 'species'
-//     container.appendChild(speciesKey)
-//     speciesKey.classList.add('key')
-
-//     return starWarsCharacters.results[9].species[0]

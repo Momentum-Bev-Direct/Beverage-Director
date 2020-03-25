@@ -4,7 +4,7 @@
     Drink Builder
 {% endblock %}
 {% block content %}
-<div class='container'>
+<div class='container' id='drink-builder'>
     <div class='top-bar'>
         <p class='logo'>LOGO</p>
         <h2 class='cocktail-name'>Cocktail Name</h2>
@@ -62,4 +62,25 @@
     
 
 </div>
+
+<script>
+let app = new Vue({
+  delimiters: ['[[', ']]'],
+  el: '#drink-builder',
+  data: {
+    cocktails: cocktails,
+  },
+  methods: {
+    createCocktail: function(id) {
+      console.log("waddup")
+    },
+    editCoctail: function(id) {
+      console.log(`Haha, youre trying to edit cocktail ${id} but I didnt listen`)
+    }
+  }
+})
+
+</script>
+
 {% endblock content %}
+
