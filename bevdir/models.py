@@ -112,12 +112,11 @@ class Cocktail(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    spirits = models.ManyToManyField(Spirit, related_name='cocktails')
-    misc = models.ManyToManyField(MiscIngredient, related_name='cocktails')
     target_profit = models.IntegerField(default=0)
 
     def __str__(self):
         return f'{self.name}'
+
 
     @property
     def total_cost(self):
@@ -126,7 +125,7 @@ class Cocktail(models.Model):
         cost per ounce* user input of volume = volume
         =total cost
         """
-        all_shots = Shot.objects.all().filter(cocktail = self.pk)
+        all_shots = Shot.objects.all().filter(cocktail=self.pk)
         all_misc = MiscIngredients.objects.all().filter(cocktail= self.pk)
 
         ingredient_costs = []
@@ -171,7 +170,7 @@ class Portion(models.Model):
     amount = models.IntegerField(default=0)
     unit = models.CharField(max_length=10)
     cocktail= models.ForeignKey(Cocktail, related_name='portions', on_delete=models.CASCADE)
-    misc_ingredient = models.ForeignKey(MiscIngredient, related_name='misc_ingredients', on_delete=models.CASCADE)
+    misc_ingredient = models.ForeignKey(MiscIngredient, related_name='portions', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.volume} of {self.spirit.brandname} for {self.cocktail.name}'
