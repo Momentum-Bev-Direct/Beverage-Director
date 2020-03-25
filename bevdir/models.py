@@ -126,7 +126,7 @@ class Cocktail(models.Model):
         =total cost
         """
         total = 0
-        for shot in self.shots:
+        for shot in self.shots.all():
             total += shot.cost
         # for portion in self.portions:
         #     total += portion.cost
