@@ -41,6 +41,15 @@ class PortionViewSet(viewsets.ModelViewSet):
     queryset = Portion.objects.all()
     serializer_class = PortionSerializer
 
+def nathanpage(request):
+    spirits = Spirit.objects.all()
+    spirits_dataset = [{ 
+        "name": spirit.brandname,
+        "info": spirit.info 
+        } for spirit in spirits]
+    context = {}
+    context["spirits"]=json.dumps(spirits_dataset)
+    return render(request, 'bevdir/nathan_play.html', context)
 
 def homepage(request):
     cocktails = Cocktail.objects.all()
@@ -58,4 +67,6 @@ def base_launch(request):
 
 def drink_builder(request):
     return render(request, 'bevdir/drink_builder.html')
+
+
 

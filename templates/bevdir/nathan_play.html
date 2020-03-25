@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}
+    NATHAN'S TERRIBLE BURDEN
+{% endblock %}
+
+{% block content %}
+
+<h1>NOPEEEE</h1>
+
+<script type='text/javascript'>
+    const spirits = {{ spirits | safe }}
+</script>
+
+<div id='nathan-app'>
+    <div v-for='spirit in spirits'>
+        <h2>[[ spirit.name ]]</h2>
+        <h3>Size: [[ spirit.info.size ]]</h3>
+        <h3>Price: [[ spirit.info.mxb_price ]]</h3>
+    </div>
+</div>
+
+<script>
+    let app = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#nathan-app',
+        data: {
+            spirits: spirits,
+
+        }
+    })
+</script>
+
+{% endblock %}
