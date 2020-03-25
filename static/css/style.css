@@ -1,3 +1,10 @@
+:root{
+    --Blue: #1ef1fa;
+    --Pink: #f60282;
+    --MintGreen: #07fbb6;
+    --Purple: #f70ddd;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -46,6 +53,7 @@ body {
 
 .cocktail-name {
     margin: .5rem;
+    color: var;
 }
 .add-ingredient-button {
     border: 1px solid black;
@@ -59,7 +67,7 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    background-color: black;
+    background-color:#f60282;
 }
 
 .percent-field {
@@ -109,7 +117,7 @@ body {
 
 .ingredient-name {
     justify-self: center;
-   
+
 }
 .slider-bar {
     display: flex;
