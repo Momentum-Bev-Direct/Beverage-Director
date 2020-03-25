@@ -55,7 +55,8 @@ def homepage(request):
     return render(request, 'bevdir/home.html', context)
 
 def base_launch(request):
-    return render(request, 'base.html')
+    cocktails = Cocktails.object.all()
+    return render(request, 'base.html', {'cocktails': cocktails })
 
 def drink_builder(request):
     return render(request, 'bevdir/drink_builder.html')

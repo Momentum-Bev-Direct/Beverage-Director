@@ -9,10 +9,10 @@ SPIRITS_LIST = [
         'category': 'bourbon',
         'brandname':'Hookers house Bourbon',
         'age':'NA',
-        'proof':100,
-        'size':.75,
+        'proof':'100',
+        'size':'0.75',
         'unit':'L',
-        'mxb_price': '$51.40',
+        'mxb_price':'51.40',
     },
     {
         'NC_Code':'00-810',
@@ -20,21 +20,21 @@ SPIRITS_LIST = [
         'category': 'Tequila & Mezcal',
         'brandname':'Jose Cuervo Reserva de Familia',
         'age':'NA',
-        'proof':80,
-        'size':.75,
+        'proof':'80',
+        'size':'0.75',
         'unit':'L',
-        'mxb_price': '$193.70',
+        'mxb_price':'193.70',
     },
     {
         'NC_Code':'42-916',
         'collection':'Imported',
-        'category': 'Gin',
+        'category':'Gin',
         'brandname':'Beefeater',
         'age':'NA',
-        'proof': 94,
-        'size': 1.75,
+        'proof':'94',
+        'size':'1.75',
         'unit':'L',
-        'mxb_price': '$48.70',
+        'mxb_price':'$48.70',
     },
     {
         'NC_Code':'43-251',
@@ -42,10 +42,10 @@ SPIRITS_LIST = [
         'category': 'Vodka',
         'brandname':'The Aperican Vodka',
         'age':'NA',
-        'proof': 80,
-        'size': 1.75,
+        'proof':'80',
+        'size':'1.75',
         'unit':'L',
-        'mxb_price': '$20.20',
+        'mxb_price':'20.20',
     },
     {
         'NC_Code':'56-784',
@@ -53,10 +53,10 @@ SPIRITS_LIST = [
         'category': 'Cordials/ Liqueurs/ Specialties',
         'brandname':'Hatfield & McCoy The Devil\'s Fire Moonshine',
         'age':'NA',
-        'proof': '80',
-        'size': .75,
+        'proof':'80',
+        'size':'.75',
         'unit':'L',
-        'mxb_price': '$31.70',
+        'mxb_price':'31.70',
     },
     {
         'NC_Code':'19-745',
@@ -64,10 +64,10 @@ SPIRITS_LIST = [
         'category':'Special',
         'brandname':'Cragganmore Distillers Edition 12Y',
         'age':'12Y',
-        'proof': '80',
-        'size': .75,
+        'proof':'80',
+        'size':'.75',
         'unit':'L',
-        'mxb_price': '$88.70',
+        'mxb_price':'88.70',
     },
 
 ]
@@ -121,7 +121,20 @@ class Cocktail(models.Model):
 
     @property
     def total_cost(self):
-        return 'NEED'
+        """
+        cost per ounce=mxb_price/(size*33.814)
+        cost per ounce* user input of volume = volume
+        =total cost
+        """
+        all_shots = Shot.objects.all().filter(cocktail = self.pk)
+        all_misc = MiscIngredients.objects.all().filter(cocktail= self.pk)
+
+        ingredient_costs = []
+
+
+        #WE DID SOMETHING!
+        total = sum(ingredient_costs)                         #sum of cost of each ingredient
+        return total
 
     @property
     def recommended_price(self):
@@ -137,6 +150,22 @@ class Shot(models.Model):
 
     def __str__(self):
         return f'{self.volume} of {self.spirit.brandname} for {self.cocktail.name}'
+
+    @property
+    def cost(self):
+        """
+        for instance:
+            volume = 1 oz
+            spiritName = Jose Cuervo Reserva de Familia
+            spirit_total = mxb_price of bottle ($193.70)
+            spirit_bottle_size = .75L
+            spirit_bottle_size_oz = .75 * 33.814
+            price/oz = 193.70/bottleOZ
+        """
+        bottle_size_oz = float(self.spirit.info['size']) * 33.814
+        price_per_oz = float(self.spirit.info['mxb_price'])/bottle_size_oz
+        cost = self.volume * price_per_oz
+        return cost
 
 class Portion(models.Model):
     amount = models.IntegerField(default=0)
