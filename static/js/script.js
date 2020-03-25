@@ -20,3 +20,31 @@ slider.oninput = function () {
     
 }
 
+
+axios.get('/api/spirit')
+    .then(function(response) {
+        spirits = response.data
+        console.log(spirits)
+        console.log(spirits[1].brandname)
+
+    })
+
+// axios({
+//     method: 'post',
+//     url: '/api/spirit',
+//     data: { 
+//         brandname: 'SLIMEY\'s FART SPLOO'
+//     }
+// })
+
+
+
+
+// console.log('pre-fetch')
+
+// fetch('/api/spirit')
+//     .then(function(response) {return response.json()})
+//     .then(function (data) {
+//         console.log(data)
+        
+//     })
