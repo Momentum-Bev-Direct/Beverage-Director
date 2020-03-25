@@ -125,14 +125,11 @@ class Cocktail(models.Model):
         cost per ounce* user input of volume = volume
         =total cost
         """
-        all_shots = Shot.objects.all().filter(cocktail=self.pk)
-        all_misc = MiscIngredients.objects.all().filter(cocktail= self.pk)
-
-        ingredient_costs = []
-
-
-        #WE DID SOMETHING!
-        total = sum(ingredient_costs)                         #sum of cost of each ingredient
+        total = 0
+        for shot in self.shots:
+            total += shot.cost
+        # for portion in self.portions:
+        #     total += portion.cost
         return total
 
     @property
