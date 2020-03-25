@@ -54,6 +54,7 @@ def nathanpage(request):
 def homepage(request):
     cocktails = Cocktail.objects.all()
     cocktails_dataset = [{
+        "id": cocktail.pk,
         "name":cocktail.name,
         "total_cost":cocktail.total_cost,
         "recommended_price":cocktail.recommended_price
@@ -63,7 +64,8 @@ def homepage(request):
     return render(request, 'bevdir/home.html', context)
 
 def base_launch(request):
-    return render(request, 'base.html')
+    cocktails = Cocktails.object.all()
+    return render(request, 'base.html', {'cocktails': cocktails })
 
 def drink_builder(request):
     return render(request, 'bevdir/drink_builder.html')
