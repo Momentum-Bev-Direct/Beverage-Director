@@ -18,6 +18,7 @@ const cocktails = {{ cocktails|safe }}
       <p>Cost/Loss: [[ cocktail.total_cost ]]</p>
       <p>Recommended: [[ cocktail.recommended_price ]]</p>
       <button v-on:click="deleteCocktail(cocktail.id)">DELETE</button>
+      <button v-on:click="editCocktail(cocktail.id)">EDIT</button>
     </div>
   </div>
 </div>
@@ -66,7 +67,7 @@ let app = new Vue({
 
       console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
     },
-    editCoctail: function(id) {
+    editCocktail: function(id) {
       console.log(`Haha, youre trying to edit cocktail ${id} but I didnt listen`)
     }
   }
