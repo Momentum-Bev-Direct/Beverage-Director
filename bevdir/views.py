@@ -62,27 +62,3 @@ def base_launch(request):
 
 def drink_builder(request):
     return render(request, 'bevdir/drink_builder.html')
-
-
-def populate_spirits(request):
-    response = requests.get("https://abc.nc.gov/Pricing/PriceList")
-    soup = BeautifulSoup(response.text, 'html.parser')
-    spirits = soup.find_all(class_="list-generic")
-    for spirit in spirits:
-        elements = spirit.find_all('div')
-        try:
-            this_spirit = Spirit.objects.get(brandname=elements[2].get_text())
-            this_spirit.mxb = float(elements[7].get_text().replace('$', '').replace(',',''))
-            this_spirit.save()
-        except Spirit.DoesNotExist:
-            new_spirit = Spirit.objects.create(
-                nc_code = elements[0].get_text(),
-                supplier = elements[1].get_text(),
-                brandname = elements[2].get_text(),
-                proof = elements[4].get_text(),
-                size = float(elements[5].get_text().replace('M', '').replace('L', '').replace(',','')),
-                mxb = float(elements[7].get_text().replace('$', '').replace(',',''))
-            )
-            new_spirit.save()
-    return redirect('homepage')
-

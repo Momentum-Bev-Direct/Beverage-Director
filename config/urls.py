@@ -10,8 +10,6 @@ urlpatterns = [
     path('accounts/', include('registration.backends.default.urls')),
     path('api/', include('bevdir.urls')),
     path('drinkbuilder/', views.drink_builder, name='drink-builder'),
-    path('populate_spirits', views.populate_spirits, name='populate_spirits'),
-
 ]
 
 if settings.DEBUG:
