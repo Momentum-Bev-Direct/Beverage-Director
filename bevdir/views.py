@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import viewsets
 from .models import Cocktail, Spirit, MiscIngredient, Rating, Shot, Portion
 from .serializers import CocktailSerializer, SpiritSerializer, MiscIngredientSerializer, RatingSerializer, UserSerializer, ShotSerializer, PortionSerializer
 from users.models import User
 from config import urls
 import json
+import requests
+from bs4 import BeautifulSoup
 
 
 class CocktailViewSet(viewsets.ModelViewSet):
@@ -43,16 +45,16 @@ class PortionViewSet(viewsets.ModelViewSet):
 
 
 def homepage(request):
-    cocktails = Cocktail.objects.all()
-    cocktails_dataset = [{
-        "id": cocktail.pk,
-        "name":cocktail.name,
-        "total_cost":cocktail.total_cost,
-        "recommended_price":cocktail.recommended_price
-        } for cocktail in cocktails]
-    context= {}
-    context["cocktails"]=json.dumps(cocktails_dataset)
-    return render(request, 'bevdir/home.html', context)
+    # cocktails = Cocktail.objects.all()
+    # cocktails_dataset = [{
+    #     "id": cocktail.pk,
+    #     "name":cocktail.name,
+    #     "total_cost":cocktail.total_cost,
+    #     "recommended_price":cocktail.recommended_price
+    #     } for cocktail in cocktails]
+    # context= {}
+    # context["cocktails"]=json.dumps(cocktails_dataset)
+    return render(request, 'bevdir/home.html')
 
 def base_launch(request):
     cocktails = Cocktails.object.all()
@@ -60,4 +62,3 @@ def base_launch(request):
 
 def drink_builder(request):
     return render(request, 'bevdir/drink_builder.html')
-

@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %} 
+{% block title %}
     Drink Builder
 {% endblock %}
 {% block content %}
 <div class='container' id='drink-builder'>
     <div class='top-bar'>
-        <p class='logo'>LOGO</p>
+        <p class='logo'>Logo</p>
         <h2 class='cocktail-name'>Cocktail Name</h2>
-        <a href='#'><p class='add-ingredient-button'>ADD INGREDIENT</p></a>
+        <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
     </div>
     <div class='cost-bar'>
         <p class='target-cost'>Enter Target Cost %:</p>
@@ -25,11 +25,12 @@
             <p>$<span id='menu-price-value'></span></p>
         </div>
     </div>
+    <div class='ingredient-list'>
     <div class='ingredient-box'>
         <div class='ingredient-title-line'>
             <p class='spirit-type-icon'>WHISKEY</p>
             <p class='ingredient-name'>Evan Williams Green Label</p>
-        </div>  
+        </div>
         <div class='slider-bar'>
             <p>Cost: $1.31<span id="ing-cost"></span></p>
             <input class='slider' type="range" min=".0625" max="100" value="50" class="slider" id="myRange">
@@ -40,7 +41,7 @@
         <div class='ingredient-title-line'>
             <p class='spirit-type-icon'>VODKA</p>
             <p class='ingredient-name'>Ketel One</p>
-        </div>  
+        </div>
         <div class='slider-bar'>
             <p>Cost: $<span id='pour-price'></span></p>
             <input type="range" min=".25" max="5" value=".25" step=".25" class="slider" id="ounce-slider">
@@ -51,15 +52,16 @@
         <div class='ingredient-title-line'>
             <p class='spirit-type-icon'>LIQUEUR</p>
             <p class='ingredient-name'>Hatfield & McCoy The Devil's Fire Moonshine</p>
-        </div>  
+        </div>
         <div class='slider-bar'>
             <p>Cost: $2.40<span id="ing-cost"></span></p>
             <input type="range" min=".0625" max="100" value="50" class="slider" id="myRange">
             <p>Vol: 2.0<span></span>oz</p>
         </div>
     </div>
+    </div>
     <button class='save-button' type="button">SAVE</button>
-    
+
 
 </div>
 
