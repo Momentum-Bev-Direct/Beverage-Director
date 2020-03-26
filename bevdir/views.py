@@ -45,16 +45,14 @@ class PortionViewSet(viewsets.ModelViewSet):
 
 
 def homepage(request):
-    # cocktails = Cocktail.objects.all()
-    # cocktails_dataset = [{
-    #     "id": cocktail.pk,
-    #     "name":cocktail.name,
-    #     "total_cost":cocktail.total_cost,
-    #     "recommended_price":cocktail.recommended_price
-    #     } for cocktail in cocktails]
-    # context= {}
-    # context["cocktails"]=json.dumps(cocktails_dataset)
-    return render(request, 'bevdir/home.html')
+    cocktails = Cocktail.objects.all()
+    cocktails_dataset = [{
+        "id": cocktail.pk,
+        "name":cocktail.name,
+        } for cocktail in cocktails]
+    context= {}
+    context["cocktails"]=json.dumps(cocktails_dataset)
+    return render(request, 'bevdir/home.html', context)
 
 def base_launch(request):
     cocktails = Cocktails.object.all()
