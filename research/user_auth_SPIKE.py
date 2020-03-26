@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
       Token.objects.create(user=user)
       return user
 
-# NEED THESE SETTINGS: 
+# NEED THESE SETTINGS:
 
   INSTALLED_APPS = [
     'rest_framework.authtoken',
@@ -28,18 +28,16 @@ REST_FRAMEWORK = {
 # MODELVIEWS:
 
 from rest_framework import viewsets, status
-from rest_framework.response import Response 
+from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
 
 class GeneralModelViewSet(viewsets.ModelViewSet):
   queryset = #yadda yadda
-  serializer_class = #yadda yadda 
+  serializer_class = #yadda yadda
   authentication_classes = (TokenAuthentication)
   permission_classes = (AllowAny)
 
-  
-#SCRAPING
-#Beautiful Soup
-#Look up management commands. 
+
+
