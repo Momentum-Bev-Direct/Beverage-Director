@@ -18,6 +18,13 @@ class Spirit(models.Model):
     def __str__(self):
         return f'{self.brandname}'
 
+    @property
+    def price_per_ounce(self):
+        bottle_size_oz = float(self.size) * 33.814
+        price_per_oz = round(float(self.mxb)/bottle_size_oz, 2)
+        return price_per_oz
+
+
 
 class MiscIngredient(models.Model):
     name = models.CharField(max_length=100)
@@ -65,7 +72,8 @@ class Cocktail(models.Model):
         """
         product of target_profit and total_cost
         """
-        return 'NEED'
+        rec_price = self.total_cost/self.target_profit
+        return rec_price
 
 class Shot(models.Model):
     volume = models.IntegerField(default=0)
@@ -86,9 +94,9 @@ class Shot(models.Model):
             spirit_bottle_size_oz = .75 * 33.814
             price/oz = 193.70/bottleOZ
         """
-        bottle_size_oz = float(self.spirit.info['size']) * 33.814
-        price_per_oz = float(self.spirit.info['mxb_price'])/bottle_size_oz
-        cost = self.volume * price_per_oz
+        # bottle_size_oz = float(self.spirit.size) * 33.814
+        # price_per_oz = float(self.spirit.mxb)/bottle_size_oz
+        cost = self.volume * self.spirit.price_per_oz
         return cost
 
 class Portion(models.Model):
@@ -98,7 +106,7 @@ class Portion(models.Model):
     misc_ingredient = models.ForeignKey(MiscIngredient, related_name='portions', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.volume} of {self.spirit.brandname} for {self.cocktail.name}'
+        return f'{self.amount} of {self.spirit.brandname} for {self.cocktail.name}'
 
 #MANUALLY ENTER FOR NOW. EVENTUALLY POPULATE THIS DATA WITH A SCRAPE OR IMPORT FUNCTION:
 # SPIRITS_LIST = [
