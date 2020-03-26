@@ -1,15 +1,13 @@
 # FINAL PROJECT: QUINN / NATHAN / BEN
-# BEVDIRECTOR (WORKING TITLE)
+# BevDev - Dev your very own bevs
 
 (body)
 
 - (list item)
 
-## Heading 2
-
-In an empty directory, run:
-
+## Populate Database
+In virtual environment, run the following to run web scraper on NC ABC site and create/update Spirit instances in the database:
 ```
-(code)
+$ python manage.py populatespirits
 ```
 
