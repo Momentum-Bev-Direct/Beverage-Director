@@ -4,7 +4,7 @@
     Drink Builder
 {% endblock %}
 {% block content %}
-<div class='container'>
+<div class='container' id='drink-builder'>
     <div class='top-bar'>
         <p class='logo'>Logo</p>
         <h2 class='cocktail-name'>Cocktail Name</h2>
@@ -12,16 +12,17 @@
     </div>
     <div class='cost-bar'>
         <p class='target-cost'>Enter Target Cost %:</p>
-        <input class='percent-field' type='number' min='1' max='100'>
+        <input class='percent-field' id='target-cost-value' type='number' min='1' max='100' value='15'>
     </div>
     <div class='cost-sell-box'>
+        <input class='vert-slider' type="range" min="1" max="100" value="10" class="slider" id="myRange">
         <div class='total-cost-box'>
             <p>Cost of Goods</p>
-            <p>$2.50</p>
+            <p>$<span id='cost-of-goods-value'></span></p>
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
-            <p>$10.00</p>
+            <p>$<span id='menu-price-value'></span></p>
         </div>
     </div>
     <div class='ingredient-list'>
@@ -42,9 +43,9 @@
             <p class='ingredient-name'>Ketel One</p>
         </div>
         <div class='slider-bar'>
-            <p>Cost: $2.40<span id="ing-cost"></span></p>
-            <input type="range" min=".0625" max="100" value="50" class="slider" id="myRange">
-            <p>Vol: 2.0<span></span>oz</p>
+            <p>Cost: $<span id='pour-price'></span></p>
+            <input type="range" min=".25" max="5" value=".25" step=".25" class="slider" id="ounce-slider">
+            <p>Vol: <span id='ounce-pour'></span>oz</p>
         </div>
     </div>
     <div class='ingredient-box'>
@@ -63,4 +64,25 @@
 
 
 </div>
+
+<script>
+let app = new Vue({
+  delimiters: ['[[', ']]'],
+  el: '#drink-builder',
+  data: {
+    cocktails: cocktails,
+  },
+  methods: {
+    createCocktail: function(id) {
+      console.log("waddup")
+    },
+    editCoctail: function(id) {
+      console.log(`Haha, youre trying to edit cocktail ${id} but I didnt listen`)
+    }
+  }
+})
+
+</script>
+
 {% endblock content %}
+

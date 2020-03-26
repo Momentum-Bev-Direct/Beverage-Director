@@ -110,6 +110,10 @@ body {
     font-family: 'Abril Fatface', cursive;
 }
 
+.vert-slider {
+    width: 80px;
+    transform: rotate(-90deg);
+}
 .total-cost-box,
 .menu-price-box {
     font-size: 1.5rem;
