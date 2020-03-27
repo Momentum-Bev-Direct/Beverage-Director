@@ -1,98 +1,66 @@
 {% extends 'base.html' %}
+
 {% block title %}
-    BevDev Home
+    Drink Builder
 {% endblock %}
-
 {% block content %}
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type='text/javascript'>
-const cocktails = {{ cocktails|safe }}
-</script>
-
-<div id='homeapp'>
-  <h2>Your Drink Menu</h2>
-  <div v-bind:title="message" v-for="cocktail in cocktails">
-    <div v-bind:id="cocktail.id">
-      <p>[[ message ]]</p>
-      <h3 >[[ cocktail.name ]]</h3>
-      <p>Cost/Loss: [[ cocktail.total_cost ]]</p>
-      <p>Recommended: [[ cocktail.recommended_price ]]</p>
-      <button v-on:click="deleteCocktail(cocktail.id)">DELETE</button>
-      <button v-on:click="editCocktail(cocktail.id)">EDIT</button>
+<div class='container' id='drink-builder'>
+    <div class='top-bar'>
+        <p class='logo'>Logo</p>
+        <h2 class='cocktail-name'>Cocktail Name</h2>
+        <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
     </div>
-  </div>
+    <div class='cost-bar'>
+        <p class='target-cost'>Enter Target Cost %:</p>
+        <input class='percent-field' id='target-cost-value' type='number' min='1' max='100' value='15'>
+    </div>
+    <div class='cost-sell-box'>
+        <input class='vert-slider' type="range" min="1" max="100" value="10" class="slider" id="myRange">
+        <div class='total-cost-box'>
+            <p>Cost of Goods</p>
+            <p>$<span id='cost-of-goods-value'></span></p>
+        </div>
+        <div class='menu-price-box'>
+            <p>Menu Price</p>
+            <p>$<span id='menu-price-value'></span></p>
+        </div>
+    </div>
+    <div class='ingredient-list'>
+        <div class='ingredient-box'>
+            <div class='ingredient-title-line'>
+                <p class='spirit-type-icon'>VODKA</p>
+                <p class='ingredient-name'>Ketel One</p>
+            </div>
+            <div class='slider-bar'>
+                <p>Cost: $<span id='pour-price'></span></p>
+                <input type="range" min=".25" max="5" value=".25" step=".25" class="slider" id="ounce-slider">
+                <p>Vol: <span id='ounce-pour'></span>oz</p>
+            </div>
+        </div>
+    </div>
+    <button class='save-button' type="button">SAVE</button>
+
+
 </div>
 
 <script>
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-const instance = axios.create({
-  headers: {
-    'X-CSRFToken': getCookie("csrftoken"),
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  }
-})
-
 let app = new Vue({
   delimiters: ['[[', ']]'],
-  el: '#homeapp',
+  el: '#drink-builder',
   data: {
     cocktails: cocktails,
   },
   methods: {
-    deleteCocktail: function(id) {
-      instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
-      .then(function(response) {
-      }).then(function(data){
-        console.log("data is ok", data)
-      }).catch(function(ex) {
-        console.log('parsing failed', ex)
-      })
-
-      console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
+    createCocktail: function(id) {
+      console.log("waddup")
     },
-    editCocktail: function(id) {
+    editCoctail: function(id) {
       console.log(`Haha, youre trying to edit cocktail ${id} but I didnt listen`)
     }
   }
 })
 
-// // register modal component
-// Vue.component('modal', {
-//   template: '#modal-template',
-//   props: {
-//     show: {
-//       type: Boolean,
-//       required: true,
-//       twoWay: true
-//     }
-//   }
-// })
+</script>
 
-// // start app
-// new Vue({
-//   el: '#app',
-//   data: {
-//     showModal: false
-//   }
-// })
+{% endblock content %}
 
-// </script>
-
-
-{% endblock %}

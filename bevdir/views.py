@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
 from .models import Cocktail, Spirit, MiscIngredient, Rating, Shot, Portion
 from .serializers import CocktailSerializer, SpiritSerializer, MiscIngredientSerializer, RatingSerializer, UserSerializer, ShotSerializer, PortionSerializer
@@ -61,7 +61,16 @@ def base_launch(request):
 def drink_builder(request):
     return render(request, 'bevdir/drink_builder.html')
 
-def edit_cocktail(request):
-    return render(request, 'bevdir/drink_builder.html')
+def edit_cocktail(request, pk):
+    cocktail = get_object_or_404(Cocktail, pk=pk)
+    shots = Shot.objects.filter(shot=cocktail.pk)
+    cocktail_dataset = {
+        "id": cocktail.pk,
+        "name": cocktail.name,
+        "shots": shots,
+    }
+    context= {}
+    context["cocktail"]=json.dumps(cocktail_dataset)
+    return render(request, 'bevdir/drink_builder_edit.html', context, {'pk':pk})
 
 
