@@ -62,5 +62,6 @@ def drink_builder(request):
     return render(request, 'bevdir/drink_builder.html')
 
 def edit_cocktail(request):
-    pass
+    return render(request, 'bevdir/drink_builder.html')
+
 
