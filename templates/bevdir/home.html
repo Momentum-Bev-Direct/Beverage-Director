@@ -20,6 +20,10 @@ const cocktails = {{ cocktails|safe }}
       <button v-on:click="deleteCocktail(cocktail.id)">DELETE</button>
     </div>
   </div>
+  <div v-for="spirit in spirits">
+    <h2>[[ spirit.brandname ]]</h2>
+  </div>
+
 </div>
 
 <script>
@@ -50,11 +54,41 @@ const instance = axios.create({
 let app = new Vue({
   delimiters: ['[[', ']]'],
   el: '#homeapp',
-  data: {
-    message: 'poop',
-    cocktails: cocktails,
+  data: function() {
+    return {
+      message: 'poop',
+      cocktails: cocktails,
+      spirits: []
+    }
+  },
+  beforeCreate: function() {
+    console.log('hi this is before create')
+  },
+  created: function() {
+    console.log('hi its me i\'m createdddd')
+    this.getSpirits()
+
   },
   methods: {
+    getSpirits: function() {
+      console.log('before axios')
+      instance.get('http://127.0.0.1:8000/api/spirit/')
+        .then((response) => {
+          console.log(response)
+          return response.data
+          // this.spirits = response.data
+          // console.log(this)
+        }).then(this.handleSpiritsData)
+        .catch(function(ex) {
+          console.log('parsing failed', ex)
+        })
+      console.log('after axios')
+    }, 
+    handleSpiritsData: function(data) {
+      console.log("data is ok", data)
+      console.log(this)
+      this.spirits = data
+    },
     deleteCocktail: function(id) {
       instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
       .then(function(response) {
