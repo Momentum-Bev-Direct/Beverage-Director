@@ -10,12 +10,18 @@
 const cocktail = {{ cocktail|safe }}
 </script>
 <!--  -->
+<!-- Cannot resolve keyword 'shot' into field. Choices are: cocktail, cocktail_id, id, spirit, spirit_id, volume -->
 
 <div id="drink-builder-edit">
-    <h1>{{ cocktail }}</h1>
-    <div v-for='shot in shots'>
+    <h1>[[ cocktail.name ]]</h1>
+    <button v-on:click='clearShots'>Clear Butts</button>
+    <div class='shotty' v-for='shot in shots'>
         <div v-bind:id="shot.id">
-            <h2>[[ shot ]]</h2>
+            <h2>Shot ID #: [[ shot.id ]]</h2>
+            <h3>Cocktail #: [[shot.cocktail]] </h3>
+            <h3>Spirit #: [[shot.spirit]]</h3>
+            <input type="range" min='.25' max='10' step='.25' value= '[[ shot.volume ]]'> 
+            <p>Volume: [[shot.volume]]</p>
     </div>
 </div>
 
@@ -45,20 +51,29 @@ const instance = axios.create({
 })
 
 let app = new Vue({
-  delimiters: ['[[', ']]'],
-  el: '#drink-builder-edit',
-  data: function() {
-      return {
-          shots : []
-      }
+    delimiters: ['[[', ']]'],
+    el: '#drink-builder-edit',
+    data: {
+        cocktail: cocktail,
+        shots: [{ volume: 4, id: 69, spirit: 666, cocktail: 420},]
   },
-  beforeCreate: function() {
-      console.log('hi this is before create')
+    beforeCreate: function() {
+        console.log('hi this is before create')
     },
     created: function() {
       console.log('hi its me i\'m createdddd')
-      this.getShots()
-  
+    },
+    mounted: function() {
+        console.log('mounted')
+        setTimeout(() => {
+            this.getShots()
+        }, 2000)
+    },
+    beforeUpdate: function() {
+        console.log('before update', document.getElementsByClassName('shotty').length)
+    },
+    updated: function() {
+        console.log('updated', document.getElementsByClassName('shotty').length)
     },
     methods: {
         getShots: function() {
@@ -76,6 +91,9 @@ let app = new Vue({
             // console.log(this)
             this.shots = data
         },
+        clearShots: function() {
+            this.shots=[]
+        }
     }
 })
 
