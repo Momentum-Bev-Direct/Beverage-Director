@@ -62,6 +62,14 @@
     </div>
     </div>
     <button class='save-button' type="button">SAVE</button>
+    <div id="app">
+      <button v-on="click: showModal = true">Show Modal</button>
+      <modal show="[[@showModal]]">
+        <div class="modal-header">
+          <h3>custom header</h3>
+        </div>
+      </modal>
+    </div>
 </div>
 
 <template id="modal-template">
@@ -117,13 +125,16 @@ Vue.component('modal', {
 // start app
 let app = new Vue({
   delimiters: ('[[',']]'),
-  el: '#app',
+  el: '#drink-builder',
+  components:{
+    "modal": modal
+  },
   data: {
-    showModal: true
+    showModal: false
   }
 })
 
 </script>
 
 {% endblock content %}
-
+get app registered as a component look up component registration.
