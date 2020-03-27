@@ -20,7 +20,7 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Abril Fatface', cursive;
 }
 
 .header {
@@ -29,7 +29,7 @@ body {
     width: 100%;
     padding:.5rem;
     font-family:'Orbitron', sans-serif;
-    font-size: 30px;
+    font-size: 15px;
 }
 .container {
     display: flex;
@@ -61,6 +61,7 @@ body {
     text-align: center;
     margin: .5rem;
     padding: .5rem;
+    font-family: 'Abril Fatface', cursive;
 }
 
 .cocktail-name {
@@ -75,10 +76,18 @@ body {
     border-radius: 10px;
     padding: .5rem;
     background-color: var(--MintGreen);
+    font-family: 'Abril Fatface', cursive;
 }
 
 .ingredient-list {
     background-color:var(--DarkBlue);
+}
+.dollars-in{
+    color:green;
+}
+
+.money-sign-out{
+    color:red;
 }
 .cost-bar {
     color: black;
@@ -93,6 +102,7 @@ body {
 .target-cost {
     font:white;
     font-size: 25px;
+    justify-content: left;
 }
 
 .percent-field {
@@ -169,5 +179,5 @@ body {
     background-color: var(--MintGreen);
     border: 1px solid var(--DarkGreen);
     border-radius: 10px;
+    font-family: 'Abril Fatface', cursive;
 }
-ß
