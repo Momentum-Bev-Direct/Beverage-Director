@@ -165,8 +165,8 @@ body {
 .slider-bar {
     display: flex;
     justify-content: space-between ;
-}
 
+}
 .slider {
     width: 50%;
 }
