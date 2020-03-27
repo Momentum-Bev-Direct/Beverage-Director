@@ -76,7 +76,7 @@ class Cocktail(models.Model):
         return rec_price
 
 class Shot(models.Model):
-    volume = models.IntegerField(default=0)
+    volume = models.FloatField(default=0)
     cocktail= models.ForeignKey(Cocktail, related_name='shots', on_delete=models.CASCADE)
     spirit = models.ForeignKey(Spirit, related_name='shots', on_delete=models.CASCADE)
 

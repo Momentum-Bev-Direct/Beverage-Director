@@ -63,14 +63,14 @@ def drink_builder(request):
 
 def edit_cocktail(request, pk):
     cocktail = get_object_or_404(Cocktail, pk=pk)
-    shots = Shot.objects.filter(shot=cocktail.pk)
-    cocktail_dataset = {
-        "id": cocktail.pk,
-        "name": cocktail.name,
-        "shots": shots,
-    }
-    context= {}
-    context["cocktail"]=json.dumps(cocktail_dataset)
-    return render(request, 'bevdir/drink_builder_edit.html', context, {'pk':pk})
+    # shots = Shot.objects.filter(shot=cocktail.pk)
+    # cocktail_dataset = {
+    #     "id": cocktail.pk,
+    #     "name": cocktail.name,
+    #     "shots": shots,
+    # }
+    # context= {}
+    # context["cocktail"]=json.dumps(cocktail_dataset)
+    return render(request, 'bevdir/drink_builder_edit.html', {'cocktail': cocktail})
 
 
