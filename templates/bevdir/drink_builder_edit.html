@@ -31,7 +31,7 @@ console.log(cocktail)
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
-            <p>$<span id='menu-price-value'></span></p>
+            <p>$[[]]<span id='menu-price-value'></span></p>
         </div>
     </div>
     <div class='ingredient-list' v-for='shot in cocktail.shots'>
@@ -87,28 +87,28 @@ console.log(cocktail)
   el: '#drink-edit',
   data: {
     cocktail: cocktail,
-    // showModal: -1,
-    // modal_info:{
-    //   id:"",
-    //   name: "",
-    //   target:"",
-    //   shots: {
-    //     id:"",
-    //     volume:"",
-    //     cost:"",
-    //     brandname:""
-    //   },
-    //   portions: {
-    //     id:"",
-    //     amount:"",
-    //     cost:"",
-    //     name:""
-    //   }
-    // }
+    showModal: -1,
+    modal_info:{
+      id:"",
+      name: "",
+      target:"",
+      shots: {
+        id:"",
+        volume:"",
+        cost:"",
+        brandname:""
+      },
+      portions: {
+        id:"",
+        amount:"",
+        cost:"",
+        name:""
+      }
+    }
   },
   computed: {
-      calcPricePerPour: function(pour) {
-        return pour
+      calcPricePerPour: function() {
+        return "FART"
       }
   },
   
