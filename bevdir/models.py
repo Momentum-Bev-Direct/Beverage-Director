@@ -7,7 +7,7 @@ CATEGORIES = [
         "min": 0,
         "max": 99,
     },{
-        "cat": "Whiskey",
+        "cat": "Whiskey - Other",
         "min": 100,
         "max": 199,
     },{
