@@ -19,7 +19,7 @@ class Spirit(models.Model):
         return f'{self.brandname}'
 
     @property
-    def price_per_ounce(self):
+    def price_per_oz(self):
         bottle_size_oz = float(self.size) * 33.814
         price_per_oz = round(float(self.mxb)/bottle_size_oz, 2)
         return price_per_oz
@@ -85,28 +85,23 @@ class Shot(models.Model):
 
     @property
     def cost(self):
-        """
-        for instance:
-            volume = 1 oz
-            spiritName = Jose Cuervo Reserva de Familia
-            spirit_total = mxb_price of bottle ($193.70)
-            spirit_bottle_size = .75L
-            spirit_bottle_size_oz = .75 * 33.814
-            price/oz = 193.70/bottleOZ
-        """
-        # bottle_size_oz = float(self.spirit.size) * 33.814
-        # price_per_oz = float(self.spirit.mxb)/bottle_size_oz
         cost = self.volume * self.spirit.price_per_oz
         return cost
 
 class Portion(models.Model):
     amount = models.IntegerField(default=0)
     unit = models.CharField(max_length=10)
+    price_per_unit = models.FloatField(default=0)
     cocktail= models.ForeignKey(Cocktail, related_name='portions', on_delete=models.CASCADE)
     misc_ingredient = models.ForeignKey(MiscIngredient, related_name='portions', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.amount} of {self.spirit.brandname} for {self.cocktail.name}'
+        return f'{self.amount}{self.unit} of {self.misc_ingredient.name} for {self.cocktail.name}'
+
+    @property
+    def cost(self):
+        cost = self.amount*self.price_per_unit
+        return cost
 
 #MANUALLY ENTER FOR NOW. EVENTUALLY POPULATE THIS DATA WITH A SCRAPE OR IMPORT FUNCTION:
 # SPIRITS_LIST = [

@@ -1,30 +1,22 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Didact+Gothic&family=Monoton&family=Orbitron:wght@500&family=Zilla+Slab&display=swap" rel="stylesheet">
     <link rel="stylesheet" type='text/css' href="{% static 'css/style.css' %}">
-    <link href="/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
-    <style>@import url('https://fonts.googleapis.com/css?family=Abril+Fatface|Orbitron|Bebas+Neue|Monoton&display=swap');</style>
-    <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"> -->
     <title>
-        {% block title %}{% endblock %}
+    {% block title %}{% endblock %}
     </title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="{% static 'js/script.js' %}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-    <link rel="stylesheet" type='text/css' href="{% static 'css/style.css' %}">
+    {% block meta %} {% endblock %}
+    <!-- <script src="{% static 'js/script.js' %}" defer></script> -->
 </head>
 <body>
-    <header class='header'>
-        <h1 class='site-title'>BevDev</h1>
-    </header>
-    {% block content %}
+{% block content %}
 
-    {% endblock content %}
-
+{% endblock content %}
 </body>
 </html>
