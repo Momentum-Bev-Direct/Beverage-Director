@@ -55,7 +55,7 @@ let app = new Vue({
     el: '#drink-builder-edit',
     data: {
         cocktail: cocktail,
-        shots: [{ volume: 4, id: 69, spirit: 666, cocktail: 420},]
+        shots: []
   },
     beforeCreate: function() {
         console.log('hi this is before create')
@@ -65,9 +65,9 @@ let app = new Vue({
     },
     mounted: function() {
         console.log('mounted')
-        setTimeout(() => {
+    
             this.getShots()
-        }, 2000)
+
     },
     beforeUpdate: function() {
         console.log('before update', document.getElementsByClassName('shotty').length)
