@@ -1,16 +1,33 @@
 :root{
     --Blue: #1ef1fa;
+    --background_1: #1ef1fa;
     --Pink: #f60282;
+    --button_std: #f60282;
     --MintGreen: #07fbb6;
+    --background_2: #07fbb6;
     --Purple: #6b15f1;
+    --stroke_med: #6b15f1;
     --DarkBlue: #039d9d;
+    --shadow_blue: #039d9d;
     --DarkPink: #7b0738;
+    --shadow_pink: #7b0738;
     --DarkGreen: #04725c;
-    --DarkPurple: #2f075c;
+    --shadow_green: #04725c;
+    --DarkPurple: #070708;
+    --stroke_dark: #070708;
+    --shadow_dark: #07070885;
     --LightBlue: #cdebeb;
+    --highlight_blue: #cdebeb;
     --LightPink: #e8e2e5;
+    --highlight_pink: #e8e2e5;
     --LightGreen: #cce8e0;
-    --LightPurple: #;
+    --highlight_green: #cce8e0;
+    --font_headline_1: 'Orbitron', sans-serif;
+    --font_cursive_1: 'Abril Fatface', cursive;
+    --font_headline_2: 'Monoton', cursive;
+    --font_serif_1: 'Zilla Slab', serif;
+    --font_sans_1: 'Didact Gothic', sans-serif;
+
 }
 
 * {
@@ -20,7 +37,7 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font_sans_1)
 }
 
 .header {
@@ -28,11 +45,20 @@ body {
     background-color:var(--DarkPurple);
     width: 100%;
     padding:.5rem;
-    font-family:'Orbitron', sans-serif;
-    font-size: 30px;
+    font-family:var(--font_headline_2);
+    font-size: 3rem;
+    text-align: center;
+
+}
+
+.menu-heading {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 10px;
 }
 .container {
     display: flex;
+    width: 80%;
     flex-direction: column;
     max-width: 900px;
     margin: 0 auto;
@@ -65,7 +91,7 @@ body {
 
 .cocktail-name {
     font-size: 55px;
-    font-family: 'Monoton', cursive;
+    font-family: var(--font_headline_2);
     margin: .5rem;
     color: var(--Purple);
     text-underline-offset: var(--DarkPurple);
@@ -87,7 +113,7 @@ body {
     align-items: center;
     background-color: var(--Pink);
     border: thick double var(--DarkPink);
-    font-family: 'Abril Fatface', cursive;
+    font-family: var(--font_cursive_1);
 }
 
 .target-cost {
@@ -107,7 +133,7 @@ body {
     border: 1px solid black;
     padding: 1rem;
     border: thick double var(--DarkPink);
-    font-family: 'Abril Fatface', cursive;
+    font-family: var(--font_cursive_1);
 }
 
 .vert-slider {
@@ -127,7 +153,7 @@ body {
     padding: 1rem;
     margin: 1.5rem;
     background-color: var(--Blue);
-    font-family: 'Abril Fatface', cursive;
+    font-family: var(--font_cursive_1);
     background-blend-mode: color;
     border-radius: 10px;
 }
@@ -165,9 +191,71 @@ body {
     justify-content: center;
     font-size: 1rem;
     padding: .5rem;
-    margin: [2|2 ];
+    margin: 0;
     background-color: var(--MintGreen);
     border: 1px solid var(--DarkGreen);
     border-radius: 10px;
 }
-ß
+
+.btn {
+    background-color: var(--Pink);
+    color: var(--LightBlue);
+    padding: .3rem;
+    border-radius: 5px;
+}
+.menu-item {
+    display: flex;
+    width: 100%;
+    min-width: 600px;
+    background-color: var(--highlight_pink);
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    flex-direction: row;
+    justify-content: space-between;
+    /* justify-content: flex-end; */
+}
+/* .menu-item p {
+    align-self: flex-start;
+} */
+.menu-butt {
+    justify-self: flex-end;
+}
+
+.modal-bg {
+    background-color: rgba(0,0,0,.4);
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:100%;
+    align-items: center;
+}
+
+.modal-container {
+    background-color: var(--highlight_blue);
+    border-radius: 5px;
+    box-shadow: -2px 2px 20px var(--shadow_dark);
+    height: fit-content;
+    padding: 10px;
+    margin: 0 auto;
+}
+.ingredient-ul {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+/* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
+
+.bold {
+    font-weight: bold;
+}
+.flex {
+    display: flex;
+}
+
+.default-shadow {
+    box-shadow: -1px 1px 3px var(--shadow_dark);
+}
+
