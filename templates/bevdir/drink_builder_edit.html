@@ -19,11 +19,12 @@ console.log(cocktail)
         <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
     </div>
     <div class='cost-bar'>
+        <input v-model="cocktail.target" class='vert-slider' type="range" min="1" max="100" value="10" class="slider" id="myRange">
         <p class='target-cost'>Enter Target Cost %:</p>
         <input v-model.number="cocktail.target" class='percent-field' id='target-cost-value'  min='1' max='100' type="number">
     </div>
     <div class='cost-sell-box'>
-        <input class='vert-slider' type="range" min="1" max="100" value="10" class="slider" id="myRange">
+        
         <div class='total-cost-box'>
             <p>Cost of Goods</p>
             <p>$<span id='cost-of-goods-value'></span></p>
@@ -38,12 +39,13 @@ console.log(cocktail)
         <div class='ingredient-box'>
             <div class='ingredient-title-line'>
                 <p class='spirit-type-icon'>category</p>
-                <p class='ingredient-name'>[[shot.brandname]]($[[shot.cost]]/oz)</p>
+                <p class='ingredient-name'>[[shot.brandname]] ($[[shot.cost.toFixed(2)]]/oz)</p>
             </div>
             <div class='slider-bar'>
-                <p>Cost $<span id='pour-price'></span></p>
+                <p>$[[ (shot.volume * shot.cost).toFixed(2) ]]</p>
                 <input v-model="shot.volume" type="range" min=".25" max="6" value="[[shot.volume]]" step=".25" class="slider" id="ounce-slider">
-                <p>Vol:[[shot.volume]] <span id='ounce-pour'></span>oz</p>
+                <input v-model.number="shot.volume" type="number">
+                <!-- <p>Vol:[[shot.volume]] <span id='ounce-pour'></span>oz</p> -->
             </div>
     </div>
     </div>
@@ -104,13 +106,17 @@ console.log(cocktail)
     //   }
     // }
   },
+  computed: {
+      calcPricePerPour: function(pour) {
+        return pour
+      }
+  },
+  
   methods: {
     saveCocktail: function(id) {
         instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
     },
-    formatPrice(value) {
 
-    },
     deleteCocktail: function(id) {
       instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
       .then(function(response) {
