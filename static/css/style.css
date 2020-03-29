@@ -259,6 +259,9 @@ body {
 }
 
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
+.pnk-bg {
+    background-color: var(--highlight_pink)
+}
 
 .bold {
     font-weight: bold;

@@ -15,13 +15,20 @@ console.log(cocktails)
 </header>
 <div id='homeapp' class="container">
   <p class="menu-heading">Your Drink Menu</p>
-  <input type="text" v-model="search" placeholder="FILTER BY COCKTAIL" class="form-input w-50 default-shadow"/>
+  <input type="text" v-model="search" placeholder="FILTER COCKTAILS" class="form-input w-50 default-shadow"/>
   <div v-for="cocktail in filteredCocktails">
     <div v-bind:id="cocktail.id" class="menu-item default-shadow">
       <p>[[ cocktail.name ]]</p>
       <div>
-        <button @click="deleteCocktail(cocktail.id)" class="btn menu-butt">DELETE</button>
+        <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
         <button @click="cocktailSummary(cocktail.id)" class="btn menu-butt">SEE RECIPE</button>
+      </div>
+    </div>
+    <div v-if="showDeleteModal==cocktail.id" class="modal-bg">
+      <div  class="modal-container pnk-bg">
+        <p class="bold">Are you sure you want to delete [[ cocktail.name ]]?</p>
+        <button @click="deleteCocktail(cocktail.id)" class="btn danger-butt">YES, PLEASE DELETE.</button>
+        <button @click="showDeleteModal=-1" class="btn menu-butt">NO! PEASE DON'T!</button>
       </div>
     </div>
     <div v-if="showModal==cocktail.id" class="modal-bg">
@@ -74,6 +81,7 @@ let app = new Vue({
   el: '#homeapp',
   data: {
     cocktails: [],
+    showModal: -1,
     showModal: -1,
     search: "",
     modal_info:{
