@@ -27,11 +27,11 @@ console.log(cocktail)
         
         <div class='total-cost-box'>
             <p>Cost of Goods</p>
-            <p>$<span id='cost-of-goods-value'></span></p>
+            <p v-text="totalCost"></p>
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
-            <p>$[[calcPricePerPour(5)]]<span id='menu-price-value'></span></p>
+            <p>$<span id='menu-price-value'></span></p>
         </div>
     </div>
     <div class='ingredient-list' v-for='shot in cocktail.shots'>
@@ -42,7 +42,7 @@ console.log(cocktail)
                 <p class='ingredient-name'>[[shot.brandname]] ($[[shot.cost.toFixed(2)]]/oz)</p>
             </div>
             <div class='slider-bar'>
-                <p>$[[ (shot.volume * shot.cost).toFixed(2) ]]</p>
+                <p class='pour-cost'>[[ (shot.volume * shot.cost).toFixed(2) ]]</p>
                 <input v-model="shot.volume" type="range" min=".25" max="6" value="[[shot.volume]]" step=".25" class="slider" id="ounce-slider">
                 <input v-model.number="shot.volume" type="number">
                 <!-- <p>Vol:[[shot.volume]] <span id='ounce-pour'></span>oz</p> -->
@@ -80,7 +80,7 @@ console.log(cocktail)
     })
 
 
-
+    let allPours = document.querySelectorAll('.pour-cost')
 
     let app = new Vue({
   delimiters: ['[[', ']]'],
@@ -88,6 +88,8 @@ console.log(cocktail)
   data: {
     cocktail: cocktail,
     showModal: -1,
+    totalCost: 0,
+    allPours: allPours,
     modal_info:{
       id:"",
       name: "",
@@ -107,13 +109,16 @@ console.log(cocktail)
     }
   },
   computed: {
-   
+    getPourCost: function() {
+        let totalCost = 0
+        for (let pour of self.allPours) {
+            totalCost += parseFloat(pour.textContent)
+        }
+        return totalCost
+    }
   },
   
   methods: {
-    calcPricePerPour: function(num) {
-        return num
-    },
     saveCocktail: function(id) {
         instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
     },
