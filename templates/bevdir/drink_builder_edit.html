@@ -27,23 +27,22 @@ console.log(cocktail)
         
         <div class='total-cost-box'>
             <p>Cost of Goods</p>
-            <p v-text="totalCost"></p>
+            <p>$[[getPourCost]]</p>
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
-            <p>$<span id='menu-price-value'></span></p>
+            <p>$[[getMenuPrice]]</p>
         </div>
     </div>
     <div class='ingredient-list' v-for='shot in cocktail.shots'>
-    
         <div class='ingredient-box'>
             <div class='ingredient-title-line'>
                 <p class='spirit-type-icon'>category</p>
                 <p class='ingredient-name'>[[shot.brandname]] ($[[shot.cost.toFixed(2)]]/oz)</p>
             </div>
             <div class='slider-bar'>
-                <p class='pour-cost'>[[ (shot.volume * shot.cost).toFixed(2) ]]</p>
-                <input v-model="shot.volume" type="range" min=".25" max="6" value="[[shot.volume]]" step=".25" class="slider" id="ounce-slider">
+                <p v-text='(shot.volume * shot.cost).toFixed(2)' class='pour-cost'></p>
+                <input v-model="shot.volume" type="range" min=".25" max="6" step=".25" class="slider" id="ounce-slider">
                 <input v-model.number="shot.volume" type="number">
                 <!-- <p>Vol:[[shot.volume]] <span id='ounce-pour'></span>oz</p> -->
             </div>
@@ -79,50 +78,61 @@ console.log(cocktail)
       }
     })
 
-
-    let allPours = document.querySelectorAll('.pour-cost')
-
-    let app = new Vue({
+allPours = document.querySelectorAll('.pour-cost')
+console.log('outside app:', allPours)
+let app = new Vue({
   delimiters: ['[[', ']]'],
   el: '#drink-edit',
   data: {
-    cocktail: cocktail,
-    showModal: -1,
     totalCost: 0,
-    allPours: allPours,
-    modal_info:{
-      id:"",
-      name: "",
-      target:"",
-      shots: {
-        id:"",
-        volume:"",
-        cost:"",
-        brandname:""
-      },
-      portions: {
-        id:"",
-        amount:"",
-        cost:"",
-        name:""
-      }
-    }
+    menuPrice: 0,
+    ingredientPrices: [],
+    cocktail: cocktail,
+    // showModal: -1,
+    // modal_info:{
+    //   id:"",
+    //   name: "",
+    //   target:"",
+    //   shots: {
+    //     id:"",
+    //     volume:"",
+    //     cost:"",
+    //     brandname:""
+    //   },
+    //   portions: {
+    //     id:"",
+    //     amount:"",
+    //     cost:"",
+    //     name:""
+    //   }
+    // }
   },
   computed: {
     getPourCost: function() {
-        let totalCost = 0
-        for (let pour of self.allPours) {
-            totalCost += parseFloat(pour.textContent)
+        this.totalCost = 0
+        pourPrices = []
+        for (key in this.cocktail.shots) {
+            pourPrices.push(parseFloat((this.cocktail.shots[key].volume) * this.cocktail.shots[key].cost))
         }
-        return totalCost
+        for (pour of pourPrices) {
+            this.totalCost += pour
+        }
+        return (this.totalCost).toFixed(2)
+    },
+    getMenuPrice: function() {
+        console.log(cocktail.target)
+        console.log(this.totalCost)
+        this.menuPrice = (this.totalCost / (cocktail.target/100)).toFixed(2)
+        return this.menuPrice
     }
+
   },
   
   methods: {
+    
     saveCocktail: function(id) {
         instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
     },
-
     deleteCocktail: function(id) {
       instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
       .then(function(response) {
@@ -134,16 +144,16 @@ console.log(cocktail)
 
       console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
     },
-    cocktailSummary: function(id) {
-      this.showModal = id
-      for(let cocktail of this.cocktails){
-        if(cocktail.id == id) {
-          this.modal_info = cocktail
-          this.modal_shots = cocktail.shots
-          this.modal_portions = cocktail.portions
-        }
-      }
-    }
+    // cocktailSummary: function(id) {
+    //   this.showModal = id
+    //   for(let cocktail of this.cocktails){
+    //     if(cocktail.id == id) {
+    //       this.modal_info = cocktail
+    //       this.modal_shots = cocktail.shots
+    //       this.modal_portions = cocktail.portions
+    //     }
+    //   }
+    // }
   }
 })
 </script>
