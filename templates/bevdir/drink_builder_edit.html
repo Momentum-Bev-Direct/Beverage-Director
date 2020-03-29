@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Drink Builder
+{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type='text/javascript'>
+const cocktail = {{ cocktail|safe }}
+console.log(cocktail)
+</script>
+
+    
+<div class='container' id='drink-edit'>
+    <div class='top-bar'>
+        <p class='logo'>Logo</p>
+        <h2 class='cocktail-name'>[[cocktail.name]]</h2>
+        <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
+    </div>
+    <div class='cost-bar'>
+        <input v-model="cocktail.target" class='vert-slider' type="range" min="1" max="100" value="10" class="slider" id="myRange">
+        <p class='target-cost'>Enter Target Cost %:</p>
+        <input v-model.number="cocktail.target" class='percent-field' id='target-cost-value'  min='1' max='100' type="number">
+    </div>
+    <div class='cost-sell-box'>
+        
+        <div class='total-cost-box'>
+            <p>Cost of Goods</p>
+            <p v-text="totalCost"></p>
+        </div>
+        <div class='menu-price-box'>
+            <p>Menu Price</p>
+            <p>$<span id='menu-price-value'></span></p>
+        </div>
+    </div>
+    <div class='ingredient-list' v-for='shot in cocktail.shots'>
+    
+        <div class='ingredient-box'>
+            <div class='ingredient-title-line'>
+                <p class='spirit-type-icon'>category</p>
+                <p class='ingredient-name'>[[shot.brandname]] ($[[shot.cost.toFixed(2)]]/oz)</p>
+            </div>
+            <div class='slider-bar'>
+                <p class='pour-cost'>[[ (shot.volume * shot.cost).toFixed(2) ]]</p>
+                <input v-model="shot.volume" type="range" min=".25" max="6" value="[[shot.volume]]" step=".25" class="slider" id="ounce-slider">
+                <input v-model.number="shot.volume" type="number">
+                <!-- <p>Vol:[[shot.volume]] <span id='ounce-pour'></span>oz</p> -->
+            </div>
+    </div>
+    </div>
+    <button class='save-button' type="button">SAVE</button>
+
+
+</div>
+
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const instance = axios.create({
+      headers: {
+        'X-CSRFToken': getCookie("csrftoken"),
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
+
+
+    let allPours = document.querySelectorAll('.pour-cost')
+
+    let app = new Vue({
+  delimiters: ['[[', ']]'],
+  el: '#drink-edit',
+  data: {
+    cocktail: cocktail,
+    showModal: -1,
+    totalCost: 0,
+    allPours: allPours,
+    modal_info:{
+      id:"",
+      name: "",
+      target:"",
+      shots: {
+        id:"",
+        volume:"",
+        cost:"",
+        brandname:""
+      },
+      portions: {
+        id:"",
+        amount:"",
+        cost:"",
+        name:""
+      }
+    }
+  },
+  computed: {
+    getPourCost: function() {
+        let totalCost = 0
+        for (let pour of self.allPours) {
+            totalCost += parseFloat(pour.textContent)
+        }
+        return totalCost
+    }
+  },
+  
+  methods: {
+    saveCocktail: function(id) {
+        instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
+    },
+
+    deleteCocktail: function(id) {
+      instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
+      .then(function(response) {
+      }).then(function(data){
+        console.log("data is ok", data)
+      }).catch(function(ex) {
+        console.log('parsing failed', ex)
+      })
+
+      console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
+    },
+    cocktailSummary: function(id) {
+      this.showModal = id
+      for(let cocktail of this.cocktails){
+        if(cocktail.id == id) {
+          this.modal_info = cocktail
+          this.modal_shots = cocktail.shots
+          this.modal_portions = cocktail.portions
+        }
+      }
+    }
+  }
+})
+</script>
+
+{% endblock %}
