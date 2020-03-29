@@ -60,7 +60,7 @@ body {
     display: flex;
     width: 80%;
     flex-direction: column;
-    max-width: 900px;
+    min-width: 400px;
     margin: 0 auto;
     border: 10px thin var(--LightBlue)
 }
@@ -206,7 +206,7 @@ body {
 .menu-item {
     display: flex;
     width: 100%;
-    min-width: 600px;
+    min-width: 400px;
     background-color: var(--highlight_pink);
     border-radius: 5px;
     padding: 10px;
@@ -244,9 +244,24 @@ body {
 .ingredient-ul {
     list-style-type: disc;
     list-style-position: inside;
+
+}
+
+.form-input {
+    background-color: var(--highlight_blue);
+    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: none;
+    border-style: none;
+    outline: none;
+
 }
 
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
+.pnk-bg {
+    background-color: var(--highlight_pink)
+}
 
 .bold {
     font-weight: bold;
