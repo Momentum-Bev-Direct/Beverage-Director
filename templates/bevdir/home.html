@@ -15,7 +15,8 @@ console.log(cocktails)
 </header>
 <div id='homeapp' class="container">
   <p class="menu-heading">Your Drink Menu</p>
-  <div v-for="cocktail in cocktails">
+  <input type="text" v-model="search" placeholder="filter"/>
+  <div v-for="cocktail in filteredCocktails">
     <div v-bind:id="cocktail.id" class="menu-item default-shadow">
       <p>[[ cocktail.name ]]</p>
       <div>
@@ -72,8 +73,9 @@ let app = new Vue({
   delimiters: ['[[', ']]'],
   el: '#homeapp',
   data: {
-    cocktails: cocktails,
+    cocktails: [],
     showModal: -1,
+    search: "",
     modal_info:{
       id:"",
       name: "",
@@ -113,6 +115,13 @@ let app = new Vue({
           this.modal_portions = cocktail.portions
         }
       }
+    }
+  },
+  computed: {
+    filteredCocktails: function(){
+      return cocktails.filter((cocktail)=>{
+        return cocktail.name.match(this.search)
+      })
     }
   }
 })
