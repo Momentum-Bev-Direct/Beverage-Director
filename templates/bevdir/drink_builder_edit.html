@@ -31,7 +31,7 @@ console.log(cocktail)
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
-            <p>$[[]]<span id='menu-price-value'></span></p>
+            <p>$[[calcPricePerPour(5)]]<span id='menu-price-value'></span></p>
         </div>
     </div>
     <div class='ingredient-list' v-for='shot in cocktail.shots'>
@@ -107,12 +107,13 @@ console.log(cocktail)
     }
   },
   computed: {
-      calcPricePerPour: function() {
-        return "FART"
-      }
+   
   },
   
   methods: {
+    calcPricePerPour: function(num) {
+        return num
+    },
     saveCocktail: function(id) {
         instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
     },
