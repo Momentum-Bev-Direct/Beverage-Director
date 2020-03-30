@@ -107,6 +107,7 @@ let app = new Vue({
       instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
       .then(function(response) {
       }).then(function(data){
+        // NEED TO DELETE LOCALLY
         console.log("data is ok", data)
       }).catch(function(ex) {
         console.log('parsing failed', ex)

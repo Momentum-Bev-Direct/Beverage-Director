@@ -55,7 +55,7 @@ def homepage(request):
         cocktail_dict["target"]= cocktail.target_profit
 
         cocktail_dict["shots"]= {
-            str(shot.pk):{"volume":shot.volume, "cost": shot.cost, "brandname": shot.spirit.brandname} for shot in cocktail.shots.all()
+            str(shot.pk):{"volume":shot.volume, "cost": shot.spirit.price_per_oz, "brandname": shot.spirit.brandname} for shot in cocktail.shots.all()
         }
 
         cocktail_dict["portions"]= {
@@ -76,7 +76,7 @@ def edit_cocktail(request, pk):
     cocktail_dict["target"]= cocktail.target_profit
 
     cocktail_dict["shots"]= {
-        str(shot.pk):{"id":shot.pk, "volume":shot.volume, "cost": shot.cost, "brandname": shot.spirit.brandname} for shot in cocktail.shots.all()
+        str(shot.pk):{"id":shot.pk, "volume":shot.volume, "cost": shot.spirit.price_per_oz, "brandname": shot.spirit.brandname} for shot in cocktail.shots.all()
     }
 
     cocktail_dict["portions"]= {
