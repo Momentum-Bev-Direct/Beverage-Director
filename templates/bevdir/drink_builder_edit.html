@@ -31,11 +31,11 @@ const cocktail = {{ cocktail|safe }}
         </div>
     </div>
 
-    <div v-for="shot in cocktail.shots" class="menu-item">
+    <div v-for="shot in cocktail.shots" class="menu-item default-shadow">
       <shot-line v-bind:shot="shot" v-bind:id="shot.id" v-on:change="updateTotal"></shot-line>
     </div>
 
-    <button class='btn' type="button">SAVE</button>
+    <button class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
 </div>
 
 <script>
@@ -67,33 +67,61 @@ const instance = axios.create({
 
 let allPours = document.querySelectorAll('.pour-cost')
 // ----------------------------------VUE COMPONENTS---------------------------------------
+
 const ShotLine = {
   delimiters: ['[[', ']]'],
   props: {
     shot: Object,
   },
+  compontents:{
+    VueSlider: window['vue-slider-component']
+  },
   data: function(){
     return {
       volume: this.shot.volume,
-      pullCost: 0,
+      pourCost: 0,
     }
   },
   template:`
-  <div>
-    <div class='menu-item'>
-      <p class='bold'>[[ shot.brandname ]]</p>
-      <p class='vol-display'>[[ volume ]] oz</p>
-      <input v-model="volume" v-on:change="adjustPullCost" v-on:change="$emit('change')" type="range" min=".25" max="6" step=".25" class="slider"/>
-      <p>Cost of pull: $ <span class="pull-cost">[[ pullCost ]]</span></p>
+  <div class="wide-100 flex">
+    <div class="wide-100 flex">
+      <div class="menu-input center-txt">
+        <i @click="subtractVolume"class="fas fa-angle-double-left" title="decrease pour volume by 0.25 oz"></i>
+        <p class="light-stroke">LESS</p>
+      </div>
+      <div class="menu-mid">
+        <p class='bold wide-100 center-txt'>[[ shot.brandname ]]</p>
+        <div class='wide-100 center-txt'>
+        <input v-model="volume" placeholder="custom"/><label>oz</lable>
+        </div>
+        <p class="wide-100 center-txt">Cost of pour: $ <span class="pour-cost">[[ adjustedPourCost ]]</span></p>
+        <button v-on:click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
+      </div>
+      <div class="menu-input center-txt">
+        <i @click="addVolume" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
+        <p class="light-stroke">MORE</p>
+      </div>
     </div>
+
   </div>`,
   methods: {
-    adjustPullCost: function(){
-      this.pullCost = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+    deleteShot: function(id){
+      console.log('stuff')
+    },
+    addVolume: function(){
+      this.volume+=0.25
+    },
+    subtractVolume: function(){
+      this.volume-=0.25
+    }
+  },
+  computed: {
+    adjustedPourCost: function(){
+      return (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
     }
   },
   mounted (){
-      this.pullCost = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+      this.pourCost = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
   }
 }
 
@@ -160,8 +188,7 @@ let app = new Vue({
     updateTotal: function(){
       this.totalCost = 0
       output = 0
-      allInputs = document.querySelectorAll('.pull-cost')
-      console.log(allInputs)
+      allInputs = document.querySelectorAll('.pour-cost')
       for (let input of allInputs){
         output+= parseFloat(input.textContent)
       }
@@ -169,7 +196,19 @@ let app = new Vue({
       this.menuPrice = (parseFloat(this.totalCost)*parseFloat(this.targetMargin)+parseFloat(this.totalCost)).toFixed(2)
     }
   },
+  computed: {
+    getTotalCost: function(){
+      output = 0
+      allInputs = document.querySelectorAll('.pour-cost')
+      for (let input of allInputs){
+        output+= parseFloat(input.textContent)
+      }
+      return output.toFixed(2)
+    }
+  }
 })
+
+// <input v-model="volume" v-on:change="adjustPourCost" v-on:change="$emit('change')" type="range" min=".25" max="6" step=".25" class="slider"/>
 </script>
 
 {% endblock %}

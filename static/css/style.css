@@ -15,6 +15,7 @@
     --shadow_green: #04725c;
     --DarkPurple: #070708;
     --stroke_dark: #070708;
+    --stroke_lighter: #53535f;
     --shadow_dark: #07070885;
     --LightBlue: #cdebeb;
     --highlight_blue: #cdebeb;
@@ -204,6 +205,11 @@ body {
     padding: .3rem;
     border-radius: 5px;
 }
+
+.btn:hover {
+    color: var(--stroke_dark);
+}
+
 .menu-item {
     display: flex;
     width: 100%;
@@ -256,12 +262,58 @@ body {
     border: none;
     border-style: none;
     outline: none;
+}
 
+.fa-angle-double-left, .fa-angle-double-right {
+    color: var(--background_2);
+    font-size: 4rem;
+    text-shadow: -1px 1px 3px var(--shadow_dark);
+}
+
+.fa-angle-double-left:hover, .fa-angle-double-right:hover {
+    color: var(--stroke_dark);
+}
+
+.menu-input {
+    height: 100%;
+    width: 20%;
+}
+
+.menu-mid {
+    height: 100%;
+    width: 60%;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.menu-mid input{
+    padding: 3px;
+    border-radius: 5px;
+    background-color: var(--highlight_blue);
+    font-size: 1rem;
+    width: 50px;
+    text-align: center;
 }
 
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
 .pnk-bg {
     background-color: var(--highlight_pink)
+}
+
+.green-bg {
+    background-color: var(--background_2)
+}
+
+.text-dark {
+    color: var(--stroke_dark)
+}
+
+.light-stroke {
+    color: var(--stroke_lighter);
+}
+
+.justify-self {
+    justify-self: center;
 }
 
 .bold {
@@ -273,5 +325,22 @@ body {
 
 .default-shadow {
     box-shadow: -1px 1px 3px var(--shadow_dark);
+    border: none;
 }
 
+.wide-100 {
+    width: 100%;
+}
+
+.center-txt {
+    text-align: center;
+}
+
+.vert-margin-10 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.center-butt {
+    width: 40%;
+}
