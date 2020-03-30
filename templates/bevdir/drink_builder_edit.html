@@ -11,7 +11,7 @@ const cocktail = {{ cocktail|safe }}
 console.log(cocktail)
 </script>
 
-    
+
 <div class='container' id='drink-edit'>
     <div class='top-bar'>
         <p class='logo'>Logo</p>
@@ -19,77 +19,103 @@ console.log(cocktail)
         <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
     </div>
     <div class='cost-bar'>
-        <input v-model="cocktail.target" class='vert-slider' type="range" min="1" max="100" value="10" class="slider" id="myRange">
         <p class='target-cost'>Enter Target Cost %:</p>
-        <input v-model.number="cocktail.target" class='percent-field' id='target-cost-value'  min='1' max='100' type="number">
+        <p>[[ cocktail.target ]]</p>
     </div>
     <div class='cost-sell-box'>
-        
         <div class='total-cost-box'>
             <p>Cost of Goods</p>
-            <p v-text="totalCost"></p>
+            <p>$ [[ totalCost ]]</p>
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
-            <p>$<span id='menu-price-value'></span></p>
+            <p>$<span v-text="totalCost * cocktail.target + totalCost.toFixed(2)"></span></p>
         </div>
     </div>
-    <div class='ingredient-list' v-for='shot in cocktail.shots'>
-    
-        <div class='ingredient-box'>
-            <div class='ingredient-title-line'>
-                <p class='spirit-type-icon'>category</p>
-                <p class='ingredient-name'>[[shot.brandname]] ($[[shot.cost.toFixed(2)]]/oz)</p>
-            </div>
-            <div class='slider-bar'>
-                <p class='pour-cost'>[[ (shot.volume * shot.cost).toFixed(2) ]]</p>
-                <input v-model="shot.volume" type="range" min=".25" max="6" value="[[shot.volume]]" step=".25" class="slider" id="ounce-slider">
-                <input v-model.number="shot.volume" type="number">
-                <!-- <p>Vol:[[shot.volume]] <span id='ounce-pour'></span>oz</p> -->
-            </div>
+
+    <div v-for="shot in cocktail.shots" class="menu-item">
+      <shot-line v-bind:shot="shot" v-bind:id="shot.id" v-on:change="updateTotal"></shot-line>
     </div>
-    </div>
-    <button class='save-button' type="button">SAVE</button>
+
+    <button class='btn' type="button">SAVE</button>
 
 
 </div>
 
 <script>
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
         }
-        return cookieValue;
     }
+    return cookieValue;
+}
 
-    const instance = axios.create({
-      headers: {
-        'X-CSRFToken': getCookie("csrftoken"),
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    })
+const instance = axios.create({
+  headers: {
+    'X-CSRFToken': getCookie("csrftoken"),
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+})
 
 
-    let allPours = document.querySelectorAll('.pour-cost')
+let allPours = document.querySelectorAll('.pour-cost')
 
-    let app = new Vue({
+const ShotLine = {
+  delimiters: ['[[', ']]'],
+  props: {
+    shot: Object,
+  },
+  data: function(){
+    return {
+      volume: this.shot.volume,
+      pullCost: 0,
+    }
+  },
+  template:`
+  <div>
+    <div class='menu-item'>
+      <p class='bold'>[[ shot.brandname ]]</p>
+      <p class='vol-display'>[[ volume ]] oz</p>
+      <input v-model="volume" v-on:change="adjustPullCost" type="range" min=".25" max="6" step=".25" class="slider"/>
+      <p>Cost of pull: $ [[ pullCost ]]</p>
+    </div>
+  </div>`,
+  methods: {
+    adjustPullCost: function(){
+      this.pullCost = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+    }
+  },
+  mounted (){
+      this.pullCost = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+  }
+}
+
+
+let app = new Vue({
   delimiters: ['[[', ']]'],
   el: '#drink-edit',
+  components: {
+    'shot-line': ShotLine,
+    // "portion-line": PortionLine,
+  },
   data: {
     cocktail: cocktail,
+    targetMargin: 0,
+    newShots: [],
+    newPortions: [],
     showModal: -1,
     totalCost: 0,
-    allPours: allPours,
     modal_info:{
       id:"",
       name: "",
@@ -108,16 +134,6 @@ console.log(cocktail)
       }
     }
   },
-  computed: {
-    getPourCost: function() {
-        let totalCost = 0
-        for (let pour of self.allPours) {
-            totalCost += parseFloat(pour.textContent)
-        }
-        return totalCost
-    }
-  },
-  
   methods: {
     saveCocktail: function(id) {
         instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
@@ -143,9 +159,22 @@ console.log(cocktail)
           this.modal_portions = cocktail.portions
         }
       }
+    },
+    updateTotal: function(){
+      this.totalCost = 0
+      output = 0
+      allInputs = document.querySelectorAll('.ingredient-slider')
+      console.log(allInputs)
+      for (let input of allInputs){
+        output+= parseFloat(input.value)
+      }
+      this.totalCost = output
     }
   }
 })
+
+// app.updateTotal()
+
 </script>
 
 {% endblock %}
