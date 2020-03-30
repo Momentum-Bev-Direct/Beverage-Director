@@ -23,7 +23,7 @@ const cocktail = {{ cocktail|safe }}
     <div class='cost-sell-box'>
         <div class='total-cost-box'>
             <p>Cost of Goods</p>
-            <p>$ [[ totalCost ]]</p>
+            <!-- <p>$ [[ totalCost ]]</p> -->
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
@@ -92,7 +92,7 @@ const ShotLine = {
       <div class="menu-mid">
         <p class='bold wide-100 center-txt'>[[ shot.brandname ]]</p>
         <div class='wide-100 center-txt'>
-        <input v-model="volume" placeholder="custom"/><label>oz</lable>
+        <input type="number" v-model="volume" placeholder="custom"/><label>oz</lable>
         </div>
         <p class="wide-100 center-txt">Cost of pour: $ <span class="pour-cost">[[ adjustedPourCost ]]</span></p>
         <button v-on:click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
@@ -140,7 +140,9 @@ let app = new Vue({
     newShots: [],
     newPortions: [],
     showModal: -1,
-    totalCost: 0,
+    allPourCosts: function(){
+      return document.querySelectorAll('.pour-cost')
+    },
     modal_info:{
       id:"",
       name: "",
