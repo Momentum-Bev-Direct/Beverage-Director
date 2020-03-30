@@ -92,7 +92,7 @@ const ShotLine = {
       <div class="menu-mid">
         <p class='bold wide-100 center-txt'>[[ shot.brandname ]]</p>
         <div class='wide-100 center-txt'>
-        <input type="number" v-model="volume" placeholder="custom"/><label>oz</lable>
+        <input type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
         </div>
         <p class="wide-100 center-txt">Cost of pour: $ <span class="pour-cost">[[ adjustedPourCost ]]</span></p>
         <button v-on:click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
