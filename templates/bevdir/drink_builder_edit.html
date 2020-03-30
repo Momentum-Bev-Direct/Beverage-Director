@@ -8,10 +8,8 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type='text/javascript'>
 const cocktail = {{ cocktail|safe }}
-console.log(cocktail)
 </script>
-
-
+<!------------------------------- HTML --------------------------------->
 <div class='container' id='drink-edit'>
     <div class='top-bar'>
         <p class='logo'>Logo</p>
@@ -38,12 +36,10 @@ console.log(cocktail)
     </div>
 
     <button class='btn' type="button">SAVE</button>
-
-
 </div>
 
 <script>
-
+// --------------------------------------AJAX CONFIG-------------------------------------
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -70,7 +66,7 @@ const instance = axios.create({
 
 
 let allPours = document.querySelectorAll('.pour-cost')
-
+// ----------------------------------VUE COMPONENTS---------------------------------------
 const ShotLine = {
   delimiters: ['[[', ']]'],
   props: {
@@ -101,7 +97,7 @@ const ShotLine = {
   }
 }
 
-
+// -----------------------------------VUE APP INSTANCE---------------------------
 let app = new Vue({
   delimiters: ['[[', ']]'],
   el: '#drink-edit',
