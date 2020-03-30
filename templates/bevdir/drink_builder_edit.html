@@ -19,8 +19,8 @@ console.log(cocktail)
         <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
     </div>
     <div class='cost-bar'>
-        <p class='target-cost'>Enter Target Cost %:</p>
-        <p>[[ cocktail.target ]]</p>
+        <p class='target-cost'>Enter Desired Margin:</p>
+        <input v-model="targetMargin">
     </div>
     <div class='cost-sell-box'>
         <div class='total-cost-box'>
@@ -29,7 +29,7 @@ console.log(cocktail)
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
-            <p>$<span v-text="totalCost * cocktail.target + totalCost.toFixed(2)"></span></p>
+            <p>$[[ menuPrice ]]</p>
         </div>
     </div>
 
@@ -87,8 +87,8 @@ const ShotLine = {
     <div class='menu-item'>
       <p class='bold'>[[ shot.brandname ]]</p>
       <p class='vol-display'>[[ volume ]] oz</p>
-      <input v-model="volume" v-on:change="adjustPullCost" type="range" min=".25" max="6" step=".25" class="slider"/>
-      <p>Cost of pull: $ [[ pullCost ]]</p>
+      <input v-model="volume" v-on:change="adjustPullCost" v-on:change="$emit('change')" type="range" min=".25" max="6" step=".25" class="slider"/>
+      <p>Cost of pull: $ <span class="pull-cost">[[ pullCost ]]</span></p>
     </div>
   </div>`,
   methods: {
@@ -111,7 +111,8 @@ let app = new Vue({
   },
   data: {
     cocktail: cocktail,
-    targetMargin: 0,
+    targetMargin: .2,
+    menuPrice: 0,
     newShots: [],
     newPortions: [],
     showModal: -1,
@@ -163,18 +164,16 @@ let app = new Vue({
     updateTotal: function(){
       this.totalCost = 0
       output = 0
-      allInputs = document.querySelectorAll('.ingredient-slider')
+      allInputs = document.querySelectorAll('.pull-cost')
       console.log(allInputs)
       for (let input of allInputs){
-        output+= parseFloat(input.value)
+        output+= parseFloat(input.textContent)
       }
-      this.totalCost = output
+      this.totalCost = output.toFixed(2)
+      this.menuPrice = (parseFloat(this.totalCost)*parseFloat(this.targetMargin)+parseFloat(this.totalCost)).toFixed(2)
     }
-  }
+  },
 })
-
-// app.updateTotal()
-
 </script>
 
 {% endblock %}
