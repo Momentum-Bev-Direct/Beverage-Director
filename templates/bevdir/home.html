@@ -20,6 +20,7 @@ console.log(cocktails)
     <div v-bind:id="cocktail.id" class="menu-item default-shadow">
       <p>[[ cocktail.name ]]</p>
       <div>
+        <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn menu-butt">EDIT</button></a>
         <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
         <button @click="cocktailSummary(cocktail.id)" class="btn menu-butt">SEE RECIPE</button>
       </div>
