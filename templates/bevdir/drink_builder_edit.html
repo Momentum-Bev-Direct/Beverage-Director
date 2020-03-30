@@ -44,7 +44,7 @@ console.log(cocktail)
                 <p v-text='(shot.volume * shot.cost).toFixed(2)' class='pour-cost'></p>
                 <input v-model="shot.volume" type="range" min=".25" max="6" step=".25" class="slider" id="ounce-slider">
                 <input v-model.number="shot.volume" type="number">
-                <!-- <p>Vol:[[shot.volume]] <span id='ounce-pour'></span>oz</p> -->
+                <button v-on:click='deleteIngredient(shot.id)'>Delete</button>
             </div>
     </div>
     </div>
@@ -114,6 +114,7 @@ let app = new Vue({
         for (key in this.cocktail.shots) {
             pourPrices.push(parseFloat((this.cocktail.shots[key].volume) * this.cocktail.shots[key].cost))
         }
+
         for (pour of pourPrices) {
             this.totalCost += pour
         }
@@ -129,7 +130,18 @@ let app = new Vue({
   },
   
   methods: {
-    
+    deleteIngredient: function(id) {
+        console.log('delete attempt')
+        instance.delete(`http://127.0.0.1:8000/api/shot/${id}`)
+        .then(function(response) {
+      }).then(function(data){
+        console.log("data is ok", data)
+      }).catch(function(ex) {
+        console.log('parsing failed', ex)
+      })
+
+      console.log(`DELETE Shot ${id}`)
+    },
     saveCocktail: function(id) {
         instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
     },
