@@ -16,14 +16,13 @@ const cocktail = {{ cocktail|safe }}
         <h2 class='cocktail-name'>[[cocktail.name]]</h2>
         <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
     </div>
-    <div class='cost-bar'>
+    <div class='cost-bar default-shadow'>
       <p class='target-cost'>ADJUST TARGET:</p>
       <div class="input-contain">
-        <input id="target-percent" v-model="targetMargin" type="number" min="1" max="100"><label for="target-percent">%</label>
+        <input id="target-percent" class="input-default" v-model="targetMargin" type="number" min="1" max="100"><label for="target-percent">%</label>
       </div>
-
     </div>
-    <div class='cost-sell-box'>
+    <div class='cost-sell-box default-shadow'>
         <div class='total-cost-box'>
             <p>Cost of Goods</p>
             <p>$ [[ displayCost ]]</p>
@@ -90,7 +89,7 @@ const ShotLine = {
       <div class="menu-mid">
         <p class='bold wide-100 center-txt'>[[ shot.brandname ]]</p>
         <div class='wide-100 center-txt'>
-        <input type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
+        <input class="input-default" type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
         </div>
         <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
         <button @click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
