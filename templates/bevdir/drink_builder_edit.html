@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Drink Builder
+{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type='text/javascript'>
+const cocktail = {{ cocktail|safe }}
+</script>
+<!------------------------------- HTML --------------------------------->
+<div class='container' id='drink-edit'>
+    <div class='top-bar'>
+        <p class='logo'>Logo</p>
+        <h2 class='cocktail-name'>[[cocktail.name]]</h2>
+        <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
+    </div>
+    <div class='cost-bar'>
+        <p class='target-cost'>Enter Desired Margin:</p>
+        <input v-model="targetMargin">
+    </div>
+    <div class='cost-sell-box'>
+        <div class='total-cost-box'>
+            <p>Cost of Goods</p>
+            <p>$ [[ totalCost ]]</p>
+        </div>
+        <div class='menu-price-box'>
+            <p>Menu Price</p>
+            <p>$[[ menuPrice ]]</p>
+        </div>
+    </div>
+
+    <div v-for="shot in cocktail.shots" class="menu-item">
+      <shot-line v-bind:shot="shot" v-bind:id="shot.id" v-on:change="updateTotal"></shot-line>
+    </div>
+
+    <button class='btn' type="button">SAVE</button>
+</div>
+
+<script>
+// --------------------------------------AJAX CONFIG-------------------------------------
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const instance = axios.create({
+  headers: {
+    'X-CSRFToken': getCookie("csrftoken"),
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+})
+
+
+let allPours = document.querySelectorAll('.pour-cost')
+// ----------------------------------VUE COMPONENTS---------------------------------------
+const ShotLine = {
+  delimiters: ['[[', ']]'],
+  props: {
+    shot: Object,
+  },
+  data: function(){
+    return {
+      volume: this.shot.volume,
+      pullCost: 0,
+    }
+  },
+  template:`
+  <div>
+    <div class='menu-item'>
+      <p class='bold'>[[ shot.brandname ]]</p>
+      <p class='vol-display'>[[ volume ]] oz</p>
+      <input v-model="volume" v-on:change="adjustPullCost" v-on:change="$emit('change')" type="range" min=".25" max="6" step=".25" class="slider"/>
+      <p>Cost of pull: $ <span class="pull-cost">[[ pullCost ]]</span></p>
+    </div>
+  </div>`,
+  methods: {
+    adjustPullCost: function(){
+      this.pullCost = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+    }
+  },
+  mounted (){
+      this.pullCost = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+  }
+}
+
+// -----------------------------------VUE APP INSTANCE---------------------------
+let app = new Vue({
+  delimiters: ['[[', ']]'],
+  el: '#drink-edit',
+  components: {
+    'shot-line': ShotLine,
+    // "portion-line": PortionLine,
+  },
+  data: {
+    cocktail: cocktail,
+    targetMargin: .2,
+    menuPrice: 0,
+    newShots: [],
+    newPortions: [],
+    showModal: -1,
+    totalCost: 0,
+    modal_info:{
+      id:"",
+      name: "",
+      target:"",
+      shots: {
+        id:"",
+        volume:"",
+        cost:"",
+        brandname:""
+      },
+      portions: {
+        id:"",
+        amount:"",
+        cost:"",
+        name:""
+      }
+    }
+  },
+  methods: {
+    saveCocktail: function(id) {
+        instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
+    },
+
+    deleteCocktail: function(id) {
+      instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
+      .then(function(response) {
+      }).then(function(data){
+        console.log("data is ok", data)
+      }).catch(function(ex) {
+        console.log('parsing failed', ex)
+      })
+
+      console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
+    },
+    cocktailSummary: function(id) {
+      this.showModal = id
+      for(let cocktail of this.cocktails){
+        if(cocktail.id == id) {
+          this.modal_info = cocktail
+          this.modal_shots = cocktail.shots
+          this.modal_portions = cocktail.portions
+        }
+      }
+    },
+    updateTotal: function(){
+      this.totalCost = 0
+      output = 0
+      allInputs = document.querySelectorAll('.pull-cost')
+      console.log(allInputs)
+      for (let input of allInputs){
+        output+= parseFloat(input.textContent)
+      }
+      this.totalCost = output.toFixed(2)
+      this.menuPrice = (parseFloat(this.totalCost)*parseFloat(this.targetMargin)+parseFloat(this.totalCost)).toFixed(2)
+    }
+  },
+})
+</script>
+
+{% endblock %}

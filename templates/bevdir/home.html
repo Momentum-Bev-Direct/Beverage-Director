@@ -1,27 +1,55 @@
 {% extends 'base.html' %}
 {% block title %}
-    BevDev Home
+BevDev Home
 {% endblock %}
 
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type='text/javascript'>
 const cocktails = {{ cocktails|safe }}
+console.log(cocktails)
 </script>
-
-<div id='homeapp'>
-  <h2>Your Drink Menu</h2>
-  <div v-bind:title="message" v-for="cocktail in cocktails">
-    <div v-bind:id="cocktail.id">
-      <p>[[ message ]]</p>
-      <h3 >[[ cocktail.name ]]</h3>
-      <p>Cost/Loss: [[ cocktail.total_cost ]]</p>
-      <p>Recommended: [[ cocktail.recommended_price ]]</p>
-      <button v-on:click="deleteCocktail(cocktail.id)">DELETE</button>
+<!---------------------------------BEGIN HTML --------------------------->
+<header class='header container'>
+  <p class='site-title'>BevDev</p>
+</header>
+<div id='homeapp' class="container">
+  <p class="menu-heading">Your Drink Menu</p>
+  <input type="text" v-model="search" placeholder="FILTER COCKTAILS" class="form-input w-50 default-shadow"/>
+  <div v-for="cocktail in filteredCocktails">
+    <div v-bind:id="cocktail.id" class="menu-item default-shadow">
+      <p>[[ cocktail.name ]]</p>
+      <div>
+        <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
+        <button @click="cocktailSummary(cocktail.id)" class="btn menu-butt">SEE RECIPE</button>
+      </div>
+    </div>
+    <div v-if="showDeleteModal==cocktail.id" class="modal-bg">
+      <div  class="modal-container pnk-bg">
+        <p class="bold">Are you sure you want to delete [[ cocktail.name ]]?</p>
+        <button @click="deleteCocktail(cocktail.id)" class="btn danger-butt">YES, PLEASE DELETE.</button>
+        <button @click="showDeleteModal=-1" class="btn menu-butt">NO! PEASE DON'T!</button>
+      </div>
+    </div>
+    <div v-if="showModal==cocktail.id" class="modal-bg">
+      <div class="modal-container">
+        <p class='bold'>[[ cocktail.name ]]</p>
+        <p>Liquors</p>
+        <ul class='ingredient-ul'>
+          <li v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
+        </ul>
+        <p>Mixers</p>
+        <ul class='ingredient-ul'>
+          <li v-for="portion in cocktail.portions">
+            [[ portion.amount ]] [[portion.unit]] of [[ portion.name ]]</li>
+        </ul>
+        <button @click="showModal=-1" class="btn">EXIT</button>
+      </div>
     </div>
   </div>
 </div>
 
+<!----------------------END HTML/START AXIOS CONFIG ------------------------->
 <script>
 function getCookie(name) {
     var cookieValue = null;
@@ -47,12 +75,32 @@ const instance = axios.create({
   }
 })
 
+//  ----------------------------------END AXIOS-FETCH CONFIG/ BEGIN VUE INSTANCE-----------------------------
 let app = new Vue({
   delimiters: ['[[', ']]'],
   el: '#homeapp',
   data: {
-    message: 'poop',
-    cocktails: cocktails,
+    cocktails: [],
+    showModal: -1,
+    showDeleteModal: -1,
+    search: "",
+    modal_info:{
+      id:"",
+      name: "",
+      target:"",
+      shots: {
+        id:"",
+        volume:"",
+        cost:"",
+        brandname:""
+      },
+      portions: {
+        id:"",
+        amount:"",
+        cost:"",
+        name:""
+      }
+    }
   },
   methods: {
     deleteCocktail: function(id) {
@@ -66,33 +114,25 @@ let app = new Vue({
 
       console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
     },
-    editCoctail: function(id) {
-      console.log(`Haha, youre trying to edit cocktail ${id} but I didnt listen`)
+    cocktailSummary: function(id) {
+      this.showModal = id
+      for(let cocktail of this.cocktails){
+        if(cocktail.id == id) {
+          this.modal_info = cocktail
+          this.modal_shots = cocktail.shots
+          this.modal_portions = cocktail.portions
+        }
+      }
+    }
+  },
+  computed: {
+    filteredCocktails: function(){
+      return cocktails.filter((cocktail)=>{
+        return cocktail.name.toUpperCase().match(this.search.toUpperCase())
+      })
     }
   }
 })
-
-// // register modal component
-// Vue.component('modal', {
-//   template: '#modal-template',
-//   props: {
-//     show: {
-//       type: Boolean,
-//       required: true,
-//       twoWay: true
-//     }
-//   }
-// })
-
-// // start app
-// new Vue({
-//   el: '#app',
-//   data: {
-//     showModal: false
-//   }
-// })
-
-// </script>
-
+</script>
 
 {% endblock %}
