@@ -46,8 +46,8 @@ body {
     background-color:var(--DarkPurple);
     width: 100%;
     padding:.5rem;
-    font-family:var(--font_headline_1);
-    font-size: 1.5rem;
+    font-family:var(--font_headline_2);
+    font-size: 3rem;
     text-align: center;
 
 }
@@ -372,9 +372,6 @@ body {
     background-color: rgb(194, 5, 5);
     font-family: 'Abril Fatface', cursive;
     float:right;
-}
-.site-title{
-    font:var(--font_cursive_1);
 }
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
 .pnk-bg {
