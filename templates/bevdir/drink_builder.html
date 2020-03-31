@@ -1,67 +1,108 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Drink Builder
+Drink Builder
 {% endblock %}
 {% block content %}
 <div class='container' id='drink-builder'>
-    <div class='top-bar'>
-        <p class='logo'>Logo</p>
-        <h2 class='cocktail-name'>Cocktail Name</h2>
-        <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
-    </div>
-    <div class='cost-bar'>
-        <p class='target-cost'>Enter Target Cost %:</p>
-        <input class='percent-field' id='target-cost-value' type='number' min='1' max='100' value='15'>
-    </div>
-    <div class='cost-sell-box'>
-        <input class='vert-slider' type="range" min="1" max="100" value="10" class="slider" id="myRange">
-        <div class='total-cost-box'>
-            <p>Cost of Goods</p>
-            <p>$<span id='cost-of-goods-value'></span></p>
-        </div>
-        <div class='menu-price-box'>
-            <p>Menu Price</p>
-            <p>$<span id='menu-price-value'></span></p>
-        </div>
-    </div>
-    <div v-for="ingredient in ingredients" class='menu-item'>
-        <div class='ingredient-box'>
-            <div class='ingredient-title-line'>
-                <p class='spirit-type-icon'>WHISKEY</p>
-                <p class='ingredient-name'>Evan Williams Green Label</p>
-            </div>
-            <div class='slider-bar'>
-                <p>Cost: $1.31<span id="ing-cost"></span></p>
-                <input class='slider' type="range" min=".0625" max="100" value="50" class="slider" id="myRange">
-                <p>Vol: 1.25<span></span>oz</p>
-            </div>
-        </div>
-    </div>
-    <button @click="saveCocktail" class='save-button' type="button">SAVE</button>
+  <div class='top-bar'>
+    <p class='logo'>Logo</p>
+    <h2 class='cocktail-name'>Cocktail Name</h2>
 
+    <div id="app">
 
+      <button @click='modalAction()' class="add-ingredient-button" type="button">Add Ingredient</button>
+
+      <div v-if="modal" class =modal-bg>
+        <div class=modal-container>
+        <h2>hello</h2>
+        <p>lorem ipsum</p>
+        <button @click='modalAction()' type="button" class=> Close</button>
+      </div>
+      </div>
+    </div>
+    <!-- <a href='#'>
+      <p class='add-ingredient-button'> ADD INGREDIENT</p>
+    </a> -->
+  </div>
+  <div class='cost-bar'>
+    <p class='target-cost'>Enter Target Cost % </p>
+    <input type="range" min=".0625" max="100" value="50" class="slider" id="myRange">
+    <input class='percent-field' id='target-cost-value' type='number' min='1' max='100' value='15'>
+  </div>
+  <div class='cost-sell-box'>
+    <input class='vert-slider' type="range" min="1" max="100" value="10" class="slider" id="myRange">
+    <div class='total-cost-box'>
+      <p>Cost of Goods</p>
+      <p class='money-sign-out'>$<span id='cost-of-goods-value'></span></p>
+    </div>
+    <div class='menu-price-box'>
+      <p>Menu Price</p>
+      <p class='dollars-in'>$<span id='menu-price-value'></span></p>
+    </div>
+  </div>
+  <div v-for="ingredient in ingredients" class='menu-item'>
+    <div class='ingredient-box'>
+      <div class='ingredient-title-line'>
+        <p class='spirit-type-icon'>WHISKEY</p>
+        <p class='ingredient-name'>Evan Williams Green Label</p>
+      </div>
+      <div class='slider-bar'>
+        <p>Cost: $1.31<span id="ing-cost"></span></p>
+        <input class='slider' type="range" min=".0625" max="100" value="50" class="slider" id="myRange">
+        <p>Vol: 1.25<span></span>oz</p>
+      </div>
+    </div>
+    <div class='slider-bar'>
+      <p class='money-sign-out'>Cost: $1.31<span id="ing-cost"></span></p>
+      <input class='slider' type="range" min=".0625" max="100" value="50" class="slider" id="myRange">
+      <p>Vol: 1.25<span></span>oz</p>
+    </div>
+  </div>
+  <div class='ingredient-box'>
+    <div class='ingredient-title-line'>
+      <p class='spirit-type-icon'>VODKA</p>
+      <p class='ingredient-name'>Ketel One</p>
+    </div>
+    <div class='slider-bar'>
+      <p class='money-sign-out'>Cost: $<span id='pour-price'></span></p>
+      <input type="range" min=".25" max="5" value=".25" step=".25" class="slider" id="ounce-slider">
+      <p>Vol: <span id='ounce-pour'></span>oz</p>
+    </div>
+  </div>
+  <div class='ingredient-box'>
+    <div class='ingredient-title-line'>
+      <p class='spirit-type-icon'>LIQUEUR</p>
+      <p class='ingredient-name'>Hatfield & McCoy The Devil's Fire Moonshine</p>
+    </div>
+    <div class='slider-bar'>
+      <p class='money-sign-out'>Cost: $2.40<span id="ing-cost"></span></p>
+      <input type="range" min=".0625" max="100" value="50" class="slider" id="myRange">
+      <p>Vol: 2.0<span></span>oz</p>
+    </div>
+  </div>
 </div>
+<button class='save-button' type="button">SAVE</button>
 
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
-let app = new Vue({
-  delimiters: ['[[', ']]'],
-  el: '#drink-builder',
-  ingredients: [],
-  data: {
-    cocktails: cocktails,
-  },
-  methods: {
-    saveCocktail: function(id) {
-      console.log("waddup")
+  var app = new Vue({
+    el: '#app',
+    data: {
+      modal: false
     },
-    editCoctail: function(id) {
-      console.log(`Haha, youre trying to edit cocktail ${id} but I didnt listen`)
+    methods: {
+      modalAction() {
+        if (this.modal == false) {
+          this.modal = true
+        } else {
+          this.modal = false
+        }
+      }
     }
-  }
-})
-
+  })
 </script>
 
 {% endblock content %}
-
+get app registered as a component look up component registration.

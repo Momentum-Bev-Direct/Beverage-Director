@@ -88,6 +88,7 @@ body {
     text-align: center;
     margin: .5rem;
     padding: .5rem;
+    font-family: 'Abril Fatface', cursive;
 }
 
 .cocktail-name {
@@ -102,10 +103,18 @@ body {
     border-radius: 10px;
     padding: .5rem;
     background-color: var(--MintGreen);
+    font-family: 'Abril Fatface', cursive;
 }
 
 .ingredient-list {
     background-color:var(--DarkBlue);
+}
+.dollars-in{
+    color:green;
+}
+
+.money-sign-out{
+    color:red;
 }
 .cost-bar {
     color: black;
@@ -120,6 +129,7 @@ body {
 .target-cost {
     font:white;
     font-size: 25px;
+    justify-content: left;
 }
 
 .percent-field {
@@ -183,8 +193,8 @@ body {
 .slider-bar {
     display: flex;
     justify-content: space-between ;
-}
 
+}
 .slider {
     width: 50%;
 }
@@ -197,8 +207,69 @@ body {
     background-color: var(--MintGreen);
     border: 1px solid var(--DarkGreen);
     border-radius: 10px;
+    font-family: 'Abril Fatface', cursive;
 }
+/* REPLACE THE FOLLOWING AT SOME POINT: */
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: table;
+    transition: opacity .3s ease;
+  }
 
+  .modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .modal-container {
+    width: 300px;
+    margin: 0px auto;
+    padding: 20px 30px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    transition: all .3s ease;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+
+  .modal-header h3 {
+    margin-top: 0;
+    color: #42b983;
+  }
+
+  .modal-body {
+    margin: 20px 0;
+  }
+
+  .modal-default-button {
+    float: right;
+  }
+
+  /*
+   * the following styles are auto-applied to elements with
+   * v-transition="modal" when their visiblity is toggled
+   * by Vue.js.
+   *
+   * You can easily play with the modal transition by editing
+   * these styles.
+   */
+
+  .modal-enter, .modal-leave {
+    opacity: 0;
+  }
+
+  .modal-enter .modal-container,
+  .modal-leave .modal-container {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+/* REPLACE ABOVE */
 .btn {
     background-color: var(--Pink);
     color: var(--LightBlue);
