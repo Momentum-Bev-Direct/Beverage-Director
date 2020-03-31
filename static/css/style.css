@@ -117,17 +117,23 @@ body {
     color:red;
 }
 .cost-bar {
-    color: black;
+    color:var(--stroke_dark);
     display: flex;
-    justify-content: flex-end;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    justify-content: center;
+    align-items: baseline;
+    background-color: var(--background_2);
+    font-family: var(--font_sans_1);
+/*     justify-content: flex-end;
     align-items: center;
     background-color: var(--Pink);
     border: thick double var(--DarkPink);
-    font-family: var(--font_cursive_1);
+    font-family: var(--font_cursive_1); */
 }
 
 .target-cost {
-    font:white;
+    color:white;
     font-size: 25px;
     justify-content: left;
 }
@@ -142,10 +148,13 @@ body {
 .cost-sell-box {
     display: flex;
     justify-content: space-evenly;
-    border: 1px solid black;
+    border-top: .25px solid var(--stroke_lighter);
+    background-color: var(--highlight_green);
     padding: 1rem;
-    border: thick double var(--DarkPink);
-    font-family: var(--font_cursive_1);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-family: var(--font_sans_1);
+    box-shadow: -1px 1px 3px var(--shadow_dark);
 }
 
 .vert-slider {
@@ -271,8 +280,8 @@ body {
   }
 /* REPLACE ABOVE */
 .btn {
-    background-color: var(--Pink);
-    color: var(--LightBlue);
+    background-color: var(--background_2);
+    color: black;
     padding: .3rem;
     border-radius: 5px;
 }
@@ -313,7 +322,7 @@ body {
 
 .modal-container {
     background-color: var(--highlight_blue);
-    border-radius: 5px;
+    border-radius: 5x;
     box-shadow: -2px 2px 20px var(--shadow_dark);
     height: fit-content;
     padding: 10px;
@@ -357,15 +366,26 @@ body {
     text-align: center;
 }
 
-.menu-mid input{
+.input-default{
     padding: 3px;
+    margin: 5px;
     border-radius: 5px;
     background-color: var(--highlight_blue);
     font-size: 1rem;
     width: 60px;
     text-align: center;
+    border: 1px solid var(--stroke_lighter);
+    outline: none;
 }
-
+}
+.close-button{
+    border: 1px solid var(--DarkGreen);
+    border-radius: 10px;
+    padding: .3rem;
+    background-color: rgb(194, 5, 5);
+    font-family: 'Abril Fatface', cursive;
+    float:right;
+}
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
 .pnk-bg {
     background-color: var(--highlight_pink)
@@ -414,4 +434,8 @@ body {
 
 .center-butt {
     width: 40%;
+}
+
+.white-bg{
+    background-color: white;
 }

@@ -16,14 +16,16 @@ const cocktail = {{ cocktail|safe }}
         <h2 class='cocktail-name'>[[cocktail.name]]</h2>
         <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
     </div>
-    <div class='cost-bar'>
-        <p class='target-cost'>Enter Desired Margin:</p>
-        <input v-model="targetMargin">
+    <div class='cost-bar default-shadow'>
+      <p class='target-cost'>Adjust Percentage of Menu Price:</p>
+      <div class="input-contain">
+        <input id="target-percent" class="input-default" v-model="targetMargin" type="number" min="1" max="100"><label for="target-percent">%</label>
+      </div>
     </div>
-    <div class='cost-sell-box'>
+    <div class='cost-sell-box default-shadow'>
         <div class='total-cost-box'>
             <p>Cost of Goods</p>
-            <!-- <p>$ [[ totalCost ]]</p> -->
+            <p>$ [[ displayCost ]]</p>
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
@@ -32,7 +34,7 @@ const cocktail = {{ cocktail|safe }}
     </div>
 
     <div v-for="shot in filterDeletedShots" class="menu-item default-shadow">
-      <shot-line v-bind:shot="shot" v-bind:id="shot.id" v-on:change="updateTotal"></shot-line>
+      <shot-line v-bind:shot="shot" v-bind:id="shot.id" ></shot-line>
     </div>
 
     <button class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
@@ -64,8 +66,6 @@ const instance = axios.create({
   }
 })
 
-
-let allPours = document.querySelectorAll('.pour-cost')
 // ----------------------------------VUE COMPONENTS---------------------------------------
 
 const ShotLine = {
@@ -73,28 +73,25 @@ const ShotLine = {
   props: {
     shot: Object,
   },
-  components:{
-    VueSlider: window['vue-slider-component']
-  },
   data: function(){
     return {
-      volume: this.shot.volume,
-      pourCost: 0,
+      volume: "",
+      pourCost: "",
     }
   },
   template:`
   <div v-bind:id="shot.id" class="wide-100 flex">
     <div class="wide-100 flex">
       <div class="menu-input center-txt">
-        <i @click="subtractVolume"class="fas fa-angle-double-left" title="decrease pour volume by 0.25 oz"></i>
+        <i @click="subtractVolume" class="fas fa-angle-double-left" title="decrease pour volume by 0.25 oz"></i>
         <p class="light-stroke">LESS</p>
       </div>
       <div class="menu-mid">
         <p class='bold wide-100 center-txt'>[[ shot.brandname ]]</p>
         <div class='wide-100 center-txt'>
-        <input type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
+        <input class="input-default" type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
         </div>
-        <p class="wide-100 center-txt">Cost of pour: $ <span class="pour-cost">[[ adjustedPourCost ]]</span></p>
+        <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
         <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
       </div>
       <div class="menu-input center-txt">
@@ -129,13 +126,24 @@ const ShotLine = {
     }
     
   },
+
   computed: {
-    adjustedPourCost: function(){
-      return (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
-    },
+    adjustedCost: function(){
+      let total = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+      return total
+    }
   },
-  mounted (){
-      this.pourCost = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+  watch: {
+    volume: function(newVolume, oldVolume){
+      newCost = newVolume * this.shot.cost
+      oldCost = oldVolume * this.shot.cost
+
+      this.$parent.totalPrice += newCost
+      this.$parent.totalPrice -= oldCost
+    }
+  },
+  mounted(){
+    this.volume = this.shot.volume
   }
 }
 
@@ -149,11 +157,11 @@ let app = new Vue({
   },
   data: {
     cocktail: cocktail,
-    targetMargin: .2,
-    menuPrice: 0,
+    targetMargin: cocktail.target,
+    totalPrice: 0,
     newShots: [],
     newPortions: [],
-    deletedShots: ['47', '48', '49'],
+    deletedShots: [],
     showModal: -1,
     allPourCosts: function(){
       return document.querySelectorAll('.pour-cost')
@@ -190,30 +198,17 @@ let app = new Vue({
         }
       }
     },
-    updateTotal: function(){
-      this.totalCost = 0
-      output = 0
-      allInputs = document.querySelectorAll('.pour-cost')
-      for (let input of allInputs){
-        output+= parseFloat(input.textContent)
-      }
-      this.totalCost = output.toFixed(2)
-      this.menuPrice = (parseFloat(this.totalCost)*parseFloat(this.targetMargin)+parseFloat(this.totalCost)).toFixed(2)
-    },
-    
   },
-  computed: {
-    getTotalCost: function(){
-      output = 0
-      allInputs = document.querySelectorAll('.pour-cost')
-      for (let input of allInputs){
-        output+= parseFloat(input.textContent)
-      }
-      return output.toFixed(2)
+  computed:{
+    displayCost: function(){
+      return parseFloat(this.totalPrice).toFixed(2)
+    },
+    menuPrice: function(){
+      return parseFloat(this.totalPrice / (this.targetMargin/100)).toFixed(2)
+      // parseFloat(this.totalPrice * (this.targetMargin/100) + this.totalPrice).toFixed(2)
     },
     filterDeletedShots: function(){
-      let shotList= (Object.keys(this.cocktail.shots))
-      console.log(shotList)
+      
       return this.cocktail.shots.filter((shot)=>{
         console.log(this.deletedShots)
         return !this.deletedShots.includes(shot.id)

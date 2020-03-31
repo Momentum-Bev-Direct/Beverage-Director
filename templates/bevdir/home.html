@@ -10,9 +10,6 @@ const cocktails = {{ cocktails|safe }}
 console.log(cocktails)
 </script>
 <!---------------------------------BEGIN HTML --------------------------->
-<header class='header container'>
-  <p class='site-title'>BevDev</p>
-</header>
 <div id='homeapp' class="container">
   <p class="menu-heading">Your Drink Menu</p>
   <input type="text" v-model="search" placeholder="FILTER COCKTAILS" class="form-input w-50 default-shadow"/>
@@ -44,7 +41,7 @@ console.log(cocktails)
           <li v-for="portion in cocktail.portions">
             [[ portion.amount ]] [[portion.unit]] of [[ portion.name ]]</li>
         </ul>
-        <button @click="showModal=-1" class="btn">EXIT</button>
+        <button @click="showModal=-1" class="btn">CLOSE</button>
       </div>
     </div>
   </div>
