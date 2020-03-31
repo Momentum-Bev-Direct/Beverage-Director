@@ -105,8 +105,17 @@ const ShotLine = {
 
   </div>`,
   methods: {
-    deleteShot: function(id){
-      console.log('stuff')
+    deleteShot: function(id) {
+        console.log('delete attempt')
+        instance.delete(`http://127.0.0.1:8000/api/shot/${id}`)
+        .then(function(response) {
+      }).then(function(data){
+        console.log("data is ok", data)
+      }).catch(function(ex) {
+        console.log('parsing failed', ex)
+      })
+
+      console.log(`DELETE Shot ${id}`)
     },
     addVolume: function(){
       this.volume+=0.25
