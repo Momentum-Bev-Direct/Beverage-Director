@@ -281,6 +281,14 @@ body {
     color: var(--stroke_dark);
 }
 
+.create-btn {
+    background-color: var(--background_2);
+    color: black;
+    padding: .3rem;
+    border-radius: 5px;
+    float:right
+}
+
 .menu-item {
     display: flex;
     width: 100%;
