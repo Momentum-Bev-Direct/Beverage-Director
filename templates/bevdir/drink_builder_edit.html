@@ -17,13 +17,16 @@ const cocktail = {{ cocktail|safe }}
         <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
     </div>
     <div class='cost-bar'>
-        <p class='target-cost'>Enter Desired Margin:</p>
-        <input v-model="targetMargin">
+      <p class='target-cost'>ADJUST TARGET:</p>
+      <div class="input-contain">
+        <input id="target-percent" v-model="targetMargin" type="number" min="1" max="100"><label for="target-percent">%</label>
+      </div>
+
     </div>
     <div class='cost-sell-box'>
         <div class='total-cost-box'>
             <p>Cost of Goods</p>
-            <!-- <p>$ [[ totalCost ]]</p> -->
+            <p>$ [[ getTotalCost ]]</p>
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
@@ -80,6 +83,7 @@ const ShotLine = {
     return {
       volume: this.shot.volume,
       pourCost: 0,
+
     }
   },
   template:`
@@ -94,7 +98,7 @@ const ShotLine = {
         <div class='wide-100 center-txt'>
         <input type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
         </div>
-        <p class="wide-100 center-txt">Cost of pour: $ <span class="pour-cost">[[ adjustedPourCost ]]</span></p>
+        <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ adjustedPourCost ]]</span></p>
         <button v-on:click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
       </div>
       <div class="menu-input center-txt">
@@ -135,13 +139,13 @@ let app = new Vue({
   },
   data: {
     cocktail: cocktail,
-    targetMargin: .2,
+    targetMargin: cocktail.target,
     menuPrice: 0,
     newShots: [],
     newPortions: [],
     showModal: -1,
-    allPourCosts: function(){
-      return document.querySelectorAll('.pour-cost')
+    allIngredientInputs: function(){
+        return document.querySelectorAll('.ingredient-cost')
     },
     modal_info:{
       id:"",
@@ -198,14 +202,14 @@ let app = new Vue({
       this.menuPrice = (parseFloat(this.totalCost)*parseFloat(this.targetMargin)+parseFloat(this.totalCost)).toFixed(2)
     }
   },
-  computed: {
+  computed:{
     getTotalCost: function(){
-      output = 0
-      allInputs = document.querySelectorAll('.pour-cost')
-      for (let input of allInputs){
-        output+= parseFloat(input.textContent)
+      let inputs = this.allIngredientInputs
+      total = 0
+      for (let input of inputs){
+        total += parseFloat(input.textContent)
       }
-      return output.toFixed(2)
+      return total.toFixed(2)
     }
   }
 })
