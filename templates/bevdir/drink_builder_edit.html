@@ -26,7 +26,7 @@ const cocktail = {{ cocktail|safe }}
     <div class='cost-sell-box'>
         <div class='total-cost-box'>
             <p>Cost of Goods</p>
-            <p>$ [[ getTotalCost ]]</p>
+            <p>$ [[ displayCost ]]</p>
         </div>
         <div class='menu-price-box'>
             <p>Menu Price</p>
@@ -35,7 +35,7 @@ const cocktail = {{ cocktail|safe }}
     </div>
 
     <div v-for="shot in cocktail.shots" class="menu-item default-shadow">
-      <shot-line v-bind:shot="shot" v-bind:id="shot.id" v-on:change="updateTotal"></shot-line>
+      <shot-line v-bind:shot="shot" v-bind:id="shot.id" ></shot-line>
     </div>
 
     <button class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
@@ -67,8 +67,6 @@ const instance = axios.create({
   }
 })
 
-
-let allPours = document.querySelectorAll('.pour-cost')
 // ----------------------------------VUE COMPONENTS---------------------------------------
 
 const ShotLine = {
@@ -76,21 +74,17 @@ const ShotLine = {
   props: {
     shot: Object,
   },
-  compontents:{
-    VueSlider: window['vue-slider-component']
-  },
   data: function(){
     return {
-      volume: this.shot.volume,
-      pourCost: 0,
-
+      volume: "",
+      pourCost: "",
     }
   },
   template:`
   <div class="wide-100 flex">
     <div class="wide-100 flex">
       <div class="menu-input center-txt">
-        <i @click="subtractVolume"class="fas fa-angle-double-left" title="decrease pour volume by 0.25 oz"></i>
+        <i @click="subtractVolume" class="fas fa-angle-double-left" title="decrease pour volume by 0.25 oz"></i>
         <p class="light-stroke">LESS</p>
       </div>
       <div class="menu-mid">
@@ -98,8 +92,8 @@ const ShotLine = {
         <div class='wide-100 center-txt'>
         <input type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
         </div>
-        <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ adjustedPourCost ]]</span></p>
-        <button v-on:click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
+        <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
+        <button @click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
       </div>
       <div class="menu-input center-txt">
         <i @click="addVolume" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
@@ -117,15 +111,25 @@ const ShotLine = {
     },
     subtractVolume: function(){
       this.volume-=0.25
-    }
+    },
   },
   computed: {
-    adjustedPourCost: function(){
-      return (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+    adjustedCost: function(){
+      let total = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+      return total
     }
   },
-  mounted (){
-      this.pourCost = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+  watch: {
+    volume: function(newVolume, oldVolume){
+      newCost = newVolume * this.shot.cost
+      oldCost = oldVolume * this.shot.cost
+
+      this.$parent.totalPrice += newCost
+      this.$parent.totalPrice -= oldCost
+    }
+  },
+  mounted(){
+    this.volume = this.shot.volume
   }
 }
 
@@ -140,36 +144,14 @@ let app = new Vue({
   data: {
     cocktail: cocktail,
     targetMargin: cocktail.target,
-    menuPrice: 0,
+    totalPrice: 0,
     newShots: [],
     newPortions: [],
-    showModal: -1,
-    allIngredientInputs: function(){
-        return document.querySelectorAll('.ingredient-cost')
-    },
-    modal_info:{
-      id:"",
-      name: "",
-      target:"",
-      shots: {
-        id:"",
-        volume:"",
-        cost:"",
-        brandname:""
-      },
-      portions: {
-        id:"",
-        amount:"",
-        cost:"",
-        name:""
-      }
-    }
   },
   methods: {
-    saveCocktail: function(id) {
-        instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
-    },
-
+    // saveCocktail: function(id) {
+    //     instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
+    // },
     deleteCocktail: function(id) {
       instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
       .then(function(response) {
@@ -191,25 +173,13 @@ let app = new Vue({
         }
       }
     },
-    updateTotal: function(){
-      this.totalCost = 0
-      output = 0
-      allInputs = document.querySelectorAll('.pour-cost')
-      for (let input of allInputs){
-        output+= parseFloat(input.textContent)
-      }
-      this.totalCost = output.toFixed(2)
-      this.menuPrice = (parseFloat(this.totalCost)*parseFloat(this.targetMargin)+parseFloat(this.totalCost)).toFixed(2)
-    }
   },
   computed:{
-    getTotalCost: function(){
-      let inputs = this.allIngredientInputs
-      total = 0
-      for (let input of inputs){
-        total += parseFloat(input.textContent)
-      }
-      return total.toFixed(2)
+    displayCost: function(){
+      return parseFloat(this.totalPrice).toFixed(2)
+    },
+    menuPrice: function(){
+      return parseFloat(this.totalPrice * (this.targetMargin/100) + this.totalPrice).toFixed(2)
     }
   }
 })
