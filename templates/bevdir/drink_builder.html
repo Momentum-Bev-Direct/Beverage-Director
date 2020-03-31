@@ -15,15 +15,12 @@ Drink Builder
 
       <div v-if="modal" class =modal-bg>
         <div class=modal-container>
-        <h2>hello</h2>
-        <p>lorem ipsum</p>
-        <button @click='modalAction()' type="button" class=> Close</button>
+        <input type="text" placeholder="Desired Ingredient" class="form-input white-bg w-50 default-shadow"/>
+        <p class= ingredient-box >Data that's scraped</p>
+        <button @click='modalAction()' type="button" class="close-button"> Close</button>
       </div>
       </div>
     </div>
-    <!-- <a href='#'>
-      <p class='add-ingredient-button'> ADD INGREDIENT</p>
-    </a> -->
   </div>
   <div class='cost-bar'>
     <p class='target-cost'>Enter Target Cost % </p>
