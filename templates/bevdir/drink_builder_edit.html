@@ -31,7 +31,7 @@ const cocktail = {{ cocktail|safe }}
         </div>
     </div>
 
-    <div v-for="shot in cocktail.shots" class="menu-item default-shadow">
+    <div v-for="shot in filterDeletedShots" class="menu-item default-shadow">
       <shot-line v-bind:shot="shot" v-bind:id="shot.id" v-on:change="updateTotal"></shot-line>
     </div>
 
@@ -212,8 +212,12 @@ let app = new Vue({
       return output.toFixed(2)
     },
     filterDeletedShots: function(){
-      return cocktails.filter((cocktail)=>{
-        return cocktail.name.toUpperCase().match(this.search.toUpperCase())
+      let shotList= (Object.keys(this.cocktail.shots))
+      console.log(shotList)
+      return shotList.filter((shot)=>{
+        console.log(this.deletedShots)
+        return !this.deletedShots.includes(shot.id)
+
       })
     }
   }
