@@ -44,7 +44,10 @@ Drink Builder
   </div>
 
   <div v-for="shot in filterDeletedShots" class="menu-item default-shadow">
-    <shot-line v-bind:shot="shot" v-bind:id="shot.id"></shot-line>
+    <shot-line v-bind:shot="shot"></shot-line>
+  </div>
+  <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow green-bg">
+    <portion-line v-bind:portion="portion"></portion-line>
   </div>
 
   <button class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
@@ -58,7 +61,6 @@ Drink Builder
       var cookies = document.cookie.split(';');
       for (var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i].trim();
-        // Does this cookie string begin with the name we want?
         if (cookie.substring(0, name.length + 1) === (name + '=')) {
           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
           break;
@@ -115,11 +117,7 @@ const ShotLine = {
     deleteShot: function (id) {
       instance.delete(`http://127.0.0.1:8000/api/shot/${id}`)
         .then(function (response) {
-          // let costToSubtract = (parseFloat(this.cost) * parseFloat(this.volume).toFixed(2))
-          // console.log(costToSubtract)
-          // this.$parent.totalPrice -= costToSubtract
         }).then(function (id) {
-
         }).catch(function (ex) {
           console.log('parsing failed', ex)
         })
@@ -206,19 +204,19 @@ const PortionLine = {
           console.log('parsing failed', ex)
         })
 
-      console.log(`DELETE Shot ${id}`)
+      console.log(`DELETE Portion ${id}`)
     },
     addAmount: function () {
       this.amount += 0.25
     },
     subtractAmount: function () {
-      this.volume -= 0.25
+      this.amount -= 0.25
     },
     addToDeleted: function (id) {
       this.$parent.deletedPortions.push(id)
     },
     deletePortionValues: function () {
-      let costToSubtract = (parseFloat(this.shot.cost) * parseFloat(this.volume).toFixed(2))
+      let costToSubtract = (parseFloat(this.portion.cost) * parseFloat(this.amount).toFixed(2))
       console.log(costToSubtract)
       this.$parent.totalPrice -= costToSubtract
     }
@@ -232,16 +230,16 @@ const PortionLine = {
     }
   },
   watch: {
-    volume: function (newVolume, oldVolume) {
-      newCost = newVolume * this.shot.cost
-      oldCost = oldVolume * this.shot.cost
+    amount: function (newAmount, oldAmount) {
+      newCost = newAmount * this.portion.cost
+      oldCost = oldAmount * this.portion.cost
 
       this.$parent.totalPrice += newCost
       this.$parent.totalPrice -= oldCost
     }
   },
   mounted() {
-    this.volume = this.shot.volume
+    this.amount = this.portion.amount
   }
 }
 
@@ -251,7 +249,7 @@ let app = new Vue({
   el: '#drink-edit',
   components: {
     'shot-line': ShotLine,
-    // "portion-line": PortionLine,
+    "portion-line": PortionLine,
   },
   data: {
     cocktail: cocktail,
@@ -260,6 +258,7 @@ let app = new Vue({
     newShots: [],
     newPortions: [],
     deletedShots: [],
+    deletedPortions: [],
     showModal: -1,
     modal:false,
     allPourCosts: function () {
@@ -294,16 +293,6 @@ let app = new Vue({
     saveCocktail: function (id) {
       instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
     },
-    cocktailSummary: function (id) {
-      this.showModal = id
-      for (let cocktail of this.cocktails) {
-        if (cocktail.id == id) {
-          this.modal_info = cocktail
-          this.modal_shots = cocktail.shots
-          this.modal_portions = cocktail.portions
-        }
-      }
-    },
   },
   computed: {
     displayCost: function () {
@@ -317,11 +306,14 @@ let app = new Vue({
       return this.cocktail.shots.filter((shot) => {
         return !this.deletedShots.includes(shot.id)
       })
+    },
+    filterDeletedPortions: function () {
+      return this.cocktail.portions.filter((portion) => {
+        return !this.deletedPortions.includes(portion.id)
+      })
     }
   },
 })
 
-// <input v-model="volume" v-on:change="adjustPourCost" v-on:change="$emit('change')" type="range" min=".25" max="6" step=".25" class="slider"/>
 </script>
-
 {% endblock %}
