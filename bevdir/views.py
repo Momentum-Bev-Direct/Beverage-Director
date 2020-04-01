@@ -82,7 +82,7 @@ def edit_cocktail(request, pk):
     spirits = Spirit.objects.all()
     spirit_dict= []
     for spirit in spirits:
-        spirit_dict.append({"id": spirit.pk, "brandname": spirit.brandname, "mxb": spirit.mxb})
+        spirit_dict.append({"id": spirit.pk, "brandname": spirit.brandname, "mxb": spirit.mxb, "category": spirit.category})
 
     context = {}
     context['cocktail']=json.dumps(cocktail_dict)

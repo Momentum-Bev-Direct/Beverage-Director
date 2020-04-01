@@ -8,7 +8,9 @@ Drink Builder
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type='text/javascript'>
   const cocktail = {{ cocktail| safe }}
-  console.log(cocktail.portions)
+  const spirits = {{ spirits| safe }}
+  console.log(spirits)
+
 </script>
 <!------------------------------- HTML --------------------------------->
 <div class='container' id='drink-edit'>
@@ -16,12 +18,36 @@ Drink Builder
     <p class='logo'>Logo</p>
     <h2 class='cocktail-name'>[[cocktail.name]]</h2>
     <div id="drink-edit">
-      <button @click='modalAction()' class='add-ingredient-button' tyoe=button> ADD INGREDIENT</button>
-      <div v-if="modal"class=modal-bg>
+      <button @click='modalAction()' class='btn' type=button> ADD INGREDIENT</button>
+      <div v-if="modal" class=modal-bg>
         <div class=modal-container>
-          <input type="text" placeholder="Desired Ingredient" class="form-input white-bg w-50 default-shadow" />
-          <p class=ingredient-box>Data that's scraped</p>
-          <button @click='modalAction()' type="button" class="close-button"> Close</button>
+          <select class="wide-100 input-default white-bg" v-model="toAdd">
+            <option value="shot" selected>Pick from Database</option>
+            <option value="portion">Custom</option>
+          </select>
+          <div v-if="toAdd=='shot'">
+            <select class="wide-100 input-default white-bg" v-model="spiritSelection">
+              <option value="All" selected>All Categories</option>
+              <option value="Brandy & Cognac">Brandy & Cognac</option>
+              <option value="Bourbon">Bourbon</option>
+              <option value="Canadian Whiskey">Canadian Whiskey</option>
+              <option value="Cordials & Liqueurs">Cordials & Liqueurs</option>
+              <option value="Gin">Gin</option>
+              <option value="Irish Whiskey">Irish Whiskey</option>
+              <option value="NC Products">NC Products</option>
+              <option value="Other">Other</option>
+              <option value="Rum">Rum</option>
+              <option value="Rye">Rye</option>
+              <option value="Scotch">Scotch</option>
+              <option value="Tequila & Mezcal">Tequila & Mezcal</option>
+              <option value="Vodka">Vodka</option>
+              <option value="Whiskey - Other">Whiskey - Other</option>
+            </select>
+            <input type="text" placeholder="filter by name" class="input-default wide-100 white-bg"/>
+            <!-- <div v-for="spirit in filteredSpirits" class="wide-100 white-bg"></div> -->
+            <button @click='modalAction()' type="button" class="btn"> Close</button>
+            <button @click='' type="button" class="btn green-bg">Add to Cocktail</button>
+          </div>
         </div>
       </div>
     </div>
@@ -260,6 +286,8 @@ let app = new Vue({
     newPortions: [],
     deletedShots: [],
     deletedPortions: [],
+    spiritSelection:"",
+    toAdd:"",
     showModal: -1,
     modal:false,
     allPourCosts: function () {
