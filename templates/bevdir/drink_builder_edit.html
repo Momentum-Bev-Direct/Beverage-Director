@@ -1,85 +1,95 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Drink Builder
+Drink Builder
 {% endblock %}
 
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type='text/javascript'>
-const cocktail = {{ cocktail|safe }}
+  const cocktail = {{ cocktail| safe }}
 </script>
 <!------------------------------- HTML --------------------------------->
 <div class='container' id='drink-edit'>
-    <div class='top-bar'>
-        <p class='logo'>Logo</p>
-        <h2 class='cocktail-name'>[[cocktail.name]]</h2>
-        <a href='#'><p class='add-ingredient-button'> ADD INGREDIENT</p></a>
-    </div>
-    <div class='cost-bar default-shadow'>
-      <p class='target-cost'>Adjust Percentage of Menu Price:</p>
-      <div class="input-contain">
-        <input id="target-percent" class="input-default" v-model="targetMargin" type="number" min="1" max="100"><label for="target-percent">%</label>
+  <div class='top-bar'>
+    <p class='logo'>Logo</p>
+    <h2 class='cocktail-name'>[[cocktail.name]]</h2>
+    <div id="drink-edit">
+      <button @click='modalAction()' class='add-ingredient-button' tyoe=button> ADD INGREDIENT</button>
+      <div v-if="modal"class=modal-bg>
+        <div class=modal-container>
+          <input type="text" placeholder="Desired Ingredient" class="form-input white-bg w-50 default-shadow" />
+          <p class=ingredient-box>Data that's scraped</p>
+          <button @click='modalAction()' type="button" class="close-button"> Close</button>
+        </div>
       </div>
     </div>
-    <div class='cost-sell-box default-shadow'>
-        <div class='total-cost-box'>
-            <p>Cost of Goods</p>
-            <p>$ [[ displayCost ]]</p>
-        </div>
-        <div class='menu-price-box'>
-            <p>Menu Price</p>
-            <p>$[[ menuPrice ]]</p>
-        </div>
+  </div>
+  <div class='cost-bar default-shadow'>
+    <p class='target-cost'>Adjust Percentage of Menu Price:</p>
+    <div class="input-contain">
+      <input id="target-percent" class="input-default" v-model="targetMargin" type="number" min="1" max="100"><label
+        for="target-percent">%</label>
     </div>
-
-    <div v-for="shot in filterDeletedShots" class="menu-item default-shadow">
-      <shot-line v-bind:shot="shot" v-bind:id="shot.id" ></shot-line>
+  </div>
+  <div class='cost-sell-box default-shadow'>
+    <div class='total-cost-box'>
+      <p>Cost of Goods</p>
+      <p>$ [[ displayCost ]]</p>
     </div>
+    <div class='menu-price-box'>
+      <p>Menu Price</p>
+      <p>$[[ menuPrice ]]</p>
+    </div>
+  </div>
 
-    <button class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
+  <div v-for="shot in filterDeletedShots" class="menu-item default-shadow">
+    <shot-line v-bind:shot="shot" v-bind:id="shot.id"></shot-line>
+  </div>
+
+  <button class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
 </div>
 
 <script>
-// --------------------------------------AJAX CONFIG-------------------------------------
-function getCookie(name) {
+  // --------------------------------------AJAX CONFIG-------------------------------------
+  function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
         }
+      }
     }
     return cookieValue;
-}
-
-const instance = axios.create({
-  headers: {
-    'X-CSRFToken': getCookie("csrftoken"),
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
   }
-})
 
-// ----------------------------------VUE COMPONENTS---------------------------------------
-
-const ShotLine = {
-  delimiters: ['[[', ']]'],
-  props: {
-    shot: Object,
-  },
-  data: function(){
-    return {
-      volume: "",
-      pourCost: "",
+  const instance = axios.create({
+    headers: {
+      'X-CSRFToken': getCookie("csrftoken"),
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     }
-  },
-  template:`
+  })
+
+  // ----------------------------------VUE COMPONENTS---------------------------------------
+
+  const ShotLine = {
+    delimiters: ['[[', ']]'],
+    props: {
+      shot: Object,
+    },
+    data: function () {
+      return {
+        volume: "",
+        pourCost: "",
+      }
+    },
+    template: `
   <div v-bind:id="shot.id" class="wide-100 flex">
     <div class="wide-100 flex">
       <div class="menu-input center-txt">
@@ -101,126 +111,133 @@ const ShotLine = {
     </div>
 
   </div>`,
-  methods: {
-    deleteShot: function(id) {
+    methods: {
+      deleteShot: function (id) {
         instance.delete(`http://127.0.0.1:8000/api/shot/${id}`)
-        .then(function(response) {
-          // let costToSubtract = (parseFloat(this.cost) * parseFloat(this.volume).toFixed(2))
-          // console.log(costToSubtract)
-          // this.$parent.totalPrice -= costToSubtract
-      }).then(function(id){
-          
-      }).catch(function(ex) {
-        console.log('parsing failed', ex)
-      })
+          .then(function (response) {
+            // let costToSubtract = (parseFloat(this.cost) * parseFloat(this.volume).toFixed(2))
+            // console.log(costToSubtract)
+            // this.$parent.totalPrice -= costToSubtract
+          }).then(function (id) {
 
-      console.log(`DELETE Shot ${id}`)
-    },
-    addVolume: function(){
-      this.volume+=0.25
-    },
-    subtractVolume: function(){
-      this.volume-=0.25
-    },
-    addToDeleted: function(id) {
-      this.$parent.deletedShots.push(id)
-    },
-    deleteShotValues: function() {
-      let costToSubtract = (parseFloat(this.shot.cost) * parseFloat(this.volume).toFixed(2))
-          console.log(costToSubtract)
-          this.$parent.totalPrice -= costToSubtract
-    }
-    
-  },
+          }).catch(function (ex) {
+            console.log('parsing failed', ex)
+          })
 
-  computed: {
-    adjustedCost: function(){
-      let total = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
-      return total
-    }
-  },
-  watch: {
-    volume: function(newVolume, oldVolume){
-      newCost = newVolume * this.shot.cost
-      oldCost = oldVolume * this.shot.cost
-
-      this.$parent.totalPrice += newCost
-      this.$parent.totalPrice -= oldCost
-    }
-  },
-  mounted(){
-    this.volume = this.shot.volume
-  }
-}
-
-// -----------------------------------VUE APP INSTANCE---------------------------
-let app = new Vue({
-  delimiters: ['[[', ']]'],
-  el: '#drink-edit',
-  components: {
-    'shot-line': ShotLine,
-    // "portion-line": PortionLine,
-  },
-  data: {
-    cocktail: cocktail,
-    targetMargin: cocktail.target,
-    totalPrice: 0,
-    newShots: [],
-    newPortions: [],
-    deletedShots: [],
-    showModal: -1,
-    allPourCosts: function(){
-      return document.querySelectorAll('.pour-cost')
-    },
-    modal_info:{
-      id:"",
-      name: "",
-      target:"",
-      shots: {
-        id:"",
-        volume:"",
-        cost:"",
-        brandname:""
+        console.log(`DELETE Shot ${id}`)
       },
-      portions: {
-        id:"",
-        amount:"",
-        cost:"",
-        name:""
+      addVolume: function () {
+        this.volume += 0.25
+      },
+      subtractVolume: function () {
+        this.volume -= 0.25
+      },
+      addToDeleted: function (id) {
+        this.$parent.deletedShots.push(id)
+      },
+      deleteShotValues: function () {
+        let costToSubtract = (parseFloat(this.shot.cost) * parseFloat(this.volume).toFixed(2))
+        console.log(costToSubtract)
+        this.$parent.totalPrice -= costToSubtract
       }
-    }
-  },
-  methods: {
-    saveCocktail: function(id) {
-        instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
+
     },
-    cocktailSummary: function(id) {
-      this.showModal = id
-      for(let cocktail of this.cocktails){
-        if(cocktail.id == id) {
-          this.modal_info = cocktail
-          this.modal_shots = cocktail.shots
-          this.modal_portions = cocktail.portions
+
+    computed: {
+      adjustedCost: function () {
+        let total = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+        return total
+      }
+    },
+    watch: {
+      volume: function (newVolume, oldVolume) {
+        newCost = newVolume * this.shot.cost
+        oldCost = oldVolume * this.shot.cost
+
+        this.$parent.totalPrice += newCost
+        this.$parent.totalPrice -= oldCost
+      }
+    },
+    mounted() {
+      this.volume = this.shot.volume
+    }
+  }
+
+  // -----------------------------------VUE APP INSTANCE---------------------------
+  let app = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#drink-edit',
+    components: {
+      'shot-line': ShotLine,
+      // "portion-line": PortionLine,
+    },
+    data: {
+      cocktail: cocktail,
+      targetMargin: cocktail.target,
+      totalPrice: 0,
+      newShots: [],
+      newPortions: [],
+      deletedShots: [],
+      showModal: -1,
+      modal:false,
+      allPourCosts: function () {
+        return document.querySelectorAll('.pour-cost')
+      },
+      modal_info: {
+        id: "",
+        name: "",
+        target: "",
+        shots: {
+          id: "",
+          volume: "",
+          cost: "",
+          brandname: ""
+        },
+        portions: {
+          id: "",
+          amount: "",
+          cost: "",
+          name: ""
         }
       }
     },
-  },
-  computed:{
-    displayCost: function(){
-      return parseFloat(this.totalPrice).toFixed(2)
+    methods: {
+      modalAction() {
+        if (this.modal == false) {
+          this.modal = true
+        } else {
+          this.modal = false
+        }
+      },
+      saveCocktail: function (id) {
+        instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
+      },
+      cocktailSummary: function (id) {
+        this.showModal = id
+        for (let cocktail of this.cocktails) {
+          if (cocktail.id == id) {
+            this.modal_info = cocktail
+            this.modal_shots = cocktail.shots
+            this.modal_portions = cocktail.portions
+          }
+        }
+      },
     },
-    menuPrice: function(){
-      return parseFloat(this.totalPrice / (this.targetMargin/100)).toFixed(2)
-      // parseFloat(this.totalPrice * (this.targetMargin/100) + this.totalPrice).toFixed(2)
+    computed: {
+      displayCost: function () {
+        return parseFloat(this.totalPrice).toFixed(2)
+      },
+      menuPrice: function () {
+        return parseFloat(this.totalPrice / (this.targetMargin / 100)).toFixed(2)
+        // parseFloat(this.totalPrice * (this.targetMargin/100) + this.totalPrice).toFixed(2)
+      },
+      filterDeletedShots: function () {
+        return this.cocktail.shots.filter((shot) => {
+          return !this.deletedShots.includes(shot.id)
+        })
+      }
     },
-    filterDeletedShots: function(){
-      return this.cocktail.shots.filter((shot)=>{
-        return !this.deletedShots.includes(shot.id)
-
-      })
-    }
-  },
-})
+  })
 
 // <input v-model="volume" v-on:change="adjustPourCost" v-on:change="$emit('change')" type="range" min=".25" max="6" step=".25" class="slider"/>
 </script>
