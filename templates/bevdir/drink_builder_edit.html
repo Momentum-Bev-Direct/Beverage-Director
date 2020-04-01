@@ -8,6 +8,7 @@ Drink Builder
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type='text/javascript'>
   const cocktail = {{ cocktail| safe }}
+  console.log(cocktail.portions)
 </script>
 <!------------------------------- HTML --------------------------------->
 <div class='container' id='drink-edit'>
@@ -46,7 +47,7 @@ Drink Builder
   <div v-for="shot in filterDeletedShots" class="menu-item default-shadow">
     <shot-line v-bind:shot="shot"></shot-line>
   </div>
-  <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow green-bg">
+  <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
     <portion-line v-bind:portion="portion"></portion-line>
   </div>
 
@@ -177,7 +178,7 @@ const PortionLine = {
   <div class="wide-100 flex">
     <div class="wide-100 flex">
       <div class="menu-input center-txt">
-        <i @click="subtractVolume" class="fas fa-angle-double-left" title="decrease amount by 0.25 oz"></i>
+        <i @click="subtractAmount" class="fas fa-angle-double-left" title="decrease amount by 0.25 oz"></i>
         <p class="light-stroke">LESS</p>
       </div>
       <div class="menu-mid">
@@ -185,7 +186,7 @@ const PortionLine = {
         <div class='wide-100 center-txt'>
         <input class="input-default" type="number" min="0" v-model="amount" placeholder="custom"/><label>[[ portion.unit ]]</lable>
         </div>
-        <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
+        <p class="wide-100 center-txt">Ingredient Cost: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
         <button v-on:click="addToDeleted(portion.id)" v-on:click="deletePortion(portion.id)" v-on:click="deletePortionValues()" class="btn center-butt default-shadow">DELETE</button>
       </div>
       <div class="menu-input center-txt">
@@ -225,7 +226,7 @@ const PortionLine = {
 
   computed: {
     adjustedCost: function () {
-      let total = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
+      let total = (parseFloat(this.portion.cost) * parseFloat(this.amount)).toFixed(2)
       return total
     }
   },

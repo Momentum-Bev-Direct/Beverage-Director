@@ -77,7 +77,7 @@ def edit_cocktail(request, pk):
 
     cocktail_dict["shots"]= [{"id": shot.pk, "volume":shot.volume, "cost": shot.cost, "brandname": shot.spirit.brandname} for shot in cocktail.shots.all()]
 
-    cocktail_dict["portions"]= [{str(portion.pk):{"id": portion.pk, "amount": portion.amount, "cost": portion.price_per_unit, "name": portion.misc_ingredient.name} for portion in cocktail.portions.all()}]
+    cocktail_dict["portions"]= [{"id": portion.pk, "amount": portion.amount, "unit": portion.unit, "cost": portion.price_per_unit, "name": portion.misc_ingredient.name} for portion in cocktail.portions.all()]
 
     spirits = Spirit.objects.all()
     spirit_dict= []
