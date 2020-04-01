@@ -13,12 +13,12 @@ Drink Builder
 
       <button @click='modalAction()' class="add-ingredient-button" type="button">Add Ingredient</button>
 
-      <div v-if="modal" class =modal-bg>
+      <div v-if="modal" class=modal-bg>
         <div class=modal-container>
-        <input type="text" placeholder="Desired Ingredient" class="form-input white-bg w-50 default-shadow"/>
-        <p class= ingredient-box >Data that's scraped</p>
-        <button @click='modalAction()' type="button" class="close-button"> Close</button>
-      </div>
+          <input type="text" placeholder="Desired Ingredient" class="form-input white-bg w-50 default-shadow" />
+          <p class=ingredient-box>Data that's scraped</p>
+          <button @click='modalAction()' type="button" class="close-button"> Close</button>
+        </div>
       </div>
     </div>
   </div>
