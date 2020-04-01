@@ -99,11 +99,12 @@ body {
     text-underline-offset: var(--DarkPurple);
 }
 .add-ingredient-button {
-    border: 1px solid var(--DarkGreen);
+    border: 1px solid var(--DarkPink);
     border-radius: 10px;
     padding: .5rem;
-    background-color: var(--MintGreen);
+    background-color: var(--button_std);
     font-family: 'Abril Fatface', cursive;
+    color:white
 }
 
 .ingredient-list {
@@ -213,10 +214,11 @@ body {
     font-size: 1rem;
     padding: .5rem;
     margin: 0;
-    background-color: var(--MintGreen);
-    border: 1px solid var(--DarkGreen);
+    background-color: var(--button_std);
+    border: 1px solid var(--DarkPink);
     border-radius: 10px;
     font-family: 'Abril Fatface', cursive;
+    color:white
 }
 /* REPLACE THE FOLLOWING AT SOME POINT: */
 .modal-mask {
@@ -280,14 +282,22 @@ body {
   }
 /* REPLACE ABOVE */
 .btn {
-    background-color: var(--background_2);
-    color: black;
+    background-color: var(--button_std);
+    color:white;
     padding: .3rem;
     border-radius: 5px;
 }
 
 .btn:hover {
     color: var(--stroke_dark);
+}
+
+.create-btn {
+    background-color: var(--button_std);
+    color:white;
+    padding: .3rem;
+    border-radius: 5px;
+    float:right
 }
 
 .menu-item {
@@ -377,9 +387,9 @@ body {
     border: 1px solid var(--stroke_lighter);
     outline: none;
 }
-}
+
 .close-button{
-    border: 1px solid var(--DarkGreen);
+    border: 1px solid var(--DarkPink);
     border-radius: 10px;
     padding: .3rem;
     background-color: rgb(194, 5, 5);
