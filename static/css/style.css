@@ -397,6 +397,12 @@ body {
     float:right;
 }
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
+.modal-lg {
+    height: 400px;
+    width: 50%;
+    min-width: 400px;
+}
+
 .pnk-bg {
     background-color: var(--highlight_pink)
 }
@@ -433,6 +439,19 @@ body {
     width: 100%;
 }
 
+.wide-80 {
+    width: 80%;
+}
+.wide-70 {
+    width: 70%;
+}
+.wide-30 {
+    width: 30%
+}
+.wide-20 {
+    width: 20%
+}
+
 .center-txt {
     text-align: center;
 }
@@ -441,11 +460,33 @@ body {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.vert-margin-3 {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+.pad-5 {
+    padding: 5px;
+}
 
 .center-butt {
     width: 40%;
 }
 
+.just-cent {
+    justify-content: center;
+}
+
+.align-base {
+    align-items: baseline;
+}
+
 .white-bg{
     background-color: white;
+}
+.text-left {
+    text-align: left;
+}
+.list-display {
+    height: 50px;
+    overflow-y: scroll;
 }
