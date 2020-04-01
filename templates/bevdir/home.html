@@ -11,10 +11,7 @@ console.log(cocktails)
 </script>
 <!---------------------------------BEGIN HTML --------------------------->
 <div id='homeapp' class="container">
-  <div class="top-bar">
-  <p class='logo'>Logo</p>
-  <h2>Your Drink Menu</h2> <a v-bind:href="`/drinkbuilder`"><button class=add-ingredient-button >Create Cocktail</button></a>
-  </div>
+  <p class="menu-heading">Your Drink Menu</p>
   <input type="text" v-model="search" placeholder="FILTER COCKTAILS" class="form-input w-50 default-shadow"/>
   <div v-for="cocktail in filteredCocktails">
     <div v-bind:id="cocktail.id" class="menu-item default-shadow">
