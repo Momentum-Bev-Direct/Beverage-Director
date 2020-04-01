@@ -128,6 +128,7 @@ let app = new Vue({
   },
   computed: {
     filteredCocktails: function(){
+      console.log(cocktails)
       return cocktails.filter((cocktail)=>{
         return cocktail.name.toUpperCase().match(this.search.toUpperCase())
       })
