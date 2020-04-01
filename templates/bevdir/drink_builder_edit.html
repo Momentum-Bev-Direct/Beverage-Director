@@ -8,7 +8,8 @@ Drink Builder
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type='text/javascript'>
   const cocktail = {{ cocktail| safe }}
-  console.log(cocktail.portions)
+  const spirits = {{ spirits| safe }}
+
 </script>
 <!------------------------------- HTML --------------------------------->
 <div class='container' id='drink-edit'>
@@ -16,14 +17,50 @@ Drink Builder
     <p class='logo'>Logo</p>
     <h2 class='cocktail-name'>[[cocktail.name]]</h2>
     <div id="drink-edit">
-      <button @click='modalAction()' class='add-ingredient-button' tyoe=button> ADD INGREDIENT</button>
-      <div v-if="modal"class=modal-bg>
-        <div class=modal-container>
-          <input type="text" placeholder="Desired Ingredient" class="form-input white-bg w-50 default-shadow" />
-          <p class=ingredient-box>Data that's scraped</p>
-          <button @click='modalAction()' type="button" class="close-button"> Close</button>
+<!---------------------------MODAL CODE--------------------------------------->
+      <button @click='modalAction()' class='btn' type=button> ADD INGREDIENT</button>
+      <div v-if="modal" class=modal-bg>
+        <div class="modal-container modal-lg just-cent align-base">
+          <select class="wide-70 input-default white-bg" v-model="toAdd">
+            <option value="shot">Pick from Database</option>
+            <option value="portion">Custom</option>
+          </select>
+          <button @click='modalAction()' type="button" class="btn wide-20"> Close</button>
+          <div v-if="toAdd=='shot'">
+            <select class="wide-100 input-default white-bg" v-model="spiritSelection">
+              <option value="All" selected>All Categories</option>
+              <option value="Brandy & Cognac">Brandy & Cognac</option>
+              <option value="Bourbon">Bourbon</option>
+              <option value="Canadian Whiskey">Canadian Whiskey</option>
+              <option value="Cordials & Liqueurs">Cordials & Liqueurs</option>
+              <option value="Gin">Gin</option>
+              <option value="Irish Whiskey">Irish Whiskey</option>
+              <option value="NC Products">NC Products</option>
+              <option value="Other">Other</option>
+              <option value="Rum">Rum</option>
+              <option value="Rye">Rye</option>
+              <option value="Scotch">Scotch</option>
+              <option value="Tequila & Mezcal">Tequila & Mezcal</option>
+              <option value="Vodka">Vodka</option>
+              <option value="Whiskey - Other">Whiskey - Other</option>
+            </select>
+            <input v-model="spiritSearch" type="text" placeholder="filter by name" class="input-default wide-100 white-bg"/>
+            <select class="input-default wide-100 text-left pad-5 white-bg" v-model="newShot" id="" size="12">
+              <option class="vert-margin-3" v-for="spirit in filteredSpirits" v-bind:value="spirit.id"class="wide-100 white-bg">[[ spirit.brandname ]]: $ [[ spirit.cost ]] per oz </option>
+            </select>
+
+            <button @click='' type="button" class="btn green-bg">Add to Cocktail</button>
+          </div>
+          <div v-if="toAdd=='portion'">
+            <input class="wide-100 input-default white-bg"id="portion-ingredient" v-model="newPortion.ingredient" type="text" placeholder="Name of ingredient"/>
+            <label class="wide-30" for="portion-unit-cost">Price per unit: $</label><input class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit" type="number"/>
+            <input class="wide-100 input-default white-bg"v-model="newPortion.unit" type="text" placeholder="unit" title="ounces, grams, ml, etc."/>
+            <label class="wide-30" for="portion-starting-amt">Amount:</label><input class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount" type="number"/>
+            <button class="btn green-bg">SUBMIT</button>
+          </div>
         </div>
       </div>
+<!--------------------------END MODAL CODE--------------------------------------->
     </div>
   </div>
   <div class='cost-bar default-shadow'>
@@ -261,12 +298,23 @@ let app = new Vue({
   },
   data: {
     cocktail: cocktail,
+    spirits: spirits,
     targetMargin: cocktail.target,
     totalPrice: 0,
     newShots: [],
     newPortions: [],
     deletedShots: [],
     deletedPortions: [],
+    spiritSelection:"All",
+    toAdd:"shot",
+    newShot:"",
+    newPortion:{
+      ingredient:"",
+      costPerUnit:0,
+      unit:"",
+      startingAmount: 0,
+    },
+    spiritSearch:"",
     showModal: -1,
     modal:false,
     allPourCosts: function () {
@@ -331,6 +379,18 @@ let app = new Vue({
       return this.cocktail.portions.filter((portion) => {
         return !this.deletedPortions.includes(portion.id)
       })
+    },
+    filteredSpirits: function(){
+      let brandnameFilter = this.spirits
+      if (this.spiritSelection !== "All") {
+        brandnameFilter = this.spirits.filter((spirit)=>{
+          return spirit.category.toUpperCase().match(this.spiritSelection.toUpperCase())
+        })
+      }
+      searchFilter = brandnameFilter.filter((spirit)=>{
+        return spirit.brandname.toUpperCase().match(this.spiritSearch.toUpperCase())
+      })
+      return searchFilter
     }
   },
 })
