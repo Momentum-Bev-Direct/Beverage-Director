@@ -44,8 +44,10 @@ Drink Builder
     </div>
   </div>
 
-  <div v-for="shot in filterDeletedShots" class="menu-item default-shadow">
-    <shot-line v-bind:shot="shot"></shot-line>
+  <div v-for="shot, index in cocktail.shots" class="menu-item default-shadow">
+    <shot-line :shot="shot" :index="index"></shot-line>
+    <p>[[shot ]] [[ shot.id]] [[index]]</p>
+    <button type="button" v-on:click='deleteDog(index)'>Delete</button>
   </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
     <portion-line v-bind:portion="portion"></portion-line>
@@ -85,6 +87,7 @@ const ShotLine = {
   delimiters: ['[[', ']]'],
   props: {
     shot: Object,
+    index: Number,
   },
   data: function () {
     return {
@@ -105,7 +108,7 @@ const ShotLine = {
         <input class="input-default" type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
         </div>
         <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
-        <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" v-on:click="deleteShotValues()" class="btn center-butt default-shadow">DELETE</button>
+        <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" v-on:click="deleteShotValues(index)" class="btn center-butt default-shadow">DELETE</button>
       </div>
       <div class="menu-input center-txt">
         <i @click="addVolume" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
@@ -134,12 +137,16 @@ const ShotLine = {
     addToDeleted: function (id) {
       this.$parent.deletedShots.push(id)
     },
-    deleteShotValues: function () {
-      let costToSubtract = (parseFloat(this.shot.cost) * parseFloat(this.volume).toFixed(2))
-      console.log(costToSubtract)
-      this.$parent.totalPrice -= costToSubtract
-    }
+    deleteShotValues: function (index) {
+      // this.$parent.cocktail.shots.splice(index, 1)
 
+      let costToSubtract = (parseFloat(this.shot.cost) * parseFloat(this.volume).toFixed(2))
+      console.log('INDEX:', index)
+      console.log(costToSubtract)
+      console.log('Shot array:', cocktail.shots)
+      this.$parent.totalPrice -= costToSubtract
+    },
+   
   },
 
   computed: {
@@ -187,7 +194,7 @@ const PortionLine = {
         <input class="input-default" type="number" min="0" v-model="amount" placeholder="custom"/><label>[[ portion.unit ]]</lable>
         </div>
         <p class="wide-100 center-txt">Ingredient Cost: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
-        <button v-on:click="addToDeleted(portion.id)" v-on:click="deletePortion(portion.id)" v-on:click="deletePortionValues()" class="btn center-butt default-shadow">DELETE</button>
+        <button @click="addToDeleted(portion.id)" @click="deletePortion(portion.id)" @click="deletePortionValues()" class="btn center-butt default-shadow">DELETE</button>
       </div>
       <div class="menu-input center-txt">
         <i @click="addAmount" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
@@ -290,6 +297,17 @@ let app = new Vue({
       } else {
         this.modal = false
       }
+    },
+    deleteDog: function (index) {
+      console.log('fuck you', index)
+      let costToSubtract = (parseFloat(this.cocktail.shots[index].cost) * parseFloat(this.cocktail.shots[index].volume).toFixed(2))
+      console.log('INDEX:', index)
+      console.log(costToSubtract)
+      console.log('Shot array:', this.cocktail.shots)
+      this.totalPrice -= costToSubtract
+      this.cocktail.shots.splice(index, 1)
+
+
     },
     saveCocktail: function (id) {
       instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
