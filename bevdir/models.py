@@ -179,6 +179,7 @@ class Rating(models.Model):
     def __str__(self):
         return f'{self.user.username} {stars} stars'
 
+
 class Cocktail(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -187,7 +188,6 @@ class Cocktail(models.Model):
 
     def __str__(self):
         return f'{self.name}'
-
 
     @property
     def total_cost(self):
@@ -199,8 +199,6 @@ class Cocktail(models.Model):
         total = 0
         for shot in self.shots.all():
             total += shot.cost
-        # for portion in self.portions:
-        #     total += portion.cost
         return total
 
     @property
@@ -210,6 +208,7 @@ class Cocktail(models.Model):
         """
         rec_price = self.total_cost/self.target_profit
         return rec_price
+
 
 class Shot(models.Model):
     volume = models.FloatField(default=0)
@@ -223,6 +222,7 @@ class Shot(models.Model):
     def cost(self):
         cost = self.volume * self.spirit.price_per_oz
         return cost
+
 
 class Portion(models.Model):
     amount = models.IntegerField(default=0)
@@ -238,74 +238,3 @@ class Portion(models.Model):
     def cost(self):
         cost = self.amount*self.price_per_unit
         return cost
-
-#MANUALLY ENTER FOR NOW. EVENTUALLY POPULATE THIS DATA WITH A SCRAPE OR IMPORT FUNCTION:
-# SPIRITS_LIST = [
-#     {
-#         'NC_Code':'00-005',
-#         'collection':'Boutique Collection',
-#         'category': 'bourbon',
-#         'brandname':'Hookers house Bourbon',
-#         'age':'NA',
-#         'proof':'100',
-#         'size':'0.75',
-#         'unit':'L',
-#         'mxb_price':'51.40',
-#     },
-#     {
-#         'NC_Code':'00-810',
-#         'collection':'Boutique Collection',
-#         'category': 'Tequila & Mezcal',
-#         'brandname':'Jose Cuervo Reserva de Familia',
-#         'age':'NA',
-#         'proof':'80',
-#         'size':'0.75',
-#         'unit':'L',
-#         'mxb_price':'193.70',
-#     },
-#     {
-#         'NC_Code':'42-916',
-#         'collection':'Imported',
-#         'category':'Gin',
-#         'brandname':'Beefeater',
-#         'age':'NA',
-#         'proof':'94',
-#         'size':'1.75',
-#         'unit':'L',
-#         'mxb_price':'$48.70',
-#     },
-#     {
-#         'NC_Code':'43-251',
-#         'collection':'Domestic',
-#         'category': 'Vodka',
-#         'brandname':'The Aperican Vodka',
-#         'age':'NA',
-#         'proof':'80',
-#         'size':'1.75',
-#         'unit':'L',
-#         'mxb_price':'20.20',
-#     },
-#     {
-#         'NC_Code':'56-784',
-#         'collection':'Domestic',
-#         'category': 'Cordials/ Liqueurs/ Specialties',
-#         'brandname':'Hatfield & McCoy The Devil\'s Fire Moonshine',
-#         'age':'NA',
-#         'proof':'80',
-#         'size':'.75',
-#         'unit':'L',
-#         'mxb_price':'31.70',
-#     },
-#     {
-#         'NC_Code':'19-745',
-#         'collection':'Special',
-#         'category':'Special',
-#         'brandname':'Cragganmore Distillers Edition 12Y',
-#         'age':'12Y',
-#         'proof':'80',
-#         'size':'.75',
-#         'unit':'L',
-#         'mxb_price':'88.70',
-#     },
-
-# ]
