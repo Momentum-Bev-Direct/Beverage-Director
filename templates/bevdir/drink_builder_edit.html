@@ -58,7 +58,7 @@ Drink Builder
             <label class="wide-30" for="portion-unit-cost">Price per unit: $</label><input class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit" type="number"/>
             <input class="wide-100 input-default white-bg"v-model="newPortion.unit" type="text" placeholder="unit" title="ounces, grams, ml, etc."/>
             <label class="wide-30" for="portion-starting-amt">Amount:</label><input class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount" type="number"/>
-            <button class="btn green-bg">SUBMIT</button>
+            <button @click="createNewPortion"class="btn green-bg">SUBMIT</button>
           </div>
         </div>
       </div>
@@ -92,6 +92,9 @@ Drink Builder
     </div>
   </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
+    <portion-line v-bind:portion="portion"></portion-line>
+  </div>
+  <div v-for="portion in filterDeletedNewPortions" class="menu-item default-shadow">
     <portion-line v-bind:portion="portion"></portion-line>
   </div>
 
@@ -315,6 +318,7 @@ let app = new Vue({
       costPerUnit:0,
       unit:"",
       startingAmount: 0,
+      ingredientID:"",
     },
     spiritSearch:"",
     showModal: -1,
@@ -357,13 +361,6 @@ let app = new Vue({
         }
       }
       console.log(spiritInfo)
-      // const uniqueID = uuid.v4()
-      // this.newShots.push({
-      //   id: uniqueID,
-      //   volume: 0,
-      //   cost: spiritInfo.cost,
-      //   brandname: spiritInfo.brandname
-      // })
 
       instance.post('/api/shot/', {
         volume: .25,
@@ -381,8 +378,45 @@ let app = new Vue({
       .catch(res => console.log(res))
       this.newSpirit = ""
       this.modal = false
-    }
+    },
+    createNewPortion: function(){
+      instance.post('/api/misc/',{
+        name: this.newPortion.ingredient,
+        cost_per_unit: this.newPortion.costPerUnit,
+      })
+      .then(res => {
+        instance.post('/api/portion/', {
+          amount: this.newPortion.startingAmount,
+          unit: this.newPortion.unit,
+          price_per_unit: res.data.cost_per_unit,
+          cocktail: this.cocktail.id,
+          misc_ingredient: res.data.id,
+        })
+        .then(res => {
+          this.newPortions.push({
+            id: res.data.id,
+            amount: res.data.amount,
+            unit: res.data.unit,
+            cost: res.data.price_per_unit,
+            name: this.newPortion.ingredient,
+          })
+        .catch(res =>
+        console.log("your portion response:"),
+        console.log(res))
+      })
+      .catch(res =>
+        console.log("your misc ingredient response:"),
+        console.log(res))
 
+      this.newPortion = {
+        ingredient:"",
+        costPerUnit:0,
+        unit:"",
+        startingAmount: 0,
+      }
+      this.modal = false
+      })
+    },
   },
   computed: {
     displayCost: function () {
@@ -404,6 +438,11 @@ let app = new Vue({
     },
     filterDeletedPortions: function () {
       return this.cocktail.portions.filter((portion) => {
+        return !this.deletedPortions.includes(portion.id)
+      })
+    },
+    filterDeletedNewPortions: function(){
+      return this.newPortions.filter((portion)=> {
         return !this.deletedPortions.includes(portion.id)
       })
     },
