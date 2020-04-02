@@ -84,11 +84,11 @@ Drink Builder
   </div>
 
   <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
-    <shot-line v-bind:shot="shot" v-on:changevol="updateShotVolumes" ref="shotSet"></shot-line>
+    <shot-line v-bind:shot="shot" ref="shotSet"></shot-line>
   </div>
   <div v-if="newShots.length > 0">
     <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="menu-item default-shadow">
-      <shot-line v-bind:shot="shot" v-on:changevol="updateShotVolumes" ref="shotSet"></shot-line>
+      <shot-line v-bind:shot="shot" ref="shotSet"></shot-line>
     </div>
   </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
@@ -150,7 +150,7 @@ const ShotLine = {
       <div class="menu-mid">
         <p class='bold wide-100 center-txt'>[[ shot.brandname ]]</p>
         <div class='wide-100 center-txt'>
-        <input class="input-default" type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
+        <p class="bold">Shot Volume: [[ volume ]] oz</p>
         </div>
         <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
         <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" v-on:click="deleteShotValues()" class="btn center-butt default-shadow">DELETE</button>
@@ -245,7 +245,7 @@ const PortionLine = {
       <div class="menu-mid">
         <p class='bold wide-100 center-txt'>[[ portion.name ]]</p>
         <div class='wide-100 center-txt'>
-        <input class="input-default" type="number" min="0" v-model="amount" placeholder="custom"/><label>[[ portion.unit ]]</lable>
+        <p>Amount: [[ amount ]][[ portion.unit ]]</p>
         </div>
         <p class="wide-100 center-txt">Ingredient Cost: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
         <button v-on:click="addToDeleted(portion.id)" v-on:click="deletePortion(portion.id)" v-on:click="deletePortionValues()" class="btn center-butt default-shadow">DELETE</button>
