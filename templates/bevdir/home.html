@@ -16,11 +16,12 @@ console.log(cocktails)
   <h2>Your Drink Menu</h2> <a v-bind:href="`/drinkbuilder`"><button class=add-ingredient-button >Create Cocktail</button></a>
   </div>
   <input type="text" v-model="search" placeholder="FILTER COCKTAILS" class="form-input w-50 default-shadow"/>
-  <div v-for="cocktail in filteredCocktails">
+  <div v-for="cocktail, index in cocktails">
     <div v-bind:id="cocktail.id" class="menu-item default-shadow">
       <p>[[ cocktail.name ]]</p>
       <div>
         <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn menu-butt">EDIT</button></a>
+        <button @click="deleteCocktail(cocktail.id, index)"   class="btn menu-butt">TEST DELETE</button>
         <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
         <button @click="cocktailSummary(cocktail.id)" class="btn menu-butt">SEE RECIPE</button>
       </div>
@@ -28,8 +29,8 @@ console.log(cocktails)
     <div v-if="showDeleteModal==cocktail.id" class="modal-bg">
       <div  class="modal-container pnk-bg">
         <p class="bold">Are you sure you want to delete [[ cocktail.name ]]?</p>
-        <button @click="deleteCocktail(cocktail.id)" class="btn danger-butt">YES, PLEASE DELETE.</button>
-        <button @click="showDeleteModal=-1" class="btn menu-butt">NO! PEASE DON'T!</button>
+        <button  @click="deleteCocktail(cocktail.id, index)" @click="showDeleteModal=-1" class="btn danger-butt">YES, PLEASE DELETE.</button>
+        <button @click="showDeleteModal=-1" class="btn menu-butt">NO! PLEASE DON'T!</button>
       </div>
     </div>
     <div v-if="showModal==cocktail.id" class="modal-bg">
@@ -81,7 +82,7 @@ let app = new Vue({
   delimiters: ['[[', ']]'],
   el: '#homeapp',
   data: {
-    cocktails: [],
+    cocktails: cocktails,
     showModal: -1,
     showDeleteModal: -1,
     search: "",
@@ -104,15 +105,16 @@ let app = new Vue({
     }
   },
   methods: {
-    deleteCocktail: function(id) {
-      instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
+    deleteCocktail: function(id, index) {
+      instance.delete(`/api/cocktail/${id}`)
       .then(function(response) {
       }).then(function(data){
         console.log("data is ok", data)
       }).catch(function(ex) {
         console.log('parsing failed', ex)
       })
-
+      console.log(index)
+      cocktails.splice(index, 1)
       console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
     },
     cocktailSummary: function(id) {
@@ -124,6 +126,12 @@ let app = new Vue({
           this.modal_portions = cocktail.portions
         }
       }
+    },
+    removeCocktail: function(index) {
+      console.log("Cocktail", index)
+      console.log(cocktails[index])
+      cocktails.splice(index, 1)
+      console.log(cocktails) 
     }
   },
   computed: {
