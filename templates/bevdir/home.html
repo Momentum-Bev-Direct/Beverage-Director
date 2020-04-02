@@ -16,7 +16,7 @@ console.log(cocktails)
   <h2>Your Drink Menu</h2> <a v-bind:href="`/drinkbuilder`"><button class=add-ingredient-button >Create Cocktail</button></a>
   </div>
   <input type="text" v-model="search" placeholder="FILTER COCKTAILS" class="form-input w-50 default-shadow"/>
-  <div v-for="cocktail, index in cocktails">
+  <div v-for="cocktail, index in filteredCocktails">
     <div v-bind:id="cocktail.id" class="menu-item default-shadow">
       <p>[[ cocktail.name ]]</p>
       <div>
@@ -112,7 +112,6 @@ let app = new Vue({
       }).catch(function(ex) {
         console.log('parsing failed', ex)
       })
-      console.log(index)
       cocktails.splice(index, 1)
       showDeleteModal = -1
     },
@@ -126,12 +125,6 @@ let app = new Vue({
         }
       }
     },
-    removeCocktail: function(index) {
-      console.log("Cocktail", index)
-      console.log(cocktails[index])
-      cocktails.splice(index, 1)
-      console.log(cocktails) 
-    }
   },
   computed: {
     filteredCocktails: function(){
