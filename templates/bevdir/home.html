@@ -17,14 +17,13 @@ console.log(cocktails)
   </div>
   <input type="text" v-model="search" placeholder="FILTER COCKTAILS" class="form-input w-50 default-shadow"/>
   <div v-for="cocktail in filteredCocktails">
-    <div v-bind:id="cocktail.id" class="menu-item default-shadow">
+    <div v-on:click @click="cocktailSummary(cocktail.id)" v-bind:id="cocktail.id" class="menu-item default-shadow">
       <p>[[ cocktail.name ]]</p>
       <div>
         <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn menu-butt">EDIT</button></a>
         <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
-        <button @click="cocktailSummary(cocktail.id)" class="btn menu-butt">SEE RECIPE</button>
       </div>
-    </div>
+    </button>
     <div v-if="showDeleteModal==cocktail.id" class="modal-bg">
       <div  class="modal-container pnk-bg">
         <p class="bold">Are you sure you want to delete [[ cocktail.name ]]?</p>
