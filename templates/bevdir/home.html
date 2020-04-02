@@ -21,7 +21,6 @@ console.log(cocktails)
       <p>[[ cocktail.name ]]</p>
       <div>
         <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn menu-butt">EDIT</button></a>
-        <button @click="deleteCocktail(cocktail.id, index)"   class="btn menu-butt">TEST DELETE</button>
         <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
         <button @click="cocktailSummary(cocktail.id)" class="btn menu-butt">SEE RECIPE</button>
       </div>
@@ -29,7 +28,7 @@ console.log(cocktails)
     <div v-if="showDeleteModal==cocktail.id" class="modal-bg">
       <div  class="modal-container pnk-bg">
         <p class="bold">Are you sure you want to delete [[ cocktail.name ]]?</p>
-        <button  @click="deleteCocktail(cocktail.id, index)" @click="showDeleteModal=-1" class="btn danger-butt">YES, PLEASE DELETE.</button>
+        <button  @click="deleteCocktail(cocktail.id, index)" class="btn danger-butt">YES, PLEASE DELETE.</button>
         <button @click="showDeleteModal=-1" class="btn menu-butt">NO! PLEASE DON'T!</button>
       </div>
     </div>
@@ -115,7 +114,7 @@ let app = new Vue({
       })
       console.log(index)
       cocktails.splice(index, 1)
-      console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
+      showDeleteModal = -1
     },
     cocktailSummary: function(id) {
       this.showModal = id
