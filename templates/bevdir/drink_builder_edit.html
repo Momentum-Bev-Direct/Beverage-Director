@@ -6,6 +6,7 @@ Drink Builder
 
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.8/uuid.min.js"></script>
 <script type='text/javascript'>
   const cocktail = {{ cocktail| safe }}
   const spirits = {{ spirits| safe }}
@@ -46,7 +47,7 @@ Drink Builder
               <option value="Whiskey - Other">Whiskey - Other</option>
             </select>
             <input v-model="spiritSearch" type="text" placeholder="filter by name" class="input-default wide-100 white-bg"/>
-            <select class="input-default wide-100 text-left pad-5 white-bg" v-model="newShot" id="" size="12" required>
+            <select class="input-default wide-100 text-left pad-5 white-bg" v-model="newSpirit" id="" size="12" required>
               <option class="vert-margin-3" v-for="spirit in filteredSpirits" v-bind:value="spirit.id"class="wide-100 white-bg">[[ spirit.brandname ]]: $ [[ spirit.cost ]] per oz </option>
             </select>
             <button @click='createNewShot' type="button" class="btn green-bg">Add</button>
@@ -85,6 +86,11 @@ Drink Builder
   <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
     <shot-line v-bind:shot="shot"></shot-line>
   </div>
+  <div v-if="newShots.length > 0">
+    <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="menu-item default-shadow">
+      <shot-line v-bind:shot="shot"></shot-line>
+    </div>
+  </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
     <portion-line v-bind:portion="portion"></portion-line>
   </div>
@@ -94,6 +100,7 @@ Drink Builder
 
 <script>
   // --------------------------------------AJAX CONFIG-------------------------------------
+
   function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -302,7 +309,7 @@ let app = new Vue({
     deletedPortions: [],
     categorySelection:"All",
     toAdd:"shot",
-    newShot:"",
+    newSpirit:"",
     newPortion: {
       ingredient:"",
       costPerUnit:0,
@@ -339,11 +346,43 @@ let app = new Vue({
       }
     },
     saveCocktail: function (id) {
-      instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
+      console.log("naw dude. wrong function")
     },
+
     createNewShot: function(){
-      console.log(this.newShot)
+      let spiritInfo;
+      for (let spirit of this.spirits){
+        if(parseInt(spirit.id) == this.newSpirit){
+          spiritInfo = spirit
+        }
+      }
+      console.log(spiritInfo)
+      // const uniqueID = uuid.v4()
+      // this.newShots.push({
+      //   id: uniqueID,
+      //   volume: 0,
+      //   cost: spiritInfo.cost,
+      //   brandname: spiritInfo.brandname
+      // })
+
+      instance.post('/api/shot/', {
+        volume: .25,
+        spirit: spiritInfo.id,
+        cocktail: this.cocktail.id
+      })
+      .then(res => {
+        this.newShots.push({
+        id: res.data.id,
+        volume: res.data.volume,
+        cost: spiritInfo.cost,
+        brandname: spiritInfo.brandname
+      })
+      })
+      .catch(res => console.log(res))
+      this.newSpirit = ""
+      this.modal = false
     }
+
   },
   computed: {
     displayCost: function () {
@@ -351,10 +390,15 @@ let app = new Vue({
     },
     menuPrice: function () {
       return parseFloat(this.totalPrice / (this.targetMargin / 100)).toFixed(2)
-      // parseFloat(this.totalPrice * (this.targetMargin/100) + this.totalPrice).toFixed(2)
     },
     filterDeletedShots: function () {
-      return this.cocktail.shots.filter((shot) => {
+      let filter = this.cocktail.shots.filter((shot) => {
+        return !this.deletedShots.includes(shot.id)
+      })
+      return filter
+    },
+    filterDeletedNewShots: function (){
+      return this.newShots.filter((shot)=> {
         return !this.deletedShots.includes(shot.id)
       })
     },
@@ -376,6 +420,10 @@ let app = new Vue({
       return searchFilter
     }
   },
+  mounted(){
+    this.newShots = []
+    this.newPortions = []
+  }
 })
 
 </script>
