@@ -81,7 +81,7 @@ Drink Builder
     </div>
   </div>
 
-  <div v-for="shot in filterDeletedShots" class="menu-item default-shadow">
+  <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
     <shot-line v-bind:shot="shot"></shot-line>
   </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
@@ -161,6 +161,7 @@ const ShotLine = {
         })
 
       console.log(`DELETE Shot ${id}`)
+      // location.reload()
     },
     addVolume: function () {
       this.volume += 0.25
