@@ -84,21 +84,21 @@ Drink Builder
   </div>
 
   <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
-    <shot-line v-bind:shot="shot"></shot-line>
+    <shot-line v-bind:shot="shot" v-on:changevol="updateShotVolumes" ref="shotSet"></shot-line>
   </div>
   <div v-if="newShots.length > 0">
     <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="menu-item default-shadow">
-      <shot-line v-bind:shot="shot"></shot-line>
+      <shot-line v-bind:shot="shot" v-on:changevol="updateShotVolumes" ref="shotSet"></shot-line>
     </div>
   </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
-    <portion-line v-bind:portion="portion"></portion-line>
+    <portion-line v-bind:portion="portion" v-on:changeamt="updatePortionAmounts" ref="portionSet"></portion-line>
   </div>
-  <div v-for="portion in filterDeletedNewPortions" class="menu-item default-shadow">
-    <portion-line v-bind:portion="portion"></portion-line>
+  <div v-for="portion in filterDeletedNewPortions"  class="menu-item default-shadow">
+    <portion-line v-bind:portion="portion" v-on:changeamt="updatePortionAmounts" ref="portionSet"></portion-line>
   </div>
 
-  <button class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
+  <button @click="submitPage"class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
 </div>
 
 <script>
@@ -144,7 +144,7 @@ const ShotLine = {
   <div class="wide-100 flex">
     <div class="wide-100 flex">
       <div class="menu-input center-txt">
-        <i @click="subtractVolume" class="fas fa-angle-double-left" title="decrease pour volume by 0.25 oz"></i>
+        <i @click="subtractVolume" @click="$emit('changevol',shot.id, volume)" class="fas fa-angle-double-left" title="decrease pour volume by 0.25 oz"></i>
         <p class="light-stroke">LESS</p>
       </div>
       <div class="menu-mid">
@@ -156,7 +156,7 @@ const ShotLine = {
         <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" v-on:click="deleteShotValues()" class="btn center-butt default-shadow">DELETE</button>
       </div>
       <div class="menu-input center-txt">
-        <i @click="addVolume" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
+        <i @click="addVolume" @click="$emit('changevol',shot.id, volume)" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
         <p class="light-stroke">MORE</p>
       </div>
     </div>
@@ -164,7 +164,7 @@ const ShotLine = {
   </div>`,
   methods: {
     deleteShot: function (id) {
-      instance.delete(`http://127.0.0.1:8000/api/shot/${id}`)
+      instance.delete(`/api/shot/${id}`)
         .then(function (response) {
         }).then(function (id) {
         }).catch(function (ex) {
@@ -195,7 +195,7 @@ const ShotLine = {
     adjustedCost: function () {
       let total = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
       return total
-    }
+    },
   },
   watch: {
     volume: function (newVolume, oldVolume) {
@@ -204,10 +204,21 @@ const ShotLine = {
 
       this.$parent.totalPrice += newCost
       this.$parent.totalPrice -= oldCost
+    },
+    submitStatus: function(newStatus, oldStatus) {
+      console.log("submit detected")
+      if (newStatus==true) {
+        instance.patch(`/shot/${this.shot.id}/`,{
+          volume: this.volume
+        })
+        .then(res => console.log(res))
+        .catch(res => console.log(res))
+      }
     }
   },
   mounted() {
     this.volume = this.shot.volume
+    this.submit = false
   }
 }
 // ------------------------PORTION COMPONENT--------------------------------
@@ -216,6 +227,7 @@ const PortionLine = {
   delimiters: ['[[', ']]'],
   props: {
     portion: Object,
+    submitStatus: Boolean,
   },
   data: function () {
     return {
@@ -247,7 +259,7 @@ const PortionLine = {
   </div>`,
   methods: {
     deletePortion: function (id) {
-      instance.delete(`http://127.0.0.1:8000/api/portion/${id}`)
+      instance.delete(`/api/portion/${id}`)
         .then(function (response) {
         }).then(function (id) {
         }).catch(function (ex) {
@@ -277,7 +289,7 @@ const PortionLine = {
     adjustedCost: function () {
       let total = (parseFloat(this.portion.cost) * parseFloat(this.amount)).toFixed(2)
       return total
-    }
+    },
   },
   watch: {
     amount: function (newAmount, oldAmount) {
@@ -286,7 +298,18 @@ const PortionLine = {
 
       this.$parent.totalPrice += newCost
       this.$parent.totalPrice -= oldCost
+    },
+    'submitStatus': function(newStatus, oldStatus) {
+      console.log("submit detected")
+      if (newStatus === true) {
+        instance.patch(`/portion/${this.portion.id}/`,{
+          amount: this.amount
+        })
+        .then(res => console.log(res))
+        .catch(res => console.log(res))
+      }
     }
+
   },
   mounted() {
     this.amount = this.portion.amount
@@ -306,6 +329,12 @@ let app = new Vue({
     spirits: spirits,
     targetMargin: cocktail.target,
     totalPrice: 0,
+    updatedShotVolumes:[
+      {id:"", volume:""}
+    ],
+    updatedPortionAmounts: [
+      {id:"", amount:""}
+    ],
     newShots: [],
     newPortions: [],
     deletedShots: [],
@@ -352,7 +381,6 @@ let app = new Vue({
     saveCocktail: function (id) {
       console.log("naw dude. wrong function")
     },
-
     createNewShot: function(){
       let spiritInfo;
       for (let spirit of this.spirits){
@@ -417,6 +445,36 @@ let app = new Vue({
       this.modal = false
       })
     },
+    submitPage: function() {
+      allShots = this.$refs.shotSet
+      allPortions = this.$refs.portionSet
+
+      if (allShots !== undefined){
+        for(let i=0; i<allShots.length; i++){
+          instance.patch(`/api/shot/${allShots[i].shot.id}/`, {volume: allShots[i].volume})
+          .then(res => {console.log(res)})
+          .catch(res => {console.log(res)})
+        }}
+
+      if (allPortions !== undefined){
+        for(let i=0; i<allPortions.length; i++){
+          instance.patch(`/api/portion/${allPortions[i].portion.id}/`, {amount: allPortions[i].amount})
+          .then(res => {console.log(res)})
+          .catch(res => {console.log(res)})
+        }}
+    },
+    updateShotVolumes: function(id, volume){
+      let volumes = this.updatedShotVolumes
+      for (let i=0; i< volumes.length; i++){
+        if(volumes[i].id === id){
+          console.log("ID found"),
+          volumes[i].volume = volume
+        }
+      }
+    },
+    updatePortionAmounts: function(obj){
+      console.log("not hooked up yet")
+    }
   },
   computed: {
     displayCost: function () {
@@ -432,19 +490,22 @@ let app = new Vue({
       return filter
     },
     filterDeletedNewShots: function (){
-      return this.newShots.filter((shot)=> {
+      let filter = this.newShots.filter((shot)=> {
         return !this.deletedShots.includes(shot.id)
       })
+      return filter
     },
     filterDeletedPortions: function () {
-      return this.cocktail.portions.filter((portion) => {
+      let filter = this.cocktail.portions.filter((portion) => {
         return !this.deletedPortions.includes(portion.id)
       })
+      return filter
     },
     filterDeletedNewPortions: function(){
-      return this.newPortions.filter((portion)=> {
+      let filter = this.newPortions.filter((portion)=> {
         return !this.deletedPortions.includes(portion.id)
       })
+      return filter
     },
     filteredSpirits: function(){
       let brandnameFilter = this.spirits
