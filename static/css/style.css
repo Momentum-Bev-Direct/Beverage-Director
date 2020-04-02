@@ -51,6 +51,10 @@ body {
     text-align: center;
 
 }
+.header a{
+    text-decoration: none;
+    color:white;
+}
 
 .menu-heading {
     font-size: 1.5rem;
@@ -63,7 +67,7 @@ body {
     flex-direction: column;
     min-width: 400px;
     margin: 0 auto;
-    border: 10px thin var(--LightBlue)
+    border: 10px thin var(--LightBlue);
 }
 .top-bar {
     display: flex;
@@ -396,11 +400,19 @@ body {
     font-family: 'Abril Fatface', cursive;
     float:right;
 }
+.header-links{
+    font-family: var(--font_serif_1);
+    font-size: 1rem;
+
+}
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
 .modal-lg {
     height: 400px;
     width: 50%;
     min-width: 400px;
+}
+.text-white {
+    color:white;
 }
 
 .pnk-bg {

@@ -7,7 +7,7 @@ from django.urls import include, path
 urlpatterns = [
     path('', views.homepage, name='homepage'),
     path('admin/', admin.site.urls),
-    path('accounts/', include('registration.backends.default.urls')),
+    path('accounts/', include('registration.backends.simple.urls')),
     path('api/', include('bevdir.urls')),
     path('drinkbuilder/', views.drink_builder, name='drink-builder'),
     path('cocktails/<int:pk>/', views.edit_cocktail, name='edit-cocktail')
