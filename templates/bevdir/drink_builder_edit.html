@@ -81,8 +81,8 @@ Drink Builder
     </div>
   </div>
 
-  <div v-for="shot, index in cocktail.shots" class="menu-item default-shadow">
-    <shot-line :shot="shot" :index="index"></shot-line>
+  <div v-for="shot, index in filterDeletedShots" class="menu-item default-shadow">
+    <shot-line :key="shot.id" :shot="shot" :index="index"></shot-line>
     <button type="button" v-on:click='deleteDog(index)'>Delete</button>
   </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
@@ -124,6 +124,7 @@ const ShotLine = {
   props: {
     shot: Object,
     index: Number,
+    key: Number,
     deleteDoo: Function,
   },
   data: function () {
@@ -141,6 +142,7 @@ const ShotLine = {
       </div>
       <div class="menu-mid">
         <p class='bold wide-100 center-txt'>[[ shot.brandname ]]</p>
+        <p> [[key]] [[index]] [[shot]]
         <div class='wide-100 center-txt'>
         <input class="input-default" type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
         </div>
@@ -354,7 +356,9 @@ let app = new Vue({
       // console.log('Shot array:', this.cocktail.shots)
       // this.totalPrice -= costToSubtract
       // this.cocktail.shots.splice(index, 1)
-      Vue.delete(this.cocktail.shots, index)
+      // Vue.delete(this.cocktail.shots, index)
+      cocktail.shots.splice(index, 1, '')
+
 
 
     },
