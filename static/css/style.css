@@ -56,6 +56,15 @@ body {
     color:white;
 }
 
+.header a:hover {
+    color: var(--highlight_green)
+}
+
+.header-links{
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: .85rem;
+}
+
 .menu-heading {
     font-size: 1.5rem;
     text-align: center;
@@ -162,10 +171,6 @@ body {
     box-shadow: -1px 1px 3px var(--shadow_dark);
 }
 
-.vert-slider {
-    width: 80px;
-    transform: rotate(-90deg);
-}
 .total-cost-box,
 .menu-price-box {
     font-size: 1.5rem;
@@ -400,11 +405,7 @@ body {
     font-family: 'Abril Fatface', cursive;
     float:right;
 }
-.header-links{
-    font-family: var(--font_serif_1);
-    font-size: 1rem;
 
-}
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
 .modal-lg {
     height: 400px;
@@ -492,6 +493,10 @@ body {
     align-items: baseline;
 }
 
+.align-right {
+    text-align: right;
+}
+
 .white-bg{
     background-color: white;
 }
@@ -501,4 +506,8 @@ body {
 .list-display {
     height: 50px;
     overflow-y: scroll;
+}
+
+.flex-end {
+    align-self: flex-end;
 }
