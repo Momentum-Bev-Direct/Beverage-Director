@@ -1,34 +1,15 @@
 :root{
-    --Blue: #1ef1fa;
-    --background_1: #1ef1fa;
-    --Pink: #f60282;
+    --menu-item-bg: #1ef1fa;
     --button_std: #f60282;
-    --MintGreen: #07fbb6;
-    --background_2: #07fbb6;
-    --Purple: #6b15f1;
-    --stroke_med: #6b15f1;
-    --DarkBlue: #039d9d;
-    --shadow_blue: #039d9d;
-    --DarkPink: #7b0738;
-    --shadow_pink: #7b0738;
-    --DarkGreen: #04725c;
-    --shadow_green: #04725c;
-    --DarkPurple: #070708;
+    --button_alt: #07fbb6;
+    --stroke_purple: #6b15f1;
     --stroke_dark: #070708;
     --stroke_lighter: #53535f;
-    --shadow_dark: #07070885;
-    --LightBlue: #cdebeb;
     --highlight_blue: #cdebeb;
-    --LightPink: #e8e2e5;
     --highlight_pink: #e8e2e5;
-    --LightGreen: #cce8e0;
     --highlight_green: #cce8e0;
-    --font_headline_1: 'Orbitron', sans-serif;
-    --font_cursive_1: 'Abril Fatface', cursive;
-    --font_headline_2: 'Monoton', cursive;
-    --font_serif_1: 'Zilla Slab', serif;
-    --font_sans_1: 'Didact Gothic', sans-serif;
-
+    --font_headline: 'Monoton', cursive;
+    --font_body: 'Tajawal', sans-serif;
 }
 
 * {
@@ -38,7 +19,7 @@
 }
 
 body {
-    font-family: var(--font_sans_1)
+    font-family: var(--font_body)
 }
 
 form {
@@ -51,15 +32,15 @@ form li {
     list-style: none;
 }
 
-
-
+/* ---------------END GLOBALS ----------------*/
+/* ++++++++++++++++++++++++++++++++++++++++++ */
 
 .header {
     color: white;
-    background-color:var(--DarkPurple);
+    background-color: red;
     width: 100%;
     padding:.5rem;
-    font-family:var(--font_headline_2);
+    font-family:var(--font_headline);
     font-size: 3rem;
     text-align: center;
 
@@ -74,7 +55,7 @@ form li {
 }
 
 .header-links{
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: var(--font_body);
     font-size: .85rem;
 }
 
@@ -85,11 +66,12 @@ form li {
 }
 .container {
     display: flex;
+    /* flex-wrap: wrap; */
     width: 80%;
-    flex-direction: column;
+    /* flex-direction: column; */
     min-width: 400px;
     margin: 0 auto;
-    border: 10px thin var(--LightBlue);
+    border: 10px thin var(--highlight_blue);
 }
 .top-bar {
     display: flex;
@@ -114,27 +96,27 @@ form li {
     text-align: center;
     margin: .5rem;
     padding: .5rem;
-    font-family: 'Abril Fatface', cursive;
+    font-family: var(--font_body);
 }
 
 .cocktail-name {
     font-size: 55px;
-    font-family: var(--font_headline_2);
+    font-family: var(--font_headline);
     margin: .5rem;
-    color: var(--Purple);
-    text-underline-offset: var(--DarkPurple);
+    color: var(--stroke_purple);
+    text-underline-offset:red;
 }
 .add-ingredient-button {
-    border: 1px solid var(--DarkPink);
+    border: 1px solid red;
     border-radius: 10px;
     padding: .5rem;
     background-color: var(--button_std);
-    font-family: 'Abril Fatface', cursive;
+    font-family: var(--font_body);
     color:white
 }
 
 .ingredient-list {
-    background-color:var(--DarkBlue);
+    background-color: red;
 }
 .dollars-in{
     color:green;
@@ -150,13 +132,8 @@ form li {
     border-top-right-radius: 5px;
     justify-content: center;
     align-items: baseline;
-    background-color: var(--background_2);
-    font-family: var(--font_sans_1);
-/*     justify-content: flex-end;
-    align-items: center;
-    background-color: var(--Pink);
-    border: thick double var(--DarkPink);
-    font-family: var(--font_cursive_1); */
+    background-color: var(--button_alt);
+    font-family: var(--font_body);
 }
 
 .target-cost {
@@ -169,7 +146,7 @@ form li {
     font-size: 1.25rem;
     height: 1.5rem;
     margin: 2rem;
-    border: 2px solid var(--DarkPink);
+    border: 2px solid red;
 }
 
 .cost-sell-box {
@@ -180,8 +157,8 @@ form li {
     padding: 1rem;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    font-family: var(--font_sans_1);
-    box-shadow: -1px 1px 3px var(--shadow_dark);
+    font-family: var(--font_body);
+    box-shadow: -1px 1px 3px black;
 }
 
 .total-cost-box,
@@ -193,10 +170,10 @@ form li {
 .ingredient-box {
     display: flex;
     flex-direction: column;
-    border: 5px dotted var(--DarkBlue);
+    border: 5px dotted red;
     padding: 1rem;
     margin: 1.5rem;
-    background-color: var(--Blue);
+    background-color: var(--menu-item-bg);
     font-family: var(--font_cursive_1);
     background-blend-mode: color;
     border-radius: 10px;
@@ -206,9 +183,9 @@ form li {
 }
 
 .spirit-type-icon {
-    color:var(--LightGreen);
+    color:var(--highlight_green);
     font-size: .5rem;
-    background-color: var(--DarkBlue);
+    background-color: red;
     width: 50px;
     height: 50px;
     line-height: 35px;
@@ -237,9 +214,9 @@ form li {
     padding: .5rem;
     margin: 0;
     background-color: var(--button_std);
-    border: 1px solid var(--DarkPink);
+    border: 1px solid red;
     border-radius: 10px;
-    font-family: 'Abril Fatface', cursive;
+    font-family: var(--font_body);
     color:white
 }
 /* REPLACE THE FOLLOWING AT SOME POINT: */
@@ -268,7 +245,7 @@ form li {
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     transition: all .3s ease;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: var(--font_body);
   }
 
   .modal-header h3 {
@@ -302,7 +279,7 @@ form li {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
   }
-/* REPLACE ABOVE */
+
 .btn {
     background-color: var(--button_std);
     color:white;
@@ -332,11 +309,8 @@ form li {
     margin-top: 10px;
     flex-direction: row;
     justify-content: space-between;
-    /* justify-content: flex-end; */
 }
-/* .menu-item p {
-    align-self: flex-start;
-} */
+
 .menu-butt {
     justify-self: flex-end;
 }
@@ -355,7 +329,7 @@ form li {
 .modal-container {
     background-color: var(--highlight_blue);
     border-radius: 5x;
-    box-shadow: -2px 2px 20px var(--shadow_dark);
+    box-shadow: -2px 2px 20px black;
     height: fit-content;
     padding: 10px;
     margin: 0 auto;
@@ -363,7 +337,6 @@ form li {
 .ingredient-ul {
     list-style-type: disc;
     list-style-position: inside;
-
 }
 
 .form-input {
@@ -377,13 +350,22 @@ form li {
 }
 
 .fa-angle-double-left, .fa-angle-double-right {
-    color: var(--background_2);
+    color: var(--button_alt);
     font-size: 4rem;
-    text-shadow: -1px 1px 3px var(--shadow_dark);
+    text-shadow: -1px 1px 3px black;
 }
 
 .fa-angle-double-left:hover, .fa-angle-double-right:hover {
     color: var(--stroke_dark);
+}
+
+.fa-times {
+    color: var(--stroke_purple);
+    font-size: 2rem;
+}
+
+.fa-times:hover {
+    color: var(--button_std)
 }
 
 .menu-input {
@@ -411,65 +393,92 @@ form li {
 }
 
 .close-button{
-    border: 1px solid var(--DarkPink);
+    border: 1px solid red;
     border-radius: 10px;
     padding: .3rem;
     background-color: rgb(194, 5, 5);
-    font-family: 'Abril Fatface', cursive;
+    font-family: var(--font_body);
     float:right;
 }
+.list-display {
+    height: 50px;
+    overflow-y: scroll;
+}
+
 
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 .modal-lg {
     height: 400px;
     width: 50%;
     min-width: 400px;
 }
-.text-white {
-    color:white;
-}
-
-.pnk-bg {
-    background-color: var(--highlight_pink)
-}
-
-.green-bg {
-    background-color: var(--background_2)
-}
-
-.text-dark {
-    color: var(--stroke_dark)
-}
-
-.light-stroke {
-    color: var(--stroke_lighter);
-}
-
-.justify-self {
-    justify-self: center;
-}
-
-.bold {
-    font-weight: bold;
-}
-.flex {
-    display: flex;
-}
-
 .default-shadow {
-    box-shadow: -1px 1px 3px var(--shadow_dark);
+    box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.5);
     border: none;
 }
 
+.default-text-shadow {
+    text-shadow: -1px 1px 3px black;
+}
+.round-corners {
+    border-radius: 5px;
+}
+
+/* ---------Colors--------- */
+.text-white {
+    color:white;
+}
+.pnk-bg {
+    background-color: var(--highlight_pink)
+}
+.green-bg {
+    background-color: var(--button_alt)
+}
+.text-dark {
+    color: var(--stroke_dark)
+}
+.light-stroke {
+    color: var(--stroke_lighter);
+}
+.bold-blue-bg {
+    background-color: var(--menu-item-bg)
+}
+.white-bg{
+    background-color: white;
+}
+
+
+/* ---------TEXT OVERRIDE-------------*/
+.bold {
+    font-weight: bold;
+}
+.underline {
+    text-decoration: underline;
+}
+.italic {
+    font-style: italic;
+}
+
+
+/* -------WIDTH-------- */
 .wide-100 {
     width: 100%;
 }
-
+.wide-90 {
+    width: 90%;
+}
 .wide-80 {
     width: 80%;
 }
 .wide-70 {
     width: 70%;
+}
+.wide-50 {
+    width: 50%
+}
+.wide-40 {
+    width: 40%
 }
 .wide-30 {
     width: 30%
@@ -477,50 +486,89 @@ form li {
 .wide-20 {
     width: 20%
 }
-
-.center-txt {
-    text-align: center;
+.wide-10 {
+    width: 10%
+}
+.min-400 {
+    min-width: 400px;
+}
+.height-100 {
+    height: 100%
 }
 
+/* --------Alignment-------- */
+.flex {
+    display: flex;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.flex-col {
+    flex-direction: column;
+}
+.space-between {
+    justify-content: space-between;
+}
+.center-butt {
+    width: 40%;
+}
+.just-cent {
+    justify-content: center;
+}
+.align-base {
+    align-items: baseline;
+}
+.align-center {
+    align-items: center;
+}
+.text-center {
+    text-align: center;
+}
+.text-right {
+    text-align: right;
+}
+.text-left {
+    text-align: left;
+}
+.flex-end-self {
+    align-self: flex-end;
+}
+.justify-self-cent {
+    justify-self: center;
+}
+/* -----Margins/padding------- */
 .vert-margin-10 {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+.vert-padding-10 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.hor-margin-10 {
+    margin-right: 10px;
+    margin-left: 10px;
 }
 .vert-margin-3 {
     margin-top: 3px;
     margin-bottom: 3px;
 }
+.pad-10 {
+    padding: 10px;
+}
 .pad-5 {
     padding: 5px;
 }
 
-.center-butt {
-    width: 40%;
+/* ------------MEDIA QUERIES ------------------------ */
+@media only screen and (max-width: 800px){
+    .container {
+        width: 100%;
+        margin: 5px;
+    }
+
 }
 
-.just-cent {
-    justify-content: center;
-}
 
-.align-base {
-    align-items: baseline;
-}
 
-.align-right {
-    text-align: right;
-}
 
-.white-bg{
-    background-color: white;
-}
-.text-left {
-    text-align: left;
-}
-.list-display {
-    height: 50px;
-    overflow-y: scroll;
-}
-
-.flex-end {
-    align-self: flex-end;
-}

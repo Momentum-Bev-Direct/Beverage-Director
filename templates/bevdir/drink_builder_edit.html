@@ -13,7 +13,7 @@ Drink Builder
 
 </script>
 <!------------------------------- HTML --------------------------------->
-<div class='container' id='drink-edit'>
+<div class='container flex-wrap flex-col' id='drink-edit'>
   <div class='top-bar'>
     <p class='logo'>Logo</p>
     <h2 class='cocktail-name'>[[cocktail.name]]</h2>
@@ -26,7 +26,9 @@ Drink Builder
             <option value="shot">Pick from Database</option>
             <option value="portion">Custom</option>
           </select>
-          <button @click='modalAction()' type="button" class="btn wide-20"> Close</button>
+          <i @click='modalAction()' class="fas fa-times"></i>
+
+          <!-- <button  type="button" class="btn wide-20"> Close</button> -->
           <!-- Shot logic -->
           <div v-if="toAdd=='shot'">
             <select class="wide-100 input-default white-bg" v-model="categorySelection">
@@ -144,19 +146,19 @@ const ShotLine = {
   template: `
     <div class="wide-100 flex">
       <div class="wide-100 flex">
-        <div class="menu-input center-txt">
+        <div class="menu-input text-center">
           <i @click="subtractVolume" class="fas fa-angle-double-left" title="decrease pour volume by 0.25 oz"></i>
           <p class="light-stroke">LESS</p>
         </div>
         <div class="menu-mid">
-          <p class='bold wide-100 center-txt'>[[ shot.brandname ]]</p>
-          <div class='wide-100 center-txt'>
+          <p class='bold wide-100 text-center'>[[ shot.brandname ]]</p>
+          <div class='wide-100 text-center'>
           <p class="bold">Shot Volume: [[ volume ]] oz</p>
           </div>
-          <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ pourCost ]]</span></p>
+          <p class="wide-100 text-center">Cost of pour: $ <span class="ingredient-cost">[[ pourCost ]]</span></p>
           <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
         </div>
-        <div class="menu-input center-txt">
+        <div class="menu-input text-center">
           <i @click="addVolume" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
           <p class="light-stroke">MORE</p>
         </div>
@@ -221,19 +223,19 @@ const PortionLine = {
   template: `
   <div class="wide-100 flex">
     <div class="wide-100 flex">
-      <div class="menu-input center-txt">
+      <div class="menu-input text-center">
         <i @click="subtractAmount" class="fas fa-angle-double-left" title="decrease amount by 0.25 oz"></i>
         <p class="light-stroke">LESS</p>
       </div>
       <div class="menu-mid">
-        <p class='bold wide-100 center-txt'>[[ portion.name ]]</p>
-        <div class='wide-100 center-txt'>
+        <p class='bold wide-100 text-center'>[[ portion.name ]]</p>
+        <div class='wide-100 text-center'>
         <p>Amount: [[ amount ]][[ portion.unit ]]</p>
         </div>
-        <p class="wide-100 center-txt">Ingredient Cost: $ <span class="ingredient-cost">[[ amountCost ]]</span></p>
+        <p class="wide-100 text-center">Ingredient Cost: $ <span class="ingredient-cost">[[ amountCost ]]</span></p>
         <button v-on:click="addToDeleted(portion.id)" v-on:click="deletePortion(portion.id)" v-on:click="deletePortionValues()" class="btn center-butt default-shadow">DELETE</button>
       </div>
-      <div class="menu-input center-txt">
+      <div class="menu-input text-center">
         <i @click="addAmount" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
         <p class="light-stroke">MORE</p>
       </div>

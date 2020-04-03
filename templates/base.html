@@ -5,9 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Didact+Gothic&family=Monoton&family=Orbitron:wght@500&family=Zilla+Slab&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Tajawal&display=swap" rel="stylesheet">
     <link rel="stylesheet" type='text/css' href="{% static 'css/style.css' %}">
     <script src="https://kit.fontawesome.com/a1221e6993.js" crossorigin="anonymous"></script>
     <title>
@@ -20,20 +18,7 @@
 </head>
 
 <body>
-    <header class='header container'>
-        <a href="/"><p class='site-title'>BevDev</p> </a>
-        <div class='header-links text-white align-right'>
-            {% if user.is_authenticated %}
-            <p>{{ user }} | <a href="/accounts/logout/"> Logout </a></p>
-            {% else %}
-            <a href="/accounts/register/"> Register </a>
-            |
-            <a href="/accounts/login/"> Log in </a>
-            {% endif %}
-        </div>
-    </header>
     {% block content %}
-
     {% endblock content %}
 </body>
 

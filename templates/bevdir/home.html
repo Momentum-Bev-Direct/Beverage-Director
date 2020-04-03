@@ -10,53 +10,75 @@ const cocktails = {{ cocktails|safe }}
 console.log(cocktails)
 </script>
 <!---------------------------------BEGIN HTML --------------------------->
+<header class='header container space-between align-center'>
+  <p class='wide-10 logo height-100'>Logo</p>
+  <a class="wide-80 flex-col height-100" href="/"><p class='site-title'>BevDev</p></a>
+  <div class='header-links text-white text-right wide-10 flex-col height-100'>
+      {% if user.is_authenticated %}
+      <div>
+        <p class="top-right">{{ user }} | <a href="/accounts/logout/"> Logout </a></p>
+        <button class="btn" >New Cocktail</button>
+      </div>
+      {% else %}
+      <a href="/accounts/register/"> Register </a>
+      |
+      <a href="/accounts/login/"> Log in </a>
+      {% endif %}
+  </div>
+</header>
+<!---------------------------BEGIN MAIN---------------->
 {% if user.is_authenticated %}
 <div id='homeapp' class="container">
-  <div class="top-bar">
-  <p class='logo'>Logo</p>
-  <h2>Your Drink Menu</h2> <a v-bind:href="`/drinkbuilder`"><button class=add-ingredient-button >Create Cocktail</button></a>
+<!------------------------MENU ITEMS---------------------->
+  <div class="wide-50 min-400">
+    <h2 class="text-center">Your Drink Menu</h2>
+    <input type="text" v-model="search" placeholder="FILTER COCKTAILS" class="form-input w-50 default-shadow"/>
+    <div v-for="cocktail in filteredCocktails">
+      <div v-bind:id="cocktail.id" class="menu-item default-shadow">
+        <p>[[ cocktail.name ]]</p>
+        <div>
+          <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn menu-butt">EDIT</button></a>
+          <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
+          <button @click="cocktailSummary(cocktail.id)" class="btn menu-butt">SEE RECIPE</button>
+        </div>
+      </div>
+      <!-- DELETE CONFIRMATION MODAL -->
+      <div v-if="showDeleteModal==cocktail.id" class="modal-bg">
+        <div  class="modal-container pnk-bg">
+          <p class="bold">Are you sure you want to delete [[ cocktail.name ]]?</p>
+          <button @click="deleteCocktail(cocktail.id)" class="btn danger-butt">YES, PLEASE DELETE.</button>
+          <button @click="showDeleteModal=-1" class="btn menu-butt">NO! PEASE DON'T!</button>
+        </div>
+      </div>
+      <!-- MORE INFO MODAL -->
+      <div v-if="showModal==cocktail.id" class="modal-bg">
+        <div class="modal-container">
+          <p class='bold'>[[ cocktail.name ]]</p>
+          <p>Liquors</p>
+          <ul class='ingredient-ul'>
+            <li v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
+          </ul>
+          <p>Mixers</p>
+          <ul class='ingredient-ul'>
+            <li v-for="portion in cocktail.portions">
+              [[ portion.amount ]] [[portion.unit]] of [[ portion.name ]]</li>
+          </ul>
+          <button @click="showModal=-1" class="btn">CLOSE</button>
+        </div>
+      </div>
+    </div>
   </div>
-  <input type="text" v-model="search" placeholder="FILTER COCKTAILS" class="form-input w-50 default-shadow"/>
-  <div v-for="cocktail in filteredCocktails">
-    <div v-bind:id="cocktail.id" class="menu-item default-shadow">
-      <p>[[ cocktail.name ]]</p>
-      <div>
-        <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn menu-butt">EDIT</button></a>
-        <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
-        <button @click="cocktailSummary(cocktail.id)" class="btn menu-butt">SEE RECIPE</button>
-      </div>
-    </div>
-    <div v-if="showDeleteModal==cocktail.id" class="modal-bg">
-      <div  class="modal-container pnk-bg">
-        <p class="bold">Are you sure you want to delete [[ cocktail.name ]]?</p>
-        <button @click="deleteCocktail(cocktail.id)" class="btn danger-butt">YES, PLEASE DELETE.</button>
-        <button @click="showDeleteModal=-1" class="btn menu-butt">NO! PEASE DON'T!</button>
-      </div>
-    </div>
-    <div v-if="showModal==cocktail.id" class="modal-bg">
-      <div class="modal-container">
-        <p class='bold'>[[ cocktail.name ]]</p>
-        <p>Liquors</p>
-        <ul class='ingredient-ul'>
-          <li v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
-        </ul>
-        <p>Mixers</p>
-        <ul class='ingredient-ul'>
-          <li v-for="portion in cocktail.portions">
-            [[ portion.amount ]] [[portion.unit]] of [[ portion.name ]]</li>
-        </ul>
-        <button @click="showModal=-1" class="btn">CLOSE</button>
-      </div>
-    </div>
+  <!---------------------------MENU STATS/FIGURE?--------------------->
+  <div class="wide-50 min-400">
+
   </div>
-</div>
-{% else %}
-<div>
-<h1>FUCK YOU</h1>
+<footer></footer>
 </div>
 {% endif %}
 <!----------------------END HTML/START AXIOS CONFIG ------------------------->
 <script>
+
+// --------------------AXIOS CONFIG --------------------------
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -81,7 +103,7 @@ const instance = axios.create({
   }
 })
 
-//  ----------------------------------END AXIOS-FETCH CONFIG/ BEGIN VUE INSTANCE-----------------------------
+//  ----------------------------------VUE INSTANCE-----------------------------
 let app = new Vue({
   delimiters: ['[[', ']]'],
   el: '#homeapp',
