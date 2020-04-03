@@ -136,7 +136,7 @@ const ShotLine = {
   },
   data: function () {
     return {
-      volume: this.shot.volume,
+      volume: 0,
       costPerVol: this.shot.cost,
       pourCost: 0,
     }
@@ -361,8 +361,6 @@ let app = new Vue({
         }
         this.totalPrice = runningPrice
       })
-
-
     },
     createNewShot: function(){
       let spiritInfo;
@@ -449,7 +447,6 @@ let app = new Vue({
         }
         this.newShots = []
         this.newPortions = []
-        alert("Saved Results")
       })
     },
   },

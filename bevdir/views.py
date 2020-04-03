@@ -75,7 +75,7 @@ def edit_cocktail(request, pk):
     cocktail_dict["name"]= cocktail.name
     cocktail_dict["target"]= cocktail.target_profit
 
-    cocktail_dict["shots"]= [{"id": shot.pk, "volume":shot.volume, "cost": shot.cost, "brandname": shot.spirit.brandname} for shot in cocktail.shots.all()]
+    cocktail_dict["shots"]= [{"id": shot.pk, "volume":shot.volume, "cost": shot.spirit.price_per_oz, "brandname": shot.spirit.brandname} for shot in cocktail.shots.all()]
 
     cocktail_dict["portions"]= [{"id": portion.pk, "amount": portion.amount, "unit": portion.unit, "cost": portion.price_per_unit, "name": portion.misc_ingredient.name} for portion in cocktail.portions.all()]
 
@@ -87,7 +87,7 @@ def edit_cocktail(request, pk):
     context = {}
     context['cocktail']=json.dumps(cocktail_dict)
     context['spirits']=json.dumps(spirit_dict)
-    return render(request, 'bevdir/drink_builder_edit.html', context)
+    return render(request, 'bevdir/drink_builder_edit.html', context=context)
 
 def base_launch(request):
     cocktails = Cocktails.object.all()
