@@ -22,9 +22,9 @@
 <body>
     <header class='header container'>
         <a href="/"><p class='site-title'>BevDev</p> </a>
-        <div class='header-links text-white'>
+        <div class='header-links text-white align-right'>
             {% if user.is_authenticated %}
-            <a href="/accounts/logout/"> Log out </a>
+            <p>{{ user }} | <a href="/accounts/logout/"> Logout </a></p>
             {% else %}
             <a href="/accounts/register/"> Register </a>
             |
