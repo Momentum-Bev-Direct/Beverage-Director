@@ -402,6 +402,8 @@ let app = new Vue({
           misc_ingredient: res.data.id,
         })
         .then(res => {
+          console.log("DUMMY:")
+          console.log()
           this.newPortions.push({
             id: res.data.id,
             amount: res.data.amount,
@@ -409,20 +411,20 @@ let app = new Vue({
             cost: res.data.price_per_unit,
             name: this.newPortion.ingredient,
           })
+          this.newPortion = {
+            ingredient:"",
+            costPerUnit:0,
+            unit:"",
+            startingAmount: 0,
+          }
+        })
         .catch(res =>
         console.log("your portion response:"),
         console.log(res))
-      })
       .catch(res =>
         console.log("your misc ingredient response:"),
         console.log(res))
 
-      this.newPortion = {
-        ingredient:"",
-        costPerUnit:0,
-        unit:"",
-        startingAmount: 0,
-      }
       this.modal = false
       })
     },
