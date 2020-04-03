@@ -181,6 +181,7 @@ class Rating(models.Model):
 
 
 class Cocktail(models.Model):
+    user = models.ForeignKey(to=User, related_name='cocktails', on_delete=models.CASCADE, null = True)
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -43,9 +43,14 @@ class PortionViewSet(viewsets.ModelViewSet):
     queryset = Portion.objects.all()
     serializer_class = PortionSerializer
 
+def welcome_page(request):
+    if request.user.is_authenticated:
+        return homepage(request)
+    else:
+        return render(request, 'bevdir/welcome.html')
 
 def homepage(request):
-    cocktails = Cocktail.objects.all()
+    cocktails =  Cocktail.objects.filter(user=request.user)
     cocktails_dataset = []
 
     for cocktail in cocktails:

@@ -5,9 +5,10 @@ from django.conf import settings
 from django.urls import include, path
 
 urlpatterns = [
-    path('', views.homepage, name='homepage'),
+    path('', views.welcome_page, name='welcome-page'),
     path('admin/', admin.site.urls),
     path('accounts/', include('registration.backends.simple.urls')),
+    path('accounts/profile/', views.homepage, name='homepage'),
     path('api/', include('bevdir.urls')),
     path('drinkbuilder/', views.drink_builder, name='drink-builder'),
     path('cocktails/<int:pk>/', views.edit_cocktail, name='edit-cocktail')

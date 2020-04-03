@@ -41,6 +41,19 @@ body {
     font-family: var(--font_sans_1)
 }
 
+form {
+    font-size: 1.5rem;
+    width: 80%;
+    margin: 1rem auto;
+}
+
+form li {
+    list-style: none;
+}
+
+
+
+
 .header {
     color: white;
     background-color:var(--DarkPurple);
