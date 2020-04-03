@@ -54,7 +54,7 @@ Drink Builder
           </div>
           <!-- Portion logic  -->
           <div v-if="toAdd=='portion'">
-            <input class="wide-100 input-default white-bg"id="portion-ingredient" v-model="newPortion.ingredient" type="text" placeholder="Name of ingredient"/>
+            <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient" type="text" placeholder="Name of ingredient"/>
             <label class="wide-30" for="portion-unit-cost">Price per unit: $</label><input class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit" type="number"/>
             <input class="wide-100 input-default white-bg"v-model="newPortion.unit" type="text" placeholder="unit" title="ounces, grams, ml, etc."/>
             <label class="wide-30" for="portion-starting-amt">Amount:</label><input class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount" type="number"/>
@@ -84,21 +84,21 @@ Drink Builder
   </div>
 
   <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
-    <shot-line v-bind:shot="shot"></shot-line>
+    <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" ref="shotSet"></shot-line>
   </div>
   <div v-if="newShots.length > 0">
     <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="menu-item default-shadow">
-      <shot-line v-bind:shot="shot"></shot-line>
+      <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" ref="shotSet"></shot-line>
     </div>
   </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
-    <portion-line v-bind:portion="portion"></portion-line>
+    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost"  ref="portionSet"></portion-line>
   </div>
-  <div v-for="portion in filterDeletedNewPortions" class="menu-item default-shadow">
-    <portion-line v-bind:portion="portion"></portion-line>
+  <div v-for="portion in filterDeletedNewPortions"  class="menu-item default-shadow">
+    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" ref="portionSet"></portion-line>
   </div>
 
-  <button class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
+  <button @click="submitPage"class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
 </div>
 
 <script>
@@ -136,35 +136,35 @@ const ShotLine = {
   },
   data: function () {
     return {
-      volume: "",
-      pourCost: "",
+      volume: 0,
+      costPerVol: this.shot.cost,
+      pourCost: 0,
     }
   },
   template: `
-  <div class="wide-100 flex">
     <div class="wide-100 flex">
-      <div class="menu-input center-txt">
-        <i @click="subtractVolume" class="fas fa-angle-double-left" title="decrease pour volume by 0.25 oz"></i>
-        <p class="light-stroke">LESS</p>
-      </div>
-      <div class="menu-mid">
-        <p class='bold wide-100 center-txt'>[[ shot.brandname ]]</p>
-        <div class='wide-100 center-txt'>
-        <input class="input-default" type="number" min="0" v-model="volume" placeholder="custom"/><label>oz</lable>
+      <div class="wide-100 flex">
+        <div class="menu-input center-txt">
+          <i @click="subtractVolume" class="fas fa-angle-double-left" title="decrease pour volume by 0.25 oz"></i>
+          <p class="light-stroke">LESS</p>
         </div>
-        <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
-        <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" v-on:click="deleteShotValues()" class="btn center-butt default-shadow">DELETE</button>
+        <div class="menu-mid">
+          <p class='bold wide-100 center-txt'>[[ shot.brandname ]]</p>
+          <div class='wide-100 center-txt'>
+          <p class="bold">Shot Volume: [[ volume ]] oz</p>
+          </div>
+          <p class="wide-100 center-txt">Cost of pour: $ <span class="ingredient-cost">[[ pourCost ]]</span></p>
+          <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
+        </div>
+        <div class="menu-input center-txt">
+          <i @click="addVolume" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
+          <p class="light-stroke">MORE</p>
+        </div>
       </div>
-      <div class="menu-input center-txt">
-        <i @click="addVolume" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
-        <p class="light-stroke">MORE</p>
-      </div>
-    </div>
-
-  </div>`,
+    </div>`,
   methods: {
     deleteShot: function (id) {
-      instance.delete(`http://127.0.0.1:8000/api/shot/${id}`)
+      instance.delete(`/api/shot/${id}`)
         .then(function (response) {
         }).then(function (id) {
         }).catch(function (ex) {
@@ -183,31 +183,25 @@ const ShotLine = {
     addToDeleted: function (id) {
       this.$parent.deletedShots.push(id)
     },
-    deleteShotValues: function () {
-      let costToSubtract = (parseFloat(this.shot.cost) * parseFloat(this.volume).toFixed(2))
-      console.log(costToSubtract)
-      this.$parent.totalPrice -= costToSubtract
-    }
-
-  },
-
-  computed: {
-    adjustedCost: function () {
-      let total = (parseFloat(this.shot.cost) * parseFloat(this.volume)).toFixed(2)
-      return total
-    }
   },
   watch: {
     volume: function (newVolume, oldVolume) {
-      newCost = newVolume * this.shot.cost
-      oldCost = oldVolume * this.shot.cost
+      this.$nextTick(()=>{
+        this.pourCost = (parseFloat(newVolume) * parseFloat(this.costPerUnit)).toFixed(2)
+        this.$emit('pricechange')
+        console.log("watcher detected vol change")
+      })
+    },
+    pourCost: function(newCost, oldCost){
 
-      this.$parent.totalPrice += newCost
-      this.$parent.totalPrice -= oldCost
     }
   },
   mounted() {
-    this.volume = this.shot.volume
+    this.$nextTick(()=>{
+      this.volume = this.shot.volume
+      this.costPerUnit = this.shot.cost
+      this.pourCost = (this.volume * this.costPerUnit).toFixed(2)
+    })
   }
 }
 // ------------------------PORTION COMPONENT--------------------------------
@@ -219,8 +213,9 @@ const PortionLine = {
   },
   data: function () {
     return {
-      amount: "",
-      amountCost: "",
+      amount: this.portion.amount,
+      costPerUnit: this.portion.cost,
+      amountCost: 0,
     }
   },
   template: `
@@ -233,9 +228,9 @@ const PortionLine = {
       <div class="menu-mid">
         <p class='bold wide-100 center-txt'>[[ portion.name ]]</p>
         <div class='wide-100 center-txt'>
-        <input class="input-default" type="number" min="0" v-model="amount" placeholder="custom"/><label>[[ portion.unit ]]</lable>
+        <p>Amount: [[ amount ]][[ portion.unit ]]</p>
         </div>
-        <p class="wide-100 center-txt">Ingredient Cost: $ <span class="ingredient-cost">[[ adjustedCost ]]</span></p>
+        <p class="wide-100 center-txt">Ingredient Cost: $ <span class="ingredient-cost">[[ amountCost ]]</span></p>
         <button v-on:click="addToDeleted(portion.id)" v-on:click="deletePortion(portion.id)" v-on:click="deletePortionValues()" class="btn center-butt default-shadow">DELETE</button>
       </div>
       <div class="menu-input center-txt">
@@ -247,7 +242,7 @@ const PortionLine = {
   </div>`,
   methods: {
     deletePortion: function (id) {
-      instance.delete(`http://127.0.0.1:8000/api/portion/${id}`)
+      instance.delete(`/api/portion/${id}`)
         .then(function (response) {
         }).then(function (id) {
         }).catch(function (ex) {
@@ -270,26 +265,24 @@ const PortionLine = {
       console.log(costToSubtract)
       this.$parent.totalPrice -= costToSubtract
     }
-
-  },
-
-  computed: {
-    adjustedCost: function () {
-      let total = (parseFloat(this.portion.cost) * parseFloat(this.amount)).toFixed(2)
-      return total
-    }
   },
   watch: {
     amount: function (newAmount, oldAmount) {
-      newCost = newAmount * this.portion.cost
-      oldCost = oldAmount * this.portion.cost
-
-      this.$parent.totalPrice += newCost
-      this.$parent.totalPrice -= oldCost
+      this.$nextTick(()=>{
+        this.amountCost = (newAmount * this.costPerUnit).toFixed(2)
+        this.$emit('pricechange')
+      })
+    },
+    amountCost: function(newCost, oldCost){
+        console.log("watcher registered pricechange")
     }
   },
   mounted() {
-    this.amount = this.portion.amount
+    this.$nextTick(()=>{
+      this.amount = this.portion.amount
+      this.costPerUnit = this.portion.cost
+      this.amountCost = (this.amount * this.costPerUnit).toFixed(2)
+    })
   }
 }
 
@@ -349,10 +342,26 @@ let app = new Vue({
         this.modal = false
       }
     },
-    saveCocktail: function (id) {
-      console.log("naw dude. wrong function")
-    },
+    updateCost: function(){
+      this.totalPrice = 0
+      this.$nextTick(()=>{
+        let runningPrice = 0
+        let allShots = this.$refs.shotSet
 
+        if (allShots !== undefined){
+          for(let i=0; i<allShots.length; i++){
+            runningPrice += parseFloat(allShots[i].pourCost)
+          }
+        }
+        let allPortions = this.$refs.portionSet
+        if (allPortions !== undefined){
+          for(let i=0; i<allPortions.length; i++){
+            runningPrice += parseFloat(allPortions[i].amountCost)
+          }
+        }
+        this.totalPrice = runningPrice
+      })
+    },
     createNewShot: function(){
       let spiritInfo;
       for (let spirit of this.spirits){
@@ -393,6 +402,8 @@ let app = new Vue({
           misc_ingredient: res.data.id,
         })
         .then(res => {
+          console.log("DUMMY:")
+          console.log()
           this.newPortions.push({
             id: res.data.id,
             amount: res.data.amount,
@@ -400,21 +411,44 @@ let app = new Vue({
             cost: res.data.price_per_unit,
             name: this.newPortion.ingredient,
           })
+          this.newPortion = {
+            ingredient:"",
+            costPerUnit:0,
+            unit:"",
+            startingAmount: 0,
+          }
+        })
         .catch(res =>
         console.log("your portion response:"),
         console.log(res))
-      })
       .catch(res =>
         console.log("your misc ingredient response:"),
         console.log(res))
 
-      this.newPortion = {
-        ingredient:"",
-        costPerUnit:0,
-        unit:"",
-        startingAmount: 0,
-      }
       this.modal = false
+      })
+    },
+    submitPage: function() {
+      this.$nextTick(()=>{
+        let allShots = this.$refs.shotSet
+        let allPortions = this.$refs.portionSet
+
+        if (allShots !== undefined){
+          for(let i=0; i<allShots.length; i++){
+            instance.patch(`/api/shot/${allShots[i].shot.id}/`, {volume: allShots[i].volume})
+            .then(res => {console.log(res)})
+            .catch(res => {console.log(res)})
+          }}
+
+        if (allPortions !== undefined){
+          for(let i=0; i<allPortions.length; i++){
+            instance.patch(`/api/portion/${allPortions[i].portion.id}/`, {amount: allPortions[i].amount})
+            .then(res => {console.log(res)})
+            .catch(res => {console.log(res)})
+          }
+        }
+        // this.newShots = []
+        // this.newPortions = []
       })
     },
   },
@@ -432,19 +466,22 @@ let app = new Vue({
       return filter
     },
     filterDeletedNewShots: function (){
-      return this.newShots.filter((shot)=> {
+      let filter = this.newShots.filter((shot)=> {
         return !this.deletedShots.includes(shot.id)
       })
+      return filter
     },
     filterDeletedPortions: function () {
-      return this.cocktail.portions.filter((portion) => {
+      let filter = this.cocktail.portions.filter((portion) => {
         return !this.deletedPortions.includes(portion.id)
       })
+      return filter
     },
     filterDeletedNewPortions: function(){
-      return this.newPortions.filter((portion)=> {
+      let filter = this.newPortions.filter((portion)=> {
         return !this.deletedPortions.includes(portion.id)
       })
+      return filter
     },
     filteredSpirits: function(){
       let brandnameFilter = this.spirits
@@ -462,6 +499,25 @@ let app = new Vue({
   mounted(){
     this.newShots = []
     this.newPortions = []
+    this.$nextTick(()=>{
+      let allShots = this.$refs.shotSet
+      let allPortions = this.$refs.portionSet
+
+      let runningPrice = 0
+
+      if (allShots !== undefined){
+        for(let i=0; i<allShots.length; i++){
+          runningPrice += parseFloat(allShots[i].pourCost)
+        }
+      }
+      if (allPortions !== undefined){
+        for(let i=0; i<allPortions.length; i++){
+          runningPrice += parseFloat(allPortions[i].amountCost)
+        }
+      }
+      console.log(runningPrice)
+      this.totalPrice = runningPrice
+    })
   }
 })
 

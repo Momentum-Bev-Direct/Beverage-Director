@@ -164,7 +164,7 @@ class MyStock(models.Model):
 
 class MiscIngredient(models.Model):
     name = models.CharField(max_length=100)
-    cost_per_unit = models.IntegerField(default=0)
+    cost_per_unit = models.FloatField(default=0)
     notes = models.TextField(max_length=500, blank=True, null=True)
 
     def __str__(self):
