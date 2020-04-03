@@ -225,7 +225,7 @@ class Shot(models.Model):
 
 
 class Portion(models.Model):
-    amount = models.IntegerField(default=0)
+    amount = models.FloatField(default=0)
     unit = models.CharField(max_length=10)
     price_per_unit = models.FloatField(default=0)
     cocktail= models.ForeignKey(Cocktail, related_name='portions', on_delete=models.CASCADE)

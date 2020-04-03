@@ -6,6 +6,7 @@ Drink Builder
 
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.8/uuid.min.js"></script>
 <script type='text/javascript'>
   const cocktail = {{ cocktail| safe }}
   const spirits = {{ spirits| safe }}
@@ -26,8 +27,9 @@ Drink Builder
             <option value="portion">Custom</option>
           </select>
           <button @click='modalAction()' type="button" class="btn wide-20"> Close</button>
+          <!-- Shot logic -->
           <div v-if="toAdd=='shot'">
-            <select class="wide-100 input-default white-bg" v-model="spiritSelection">
+            <select class="wide-100 input-default white-bg" v-model="categorySelection">
               <option value="All" selected>All Categories</option>
               <option value="Brandy & Cognac">Brandy & Cognac</option>
               <option value="Bourbon">Bourbon</option>
@@ -45,18 +47,18 @@ Drink Builder
               <option value="Whiskey - Other">Whiskey - Other</option>
             </select>
             <input v-model="spiritSearch" type="text" placeholder="filter by name" class="input-default wide-100 white-bg"/>
-            <select class="input-default wide-100 text-left pad-5 white-bg" v-model="newShot" id="" size="12">
+            <select class="input-default wide-100 text-left pad-5 white-bg" v-model="newSpirit" id="" size="12" required>
               <option class="vert-margin-3" v-for="spirit in filteredSpirits" v-bind:value="spirit.id"class="wide-100 white-bg">[[ spirit.brandname ]]: $ [[ spirit.cost ]] per oz </option>
             </select>
-
-            <button @click='' type="button" class="btn green-bg">Add to Cocktail</button>
+            <button @click='createNewShot' type="button" class="btn green-bg">Add</button>
           </div>
+          <!-- Portion logic  -->
           <div v-if="toAdd=='portion'">
             <input class="wide-100 input-default white-bg"id="portion-ingredient" v-model="newPortion.ingredient" type="text" placeholder="Name of ingredient"/>
             <label class="wide-30" for="portion-unit-cost">Price per unit: $</label><input class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit" type="number"/>
             <input class="wide-100 input-default white-bg"v-model="newPortion.unit" type="text" placeholder="unit" title="ounces, grams, ml, etc."/>
             <label class="wide-30" for="portion-starting-amt">Amount:</label><input class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount" type="number"/>
-            <button class="btn green-bg">SUBMIT</button>
+            <button @click="createNewPortion"class="btn green-bg">SUBMIT</button>
           </div>
         </div>
       </div>
@@ -84,7 +86,15 @@ Drink Builder
   <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
     <shot-line v-bind:shot="shot"></shot-line>
   </div>
+  <div v-if="newShots.length > 0">
+    <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="menu-item default-shadow">
+      <shot-line v-bind:shot="shot"></shot-line>
+    </div>
+  </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
+    <portion-line v-bind:portion="portion"></portion-line>
+  </div>
+  <div v-for="portion in filterDeletedNewPortions" class="menu-item default-shadow">
     <portion-line v-bind:portion="portion"></portion-line>
   </div>
 
@@ -93,6 +103,7 @@ Drink Builder
 
 <script>
   // --------------------------------------AJAX CONFIG-------------------------------------
+
   function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -299,21 +310,19 @@ let app = new Vue({
     newPortions: [],
     deletedShots: [],
     deletedPortions: [],
-    spiritSelection:"All",
+    categorySelection:"All",
     toAdd:"shot",
-    newShot:"",
-    newPortion:{
+    newSpirit:"",
+    newPortion: {
       ingredient:"",
       costPerUnit:0,
       unit:"",
       startingAmount: 0,
+      ingredientID:"",
     },
     spiritSearch:"",
     showModal: -1,
     modal:false,
-    allPourCosts: function () {
-      return document.querySelectorAll('.pour-cost')
-    },
     modal_info: {
       id: "",
       name: "",
@@ -341,7 +350,72 @@ let app = new Vue({
       }
     },
     saveCocktail: function (id) {
-      instance.post(`http://127.0.0.1:8000/api/cocktail/${id}`)
+      console.log("naw dude. wrong function")
+    },
+
+    createNewShot: function(){
+      let spiritInfo;
+      for (let spirit of this.spirits){
+        if(parseInt(spirit.id) == this.newSpirit){
+          spiritInfo = spirit
+        }
+      }
+      console.log(spiritInfo)
+
+      instance.post('/api/shot/', {
+        volume: .25,
+        spirit: spiritInfo.id,
+        cocktail: this.cocktail.id
+      })
+      .then(res => {
+        this.newShots.push({
+        id: res.data.id,
+        volume: res.data.volume,
+        cost: spiritInfo.cost,
+        brandname: spiritInfo.brandname
+      })
+      })
+      .catch(res => console.log(res))
+      this.newSpirit = ""
+      this.modal = false
+    },
+    createNewPortion: function(){
+      instance.post('/api/misc/',{
+        name: this.newPortion.ingredient,
+        cost_per_unit: this.newPortion.costPerUnit,
+      })
+      .then(res => {
+        instance.post('/api/portion/', {
+          amount: this.newPortion.startingAmount,
+          unit: this.newPortion.unit,
+          price_per_unit: res.data.cost_per_unit,
+          cocktail: this.cocktail.id,
+          misc_ingredient: res.data.id,
+        })
+        .then(res => {
+          this.newPortions.push({
+            id: res.data.id,
+            amount: res.data.amount,
+            unit: res.data.unit,
+            cost: res.data.price_per_unit,
+            name: this.newPortion.ingredient,
+          })
+        .catch(res =>
+        console.log("your portion response:"),
+        console.log(res))
+      })
+      .catch(res =>
+        console.log("your misc ingredient response:"),
+        console.log(res))
+
+      this.newPortion = {
+        ingredient:"",
+        costPerUnit:0,
+        unit:"",
+        startingAmount: 0,
+      }
+      this.modal = false
+      })
     },
   },
   computed: {
@@ -350,10 +424,15 @@ let app = new Vue({
     },
     menuPrice: function () {
       return parseFloat(this.totalPrice / (this.targetMargin / 100)).toFixed(2)
-      // parseFloat(this.totalPrice * (this.targetMargin/100) + this.totalPrice).toFixed(2)
     },
     filterDeletedShots: function () {
-      return this.cocktail.shots.filter((shot) => {
+      let filter = this.cocktail.shots.filter((shot) => {
+        return !this.deletedShots.includes(shot.id)
+      })
+      return filter
+    },
+    filterDeletedNewShots: function (){
+      return this.newShots.filter((shot)=> {
         return !this.deletedShots.includes(shot.id)
       })
     },
@@ -362,11 +441,16 @@ let app = new Vue({
         return !this.deletedPortions.includes(portion.id)
       })
     },
+    filterDeletedNewPortions: function(){
+      return this.newPortions.filter((portion)=> {
+        return !this.deletedPortions.includes(portion.id)
+      })
+    },
     filteredSpirits: function(){
       let brandnameFilter = this.spirits
-      if (this.spiritSelection !== "All") {
+      if (this.categorySelection !== "All") {
         brandnameFilter = this.spirits.filter((spirit)=>{
-          return spirit.category.toUpperCase().match(this.spiritSelection.toUpperCase())
+          return spirit.category.toUpperCase().match(this.categorySelection.toUpperCase())
         })
       }
       searchFilter = brandnameFilter.filter((spirit)=>{
@@ -375,6 +459,10 @@ let app = new Vue({
       return searchFilter
     }
   },
+  mounted(){
+    this.newShots = []
+    this.newPortions = []
+  }
 })
 
 </script>
