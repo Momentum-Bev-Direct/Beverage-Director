@@ -37,7 +37,7 @@ Drink Builder
     </div>
   </div>
   <div class='cost-bar default-shadow'>
-    <p class='target-cost'>Adjust Percentage of Menu Price:</p>
+    <p class='target-cost'>Adjust Target Cost Percent:</p>
     <div class="input-contain">
       <input id="target-percent" class="input-default" v-model="targetMargin" type="number" min="1" max="100"><label
         for="target-percent">%</label>
@@ -114,7 +114,7 @@ Drink Builder
   <div v-for="portion in filterDeletedNewPortions"  class="menu-item default-shadow">
     <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" ref="portionSet"></portion-line>
   </div>
-  <i @click="submitPage" class="far fa-save green-bg fa-4x save-button" data-fa-transform="right-8"></i>
+  <i @click="submitPage" class="far fa-save green-bg fa-4x" data-fa-transform="right-8"> Save Cocktail</i>
   <!-- <button @click="submitPage"class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button> -->
 </div>
 
