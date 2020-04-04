@@ -12,63 +12,35 @@ Drink Builder
   const spirits = {{ spirits| safe }}
 
 </script>
+<!---------------------------------BEGIN HTML --------------------------->
+<header class='header container space-between align-center'>
+  <!-- <p class='wide-10 logo height-100'>Logo</p> -->
+  <i class="fas fa-cocktail"></i>
+  <a class="wide-80 flex-col height-100" href="/">
+    <p class='site-title'>BevDev</p>
+  </a>
+  <div class='header-links text-white text-right wide-10 flex-col height-100'>
+    {% if user.is_authenticated %}
+    <div>
+      <p class="top-right">Loged in as: {{ user }} | <br> <a href="/accounts/logout/"> Logout </a></p>
+    </div>
+    {% else %}
+    <a href="/accounts/register/"> Register </a>
+    |
+    <a href="/accounts/login/"> Log in </a>
+    {% endif %}
+  </div>
+</header>
 <!------------------------------- HTML --------------------------------->
 <div class='container flex-wrap flex-col' id='drink-edit'>
   <div class='top-bar'>
-    <p class='logo'>Logo</p>
     <h2 class='cocktail-name'>[[cocktail.name]]</h2>
     <div id="drink-edit">
-<!---------------------------MODAL CODE--------------------------------------->
-      <button @click='modalAction()' class='btn' type=button> ADD INGREDIENT</button>
-      <div v-if="modal" class=modal-bg>
-        <div class="modal-container modal-lg just-cent align-base">
-          <select class="wide-70 input-default white-bg" v-model="toAdd">
-            <option value="shot">Pick from Database</option>
-            <option value="portion">Custom</option>
-          </select>
-          <i @click='modalAction()' class="fas fa-times"></i>
 
-          <!-- <button  type="button" class="btn wide-20"> Close</button> -->
-          <!-- Shot logic -->
-          <div v-if="toAdd=='shot'">
-            <select class="wide-100 input-default white-bg" v-model="categorySelection">
-              <option value="All" selected>All Categories</option>
-              <option value="Brandy & Cognac">Brandy & Cognac</option>
-              <option value="Bourbon">Bourbon</option>
-              <option value="Canadian Whiskey">Canadian Whiskey</option>
-              <option value="Cordials & Liqueurs">Cordials & Liqueurs</option>
-              <option value="Gin">Gin</option>
-              <option value="Irish Whiskey">Irish Whiskey</option>
-              <option value="NC Products">NC Products</option>
-              <option value="Other">Other</option>
-              <option value="Rum">Rum</option>
-              <option value="Rye">Rye</option>
-              <option value="Scotch">Scotch</option>
-              <option value="Tequila & Mezcal">Tequila & Mezcal</option>
-              <option value="Vodka">Vodka</option>
-              <option value="Whiskey - Other">Whiskey - Other</option>
-            </select>
-            <input v-model="spiritSearch" type="text" placeholder="filter by name" class="input-default wide-100 white-bg"/>
-            <select class="input-default wide-100 text-left pad-5 white-bg" v-model="newSpirit" id="" size="12" required>
-              <option class="vert-margin-3" v-for="spirit in filteredSpirits" v-bind:value="spirit.id"class="wide-100 white-bg">[[ spirit.brandname ]]: $ [[ spirit.cost ]] per oz </option>
-            </select>
-            <button @click='createNewShot' type="button" class="btn green-bg">Add</button>
-          </div>
-          <!-- Portion logic  -->
-          <div v-if="toAdd=='portion'">
-            <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient" type="text" placeholder="Name of ingredient"/>
-            <label class="wide-30" for="portion-unit-cost">Price per unit: $</label><input class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit" type="number"/>
-            <input class="wide-100 input-default white-bg"v-model="newPortion.unit" type="text" placeholder="unit" title="ounces, grams, ml, etc."/>
-            <label class="wide-30" for="portion-starting-amt">Amount:</label><input class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount" type="number"/>
-            <button @click="createNewPortion"class="btn green-bg">SUBMIT</button>
-          </div>
-        </div>
-      </div>
-<!--------------------------END MODAL CODE--------------------------------------->
     </div>
   </div>
   <div class='cost-bar default-shadow'>
-    <p class='target-cost'>Adjust Percentage of Menu Price:</p>
+    <p class='target-cost'>Adjust Target Cost Percent:</p>
     <div class="input-contain">
       <input id="target-percent" class="input-default" v-model="targetMargin" type="number" min="1" max="100"><label
         for="target-percent">%</label>
@@ -84,7 +56,60 @@ Drink Builder
       <p>$[[ menuPrice ]]</p>
     </div>
   </div>
+  <!---------------------------MODAL CODE--------------------------------------->
+  <div class="add-ingredient-button"><i @click='modalAction()' class="fas fa-plus-circle"> Add Ingredient</i></div>
+  <div v-if="modal" class=modal-bg>
+    <div class="modal-container modal-lg just-cent align-base">
+      <select class="wide-70 input-default white-bg" v-model="toAdd">
+        <option value="shot">Select from ABC Stock</option>
+        <option value="portion">Custom</option>
+      </select>
+      <i @click='modalAction()' class="fas fa-window-close"></i>
 
+      <!-- <button  type="button" class="btn wide-20"> Close</button> -->
+      <!-- Shot logic -->
+      <div v-if="toAdd=='shot'">
+        <select class="wide-100 input-default white-bg" v-model="categorySelection">
+          <option value="All" selected>Filter by Category</option>
+          <option value="Brandy & Cognac">Brandy & Cognac</option>
+          <option value="Bourbon">Bourbon</option>
+          <option value="Canadian Whiskey">Canadian Whiskey</option>
+          <option value="Cordials & Liqueurs">Cordials & Liqueurs</option>
+          <option value="Gin">Gin</option>
+          <option value="Irish Whiskey">Irish Whiskey</option>
+          <option value="NC Products">NC Products</option>
+          <option value="Other">Other</option>
+          <option value="Rum">Rum</option>
+          <option value="Rye">Rye</option>
+          <option value="Scotch">Scotch</option>
+          <option value="Tequila & Mezcal">Tequila & Mezcal</option>
+          <option value="Vodka">Vodka</option>
+          <option value="Whiskey - Other">Whiskey - Other</option>
+        </select>
+        <input v-model="spiritSearch" type="text" placeholder="Start Typing to Filter by Brand"
+          class="input-default wide-100 white-bg" />
+        <select class="input-default wide-100 text-left pad-5 white-bg" v-model="newSpirit" id="" size="12" required>
+          <option class="vert-margin-3" v-for="spirit in filteredSpirits" v-bind:value="spirit.id"
+            class="wide-100 white-bg">[[ spirit.brandname ]]: $ [[ spirit.cost ]] per oz </option>
+        </select>
+        <i @click='createNewShot' class="fas fa-plus-circle"> Add</i>
+      </div>
+      <!-- Portion logic  -->
+      <div v-if="toAdd=='portion'">
+        <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient"
+          type="text" placeholder="Name of ingredient" />
+        <label class="wide-30" for="portion-unit-cost">Price per unit: $</label><input
+          class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit"
+          type="number" />
+        <input class="wide-100 input-default white-bg" v-model="newPortion.unit" type="text" placeholder="unit"
+          title="ounces, grams, ml, etc." />
+        <label class="wide-30" for="portion-starting-amt">Amount:</label><input class="wide-70 input-default white-bg"
+          id="portion-starting-amt" v-model="newPortion.startingAmount" type="number" />
+        <button @click="createNewPortion" class="btn green-bg">SUBMIT</button>
+      </div>
+    </div>
+  </div>
+  <!--------------------------END MODAL CODE--------------------------------------->
   <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
     <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" ref="shotSet"></shot-line>
   </div>
@@ -94,13 +119,13 @@ Drink Builder
     </div>
   </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
-    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost"  ref="portionSet"></portion-line>
-  </div>
-  <div v-for="portion in filterDeletedNewPortions"  class="menu-item default-shadow">
     <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" ref="portionSet"></portion-line>
   </div>
-
-  <button @click="submitPage"class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
+  <div v-for="portion in filterDeletedNewPortions" class="menu-item default-shadow">
+    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" ref="portionSet"></portion-line>
+  </div>
+  <div><i @click="submitPage" class="far fa-save green-bg fa-2x" data-fa-transform="right-8"> Save Cocktail</i></div>
+  <!-- <button @click="submitPage"class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button> -->
 </div>
 
 <script>
@@ -131,19 +156,19 @@ Drink Builder
 
   // ----------------------------------VUE COMPONENTS---------------------------------------
 
-const ShotLine = {
-  delimiters: ['[[', ']]'],
-  props: {
-    shot: Object,
-  },
-  data: function () {
-    return {
-      volume: 0,
-      costPerVol: this.shot.cost,
-      pourCost: 0,
-    }
-  },
-  template: `
+  const ShotLine = {
+    delimiters: ['[[', ']]'],
+    props: {
+      shot: Object,
+    },
+    data: function () {
+      return {
+        volume: 0,
+        costPerVol: this.shot.cost,
+        pourCost: 0,
+      }
+    },
+    template: `
     <div class="wide-100 flex">
       <div class="wide-100 flex">
         <div class="menu-input text-center">
@@ -156,71 +181,71 @@ const ShotLine = {
           <p class="bold">Shot Volume: [[ volume ]] oz</p>
           </div>
           <p class="wide-100 text-center">Cost of pour: $ <span class="ingredient-cost">[[ pourCost ]]</span></p>
-          <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
-        </div>
+          <div> <i v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="btn default-shadow fas fa-trash-alt" data-fa-transform="grow-7 right-6"></i></div>
+          </div>
         <div class="menu-input text-center">
           <i @click="addVolume" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
           <p class="light-stroke">MORE</p>
         </div>
       </div>
     </div>`,
-  methods: {
-    deleteShot: function (id) {
-      instance.delete(`/api/shot/${id}`)
-        .then(function (response) {
-        }).then(function (id) {
-        }).catch(function (ex) {
-          console.log('parsing failed', ex)
+    methods: {
+      deleteShot: function (id) {
+        instance.delete(`/api/shot/${id}`)
+          .then(function (response) {
+          }).then(function (id) {
+          }).catch(function (ex) {
+            console.log('parsing failed', ex)
+          })
+
+        console.log(`DELETE Shot ${id}`)
+        // location.reload()
+      },
+      addVolume: function () {
+        this.volume += 0.25
+      },
+      subtractVolume: function () {
+        this.volume -= 0.25
+      },
+      addToDeleted: function (id) {
+        this.$parent.deletedShots.push(id)
+      },
+    },
+    watch: {
+      volume: function (newVolume, oldVolume) {
+        this.$nextTick(() => {
+          this.pourCost = (parseFloat(newVolume) * parseFloat(this.costPerUnit)).toFixed(2)
+          this.$emit('pricechange')
+          console.log("watcher detected vol change")
         })
+      },
+      pourCost: function (newCost, oldCost) {
 
-      console.log(`DELETE Shot ${id}`)
-      // location.reload()
+      }
     },
-    addVolume: function () {
-      this.volume += 0.25
-    },
-    subtractVolume: function () {
-      this.volume -= 0.25
-    },
-    addToDeleted: function (id) {
-      this.$parent.deletedShots.push(id)
-    },
-  },
-  watch: {
-    volume: function (newVolume, oldVolume) {
-      this.$nextTick(()=>{
-        this.pourCost = (parseFloat(newVolume) * parseFloat(this.costPerUnit)).toFixed(2)
-        this.$emit('pricechange')
-        console.log("watcher detected vol change")
+    mounted() {
+      this.$nextTick(() => {
+        this.volume = this.shot.volume
+        this.costPerUnit = this.shot.cost
+        this.pourCost = (this.volume * this.costPerUnit).toFixed(2)
       })
-    },
-    pourCost: function(newCost, oldCost){
-
     }
-  },
-  mounted() {
-    this.$nextTick(()=>{
-      this.volume = this.shot.volume
-      this.costPerUnit = this.shot.cost
-      this.pourCost = (this.volume * this.costPerUnit).toFixed(2)
-    })
   }
-}
-// ------------------------PORTION COMPONENT--------------------------------
+  // ------------------------PORTION COMPONENT--------------------------------
 
-const PortionLine = {
-  delimiters: ['[[', ']]'],
-  props: {
-    portion: Object,
-  },
-  data: function () {
-    return {
-      amount: this.portion.amount,
-      costPerUnit: this.portion.cost,
-      amountCost: 0,
-    }
-  },
-  template: `
+  const PortionLine = {
+    delimiters: ['[[', ']]'],
+    props: {
+      portion: Object,
+    },
+    data: function () {
+      return {
+        amount: this.portion.amount,
+        costPerUnit: this.portion.cost,
+        amountCost: 0,
+      }
+    },
+    template: `
   <div class="wide-100 flex">
     <div class="wide-100 flex">
       <div class="menu-input text-center">
@@ -242,286 +267,287 @@ const PortionLine = {
     </div>
 
   </div>`,
-  methods: {
-    deletePortion: function (id) {
-      instance.delete(`/api/portion/${id}`)
-        .then(function (response) {
-        }).then(function (id) {
-        }).catch(function (ex) {
-          console.log('parsing failed', ex)
-        })
+    methods: {
+      deletePortion: function (id) {
+        instance.delete(`/api/portion/${id}`)
+          .then(function (response) {
+          }).then(function (id) {
+          }).catch(function (ex) {
+            console.log('parsing failed', ex)
+          })
 
-      console.log(`DELETE Portion ${id}`)
-    },
-    addAmount: function () {
-      this.amount += 0.25
-    },
-    subtractAmount: function () {
-      this.amount -= 0.25
-    },
-    addToDeleted: function (id) {
-      this.$parent.deletedPortions.push(id)
-    },
-    deletePortionValues: function () {
-      let costToSubtract = (parseFloat(this.portion.cost) * parseFloat(this.amount).toFixed(2))
-      console.log(costToSubtract)
-      this.$parent.totalPrice -= costToSubtract
-    }
-  },
-  watch: {
-    amount: function (newAmount, oldAmount) {
-      this.$nextTick(()=>{
-        this.amountCost = (newAmount * this.costPerUnit).toFixed(2)
-        this.$emit('pricechange')
-      })
-    },
-    amountCost: function(newCost, oldCost){
-        console.log("watcher registered pricechange")
-    }
-  },
-  mounted() {
-    this.$nextTick(()=>{
-      this.amount = this.portion.amount
-      this.costPerUnit = this.portion.cost
-      this.amountCost = (this.amount * this.costPerUnit).toFixed(2)
-    })
-  }
-}
-
-// -----------------------------------VUE APP INSTANCE---------------------------
-let app = new Vue({
-  delimiters: ['[[', ']]'],
-  el: '#drink-edit',
-  components: {
-    'shot-line': ShotLine,
-    "portion-line": PortionLine,
-  },
-  data: {
-    cocktail: cocktail,
-    spirits: spirits,
-    targetMargin: cocktail.target,
-    totalPrice: 0,
-    newShots: [],
-    newPortions: [],
-    deletedShots: [],
-    deletedPortions: [],
-    categorySelection:"All",
-    toAdd:"shot",
-    newSpirit:"",
-    newPortion: {
-      ingredient:"",
-      costPerUnit:0,
-      unit:"",
-      startingAmount: 0,
-      ingredientID:"",
-    },
-    spiritSearch:"",
-    showModal: -1,
-    modal:false,
-    modal_info: {
-      id: "",
-      name: "",
-      target: "",
-      shots: {
-        id: "",
-        volume: "",
-        cost: "",
-        brandname: ""
+        console.log(`DELETE Portion ${id}`)
       },
-      portions: {
-        id: "",
-        amount: "",
-        cost: "",
-        name: ""
-      }
-    }
-  },
-  methods: {
-    modalAction() {
-      if (this.modal == false) {
-        this.modal = true
-      } else {
-        this.modal = false
+      addAmount: function () {
+        this.amount += 0.25
+      },
+      subtractAmount: function () {
+        this.amount -= 0.25
+      },
+      addToDeleted: function (id) {
+        this.$parent.deletedPortions.push(id)
+      },
+      deletePortionValues: function () {
+        let costToSubtract = (parseFloat(this.portion.cost) * parseFloat(this.amount).toFixed(2))
+        console.log(costToSubtract)
+        this.$parent.totalPrice -= costToSubtract
       }
     },
-    updateCost: function(){
-      this.totalPrice = 0
-      this.$nextTick(()=>{
-        let runningPrice = 0
-        let allShots = this.$refs.shotSet
+    watch: {
+      amount: function (newAmount, oldAmount) {
+        this.$nextTick(() => {
+          this.amountCost = (newAmount * this.costPerUnit).toFixed(2)
+          this.$emit('pricechange')
+        })
+      },
+      amountCost: function (newCost, oldCost) {
+        console.log("watcher registered pricechange")
+      }
+    },
+    mounted() {
+      this.$nextTick(() => {
+        this.amount = this.portion.amount
+        this.costPerUnit = this.portion.cost
+        this.amountCost = (this.amount * this.costPerUnit).toFixed(2)
+      })
+    }
+  }
 
-        if (allShots !== undefined){
-          for(let i=0; i<allShots.length; i++){
+  // -----------------------------------VUE APP INSTANCE---------------------------
+  let app = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#drink-edit',
+    components: {
+      'shot-line': ShotLine,
+      "portion-line": PortionLine,
+    },
+    data: {
+      cocktail: cocktail,
+      spirits: spirits,
+      targetMargin: cocktail.target,
+      totalPrice: 0,
+      newShots: [],
+      newPortions: [],
+      deletedShots: [],
+      deletedPortions: [],
+      categorySelection: "All",
+      toAdd: "shot",
+      newSpirit: "",
+      newPortion: {
+        ingredient: "",
+        costPerUnit: 0,
+        unit: "",
+        startingAmount: 0,
+        ingredientID: "",
+      },
+      spiritSearch: "",
+      showModal: -1,
+      modal: false,
+      modal_info: {
+        id: "",
+        name: "",
+        target: "",
+        shots: {
+          id: "",
+          volume: "",
+          cost: "",
+          brandname: ""
+        },
+        portions: {
+          id: "",
+          amount: "",
+          cost: "",
+          name: ""
+        }
+      }
+    },
+    methods: {
+      modalAction() {
+        if (this.modal == false) {
+          this.modal = true
+        } else {
+          this.modal = false
+        }
+      },
+      updateCost: function () {
+        this.totalPrice = 0
+        this.$nextTick(() => {
+          let runningPrice = 0
+          let allShots = this.$refs.shotSet
+
+          if (allShots !== undefined) {
+            for (let i = 0; i < allShots.length; i++) {
+              runningPrice += parseFloat(allShots[i].pourCost)
+            }
+          }
+          let allPortions = this.$refs.portionSet
+          if (allPortions !== undefined) {
+            for (let i = 0; i < allPortions.length; i++) {
+              runningPrice += parseFloat(allPortions[i].amountCost)
+            }
+          }
+          this.totalPrice = runningPrice
+        })
+      },
+      createNewShot: function () {
+        let spiritInfo;
+        for (let spirit of this.spirits) {
+          if (parseInt(spirit.id) == this.newSpirit) {
+            spiritInfo = spirit
+          }
+        }
+        console.log(spiritInfo)
+
+        instance.post('/api/shot/', {
+          volume: .25,
+          spirit: spiritInfo.id,
+          cocktail: this.cocktail.id
+        })
+          .then(res => {
+            this.newShots.push({
+              id: res.data.id,
+              volume: res.data.volume,
+              cost: spiritInfo.cost,
+              brandname: spiritInfo.brandname
+            })
+          })
+          .catch(res => console.log(res))
+        this.newSpirit = ""
+        this.modal = false
+      },
+      createNewPortion: function () {
+        instance.post('/api/misc/', {
+          name: this.newPortion.ingredient,
+          cost_per_unit: this.newPortion.costPerUnit,
+        })
+          .then(res => {
+            instance.post('/api/portion/', {
+              amount: this.newPortion.startingAmount,
+              unit: this.newPortion.unit,
+              price_per_unit: res.data.cost_per_unit,
+              cocktail: this.cocktail.id,
+              misc_ingredient: res.data.id,
+            })
+              .then(res => {
+                console.log("DUMMY:")
+                console.log()
+                this.newPortions.push({
+                  id: res.data.id,
+                  amount: res.data.amount,
+                  unit: res.data.unit,
+                  cost: res.data.price_per_unit,
+                  name: this.newPortion.ingredient,
+                })
+                this.newPortion = {
+                  ingredient: "",
+                  costPerUnit: 0,
+                  unit: "",
+                  startingAmount: 0,
+                }
+              })
+              .catch(res =>
+                console.log("your portion response:"),
+                console.log(res))
+              .catch(res =>
+                console.log("your misc ingredient response:"),
+                console.log(res))
+
+            this.modal = false
+          })
+      },
+      submitPage: function () {
+        this.$nextTick(() => {
+          let allShots = this.$refs.shotSet
+          let allPortions = this.$refs.portionSet
+
+          if (allShots !== undefined) {
+            for (let i = 0; i < allShots.length; i++) {
+              instance.patch(`/api/shot/${allShots[i].shot.id}/`, { volume: allShots[i].volume })
+                .then(res => { console.log(res) })
+                .catch(res => { console.log(res) })
+            }
+          }
+
+          if (allPortions !== undefined) {
+            for (let i = 0; i < allPortions.length; i++) {
+              instance.patch(`/api/portion/${allPortions[i].portion.id}/`, { amount: allPortions[i].amount })
+                .then(res => { console.log(res) })
+                .catch(res => { console.log(res) })
+            }
+          }
+          // this.newShots = []
+          // this.newPortions = []
+        })
+      },
+    },
+    computed: {
+      displayCost: function () {
+        return parseFloat(this.totalPrice).toFixed(2)
+      },
+      menuPrice: function () {
+        return parseFloat(this.totalPrice / (this.targetMargin / 100)).toFixed(2)
+      },
+      filterDeletedShots: function () {
+        let filter = this.cocktail.shots.filter((shot) => {
+          return !this.deletedShots.includes(shot.id)
+        })
+        return filter
+      },
+      filterDeletedNewShots: function () {
+        let filter = this.newShots.filter((shot) => {
+          return !this.deletedShots.includes(shot.id)
+        })
+        return filter
+      },
+      filterDeletedPortions: function () {
+        let filter = this.cocktail.portions.filter((portion) => {
+          return !this.deletedPortions.includes(portion.id)
+        })
+        return filter
+      },
+      filterDeletedNewPortions: function () {
+        let filter = this.newPortions.filter((portion) => {
+          return !this.deletedPortions.includes(portion.id)
+        })
+        return filter
+      },
+      filteredSpirits: function () {
+        let brandnameFilter = this.spirits
+        if (this.categorySelection !== "All") {
+          brandnameFilter = this.spirits.filter((spirit) => {
+            return spirit.category.toUpperCase().match(this.categorySelection.toUpperCase())
+          })
+        }
+        searchFilter = brandnameFilter.filter((spirit) => {
+          return spirit.brandname.toUpperCase().match(this.spiritSearch.toUpperCase())
+        })
+        return searchFilter
+      }
+    },
+    mounted() {
+      this.newShots = []
+      this.newPortions = []
+      this.$nextTick(() => {
+        let allShots = this.$refs.shotSet
+        let allPortions = this.$refs.portionSet
+
+        let runningPrice = 0
+
+        if (allShots !== undefined) {
+          for (let i = 0; i < allShots.length; i++) {
             runningPrice += parseFloat(allShots[i].pourCost)
           }
         }
-        let allPortions = this.$refs.portionSet
-        if (allPortions !== undefined){
-          for(let i=0; i<allPortions.length; i++){
+        if (allPortions !== undefined) {
+          for (let i = 0; i < allPortions.length; i++) {
             runningPrice += parseFloat(allPortions[i].amountCost)
           }
         }
+        console.log(runningPrice)
         this.totalPrice = runningPrice
       })
-    },
-    createNewShot: function(){
-      let spiritInfo;
-      for (let spirit of this.spirits){
-        if(parseInt(spirit.id) == this.newSpirit){
-          spiritInfo = spirit
-        }
-      }
-      console.log(spiritInfo)
-
-      instance.post('/api/shot/', {
-        volume: .25,
-        spirit: spiritInfo.id,
-        cocktail: this.cocktail.id
-      })
-      .then(res => {
-        this.newShots.push({
-        id: res.data.id,
-        volume: res.data.volume,
-        cost: spiritInfo.cost,
-        brandname: spiritInfo.brandname
-      })
-      })
-      .catch(res => console.log(res))
-      this.newSpirit = ""
-      this.modal = false
-    },
-    createNewPortion: function(){
-      instance.post('/api/misc/',{
-        name: this.newPortion.ingredient,
-        cost_per_unit: this.newPortion.costPerUnit,
-      })
-      .then(res => {
-        instance.post('/api/portion/', {
-          amount: this.newPortion.startingAmount,
-          unit: this.newPortion.unit,
-          price_per_unit: res.data.cost_per_unit,
-          cocktail: this.cocktail.id,
-          misc_ingredient: res.data.id,
-        })
-        .then(res => {
-          console.log("DUMMY:")
-          console.log()
-          this.newPortions.push({
-            id: res.data.id,
-            amount: res.data.amount,
-            unit: res.data.unit,
-            cost: res.data.price_per_unit,
-            name: this.newPortion.ingredient,
-          })
-          this.newPortion = {
-            ingredient:"",
-            costPerUnit:0,
-            unit:"",
-            startingAmount: 0,
-          }
-        })
-        .catch(res =>
-        console.log("your portion response:"),
-        console.log(res))
-      .catch(res =>
-        console.log("your misc ingredient response:"),
-        console.log(res))
-
-      this.modal = false
-      })
-    },
-    submitPage: function() {
-      this.$nextTick(()=>{
-        let allShots = this.$refs.shotSet
-        let allPortions = this.$refs.portionSet
-
-        if (allShots !== undefined){
-          for(let i=0; i<allShots.length; i++){
-            instance.patch(`/api/shot/${allShots[i].shot.id}/`, {volume: allShots[i].volume})
-            .then(res => {console.log(res)})
-            .catch(res => {console.log(res)})
-          }}
-
-        if (allPortions !== undefined){
-          for(let i=0; i<allPortions.length; i++){
-            instance.patch(`/api/portion/${allPortions[i].portion.id}/`, {amount: allPortions[i].amount})
-            .then(res => {console.log(res)})
-            .catch(res => {console.log(res)})
-          }
-        }
-        // this.newShots = []
-        // this.newPortions = []
-      })
-    },
-  },
-  computed: {
-    displayCost: function () {
-      return parseFloat(this.totalPrice).toFixed(2)
-    },
-    menuPrice: function () {
-      return parseFloat(this.totalPrice / (this.targetMargin / 100)).toFixed(2)
-    },
-    filterDeletedShots: function () {
-      let filter = this.cocktail.shots.filter((shot) => {
-        return !this.deletedShots.includes(shot.id)
-      })
-      return filter
-    },
-    filterDeletedNewShots: function (){
-      let filter = this.newShots.filter((shot)=> {
-        return !this.deletedShots.includes(shot.id)
-      })
-      return filter
-    },
-    filterDeletedPortions: function () {
-      let filter = this.cocktail.portions.filter((portion) => {
-        return !this.deletedPortions.includes(portion.id)
-      })
-      return filter
-    },
-    filterDeletedNewPortions: function(){
-      let filter = this.newPortions.filter((portion)=> {
-        return !this.deletedPortions.includes(portion.id)
-      })
-      return filter
-    },
-    filteredSpirits: function(){
-      let brandnameFilter = this.spirits
-      if (this.categorySelection !== "All") {
-        brandnameFilter = this.spirits.filter((spirit)=>{
-          return spirit.category.toUpperCase().match(this.categorySelection.toUpperCase())
-        })
-      }
-      searchFilter = brandnameFilter.filter((spirit)=>{
-        return spirit.brandname.toUpperCase().match(this.spiritSearch.toUpperCase())
-      })
-      return searchFilter
     }
-  },
-  mounted(){
-    this.newShots = []
-    this.newPortions = []
-    this.$nextTick(()=>{
-      let allShots = this.$refs.shotSet
-      let allPortions = this.$refs.portionSet
-
-      let runningPrice = 0
-
-      if (allShots !== undefined){
-        for(let i=0; i<allShots.length; i++){
-          runningPrice += parseFloat(allShots[i].pourCost)
-        }
-      }
-      if (allPortions !== undefined){
-        for(let i=0; i<allPortions.length; i++){
-          runningPrice += parseFloat(allPortions[i].amountCost)
-        }
-      }
-      console.log(runningPrice)
-      this.totalPrice = runningPrice
-    })
-  }
-})
+  })
 
 </script>
 {% endblock %}
