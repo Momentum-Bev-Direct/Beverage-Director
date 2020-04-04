@@ -49,19 +49,19 @@ Drink Builder
   <div class='cost-sell-box default-shadow'>
     <div class='txt-1h text-center'>
       <p class='bold'>Total Volume</p>
-      <p>[[ displayTotalVolume ]] oz</p>
+      <p class='txt-2'>[[ displayTotalVolume ]] oz</p>
     </div>
     <div class='txt-1h text-center'>
       <p class='bold'>Cost of Goods</p>
-      <p>$ [[ displayCost ]]</p>
+      <p class='txt-2'>$[[ displayCost ]]</p>
     </div>
     <div class='txt-1h text-center'>
       <p class='bold'>Menu Price</p>
-      <p>$[[ menuPrice ]]</p>
+      <p class='txt-2'>$[[ menuPrice ]]</p>
     </div>
     <div class='txt-1h text-center'>
       <p class='bold'>Net Profit</p>
-      <p>$[[ netProfit ]]</p>
+      <p class='txt-2'>$[[ netProfit ]]</p>
     </div>
   </div>
   <!---------------------------MODAL CODE--------------------------------------->
@@ -104,16 +104,19 @@ Drink Builder
       </div>
       <!-- Portion logic  -->
       <div v-if="toAdd=='portion'">
+        <form>
         <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient"
-          type="text" placeholder="Name of ingredient" />
-        <label class="wide-30" for="portion-unit-cost">Price per unit: $</label><input
+          type="text" placeholder="Name of ingredient" required />
+        <label class="wide-30" for="portion-unit-cost">Price/oz: </label>
+        <input
           class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit"
-          type="number" />
-        <input class="wide-100 input-default white-bg" v-model="newPortion.unit" type="text" placeholder="unit"
-          title="ounces, grams, ml, etc." />
-        <label class="wide-30" for="portion-starting-amt">Amount:</label><input class="wide-70 input-default white-bg"
-          id="portion-starting-amt" v-model="newPortion.startingAmount" type="number" />
+          type="number" min="0" step=".01" required/>
+        <!-- <input class="wide-100 input-default white-bg" v-model="newPortion.unit" type="text" placeholder="unit"
+          title="ounces, grams, ml, etc." /> -->
+        <label class="wide-30" for="portion-starting-amt">Volume(oz):</label><input class="wide-70 input-default white-bg"
+          id="portion-starting-amt" v-model="newPortion.startingAmount" type="number" min="0" step=".25"/>
         <button @click="createNewPortion" class="btn green-bg">SUBMIT</button>
+        </form>
       </div>
     </div>
   </div>
@@ -217,7 +220,7 @@ Drink Builder
         
       },
       subtractVolume: function () {
-        if (this.volume === 0) return
+        if (this.volume <= 0) return
         this.volume -= 0.25
       },
       addToDeleted: function (id) {
@@ -296,7 +299,7 @@ Drink Builder
         this.amount += 0.25
       },
       subtractAmount: function () {
-        if (this.amount === 0) return
+        if (this.amount <= 0) return
         this.amount -= 0.25
       },
       addToDeleted: function (id) {
@@ -353,7 +356,7 @@ Drink Builder
       newPortion: {
         ingredient: "",
         costPerUnit: 0,
-        unit: "",
+        unit: "oz",
         startingAmount: 0,
         ingredientID: "",
       },
