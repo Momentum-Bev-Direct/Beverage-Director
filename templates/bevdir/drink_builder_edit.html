@@ -22,7 +22,7 @@ Drink Builder
   <div class='header-links text-white text-right wide-10 flex-col height-100'>
     {% if user.is_authenticated %}
     <div>
-      <p class="top-right">Loged in as: {{ user }} | <br> <a href="/accounts/logout/"> Logout </a></p>
+      <p class="top-right">Logged in as: {{ user }} | <br> <a href="/accounts/logout/"> Logout </a></p>
     </div>
     {% else %}
     <a href="/accounts/register/"> Register </a>
@@ -40,7 +40,7 @@ Drink Builder
     </div>
   </div>
   <div class='cost-bar default-shadow'>
-    <p class='target-cost'>Adjust Target Cost Percent:</p>
+    <p class='target-cost'>Target Pour Percentage:</p>
     <div class="input-contain">
       <input id="target-percent" class="input-default" v-model="targetMargin" type="number" min="1" max="100"><label
         for="target-percent">%</label>
@@ -48,12 +48,20 @@ Drink Builder
   </div>
   <div class='cost-sell-box default-shadow'>
     <div class='total-cost-box'>
+      <p>Total Volume</p>
+      <p>[[ displayTotalVolume ]] oz</p>
+    </div>
+    <div class='total-cost-box'>
       <p>Cost of Goods</p>
       <p>$ [[ displayCost ]]</p>
     </div>
     <div class='menu-price-box'>
       <p>Menu Price</p>
       <p>$[[ menuPrice ]]</p>
+    </div>
+    <div class='menu-price-box'>
+      <p>Net Profit</p>
+      <p>$[[ netProfit ]]</p>
     </div>
   </div>
   <!---------------------------MODAL CODE--------------------------------------->
@@ -178,7 +186,7 @@ Drink Builder
         <div class="menu-mid">
           <p class='bold wide-100 text-center'>[[ shot.brandname ]]</p>
           <div class='wide-100 text-center'>
-          <p class="bold">Shot Volume: [[ volume ]] oz</p>
+          <p class="bold">Pour Volume: [[ volume ]] oz</p>
           </div>
           <p class="wide-100 text-center">Cost of pour: $ <span class="ingredient-cost">[[ pourCost ]]</span></p>
           <div> <i v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="btn default-shadow fas fa-trash-alt" data-fa-transform="grow-7 right-6"></i></div>
@@ -326,6 +334,7 @@ Drink Builder
       spirits: spirits,
       targetMargin: cocktail.target,
       totalPrice: 0,
+      totalVolume: 0,
       newShots: [],
       newPortions: [],
       deletedShots: [],
@@ -386,7 +395,30 @@ Drink Builder
               runningPrice += parseFloat(allPortions[i].amountCost)
             }
           }
+          
           this.totalPrice = runningPrice
+        })
+      },
+      updateVolume: function () {
+        this.totalVolume = 0
+        this.$nextTick(() => {
+          let runningVolume = 0
+          let allShots = this.$refs.shotSet
+
+          if (allShots !== undefined) {
+            for (let i = 0; i < allShots.length; i++) {
+              runningVolume += parseFloat(allShots[i].volume)
+            }
+          }
+          let allPortions = this.$refs.portionSet
+          if (allPortions !== undefined) {
+            for (let i = 0; i < allPortions.length; i++) {
+              runningVolume += parseFloat(allPortions[i].amount)
+            }
+          }
+          console.log('allshots:', allShots)
+          console.log("allPortions:", allPortions)
+          this.totalVolume = runningVolume
         })
       },
       createNewShot: function () {
@@ -481,11 +513,17 @@ Drink Builder
       },
     },
     computed: {
+      displayTotalVolume: function () {
+        return this.totalVolume
+      },
       displayCost: function () {
         return parseFloat(this.totalPrice).toFixed(2)
       },
       menuPrice: function () {
         return parseFloat(this.totalPrice / (this.targetMargin / 100)).toFixed(2)
+      },
+      netProfit: function () {
+        return (this.menuPrice - this.totalPrice).toFixed(2)
       },
       filterDeletedShots: function () {
         let filter = this.cocktail.shots.filter((shot) => {
