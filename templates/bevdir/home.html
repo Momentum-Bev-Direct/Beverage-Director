@@ -10,36 +10,67 @@ const cocktails = {{ cocktails|safe }}
 console.log(cocktails)
 </script>
 <!---------------------------------BEGIN HTML --------------------------->
-<header class='header container space-between align-center'>
-  <p class='wide-10 logo height-100'>Logo</p>
-  <a class="wide-80 flex-col height-100" href="/"><p class='site-title'>BevDev</p></a>
-  <div class='header-links text-white text-right wide-10 flex-col height-100'>
-      {% if user.is_authenticated %}
-      <div>
-        <p class="top-right">{{ user }} | <a href="/accounts/logout/"> Logout </a></p>
-        <button class="btn" >New Cocktail</button>
-      </div>
-      {% else %}
-      <a href="/accounts/register/"> Register </a>
-      |
-      <a href="/accounts/login/"> Log in </a>
-      {% endif %}
-  </div>
-</header>
+
 <!---------------------------BEGIN MAIN---------------->
 {% if user.is_authenticated %}
-<div id='homeapp' class="container">
+<div id='homeapp' class="container wide-90 flex-wrap">
+  <header class='header container wide-100 space-between align-center'>
+    <!-- <p class='wide-20 logo height-100'>Logo</p> -->
+    <a class="wide-60 flex-col height-100" href="/"><p class='site-title text-left'>BevDev</p></a>
+    <div class='header-links text-white align-center flex-end wide-20 flex height-100 text-right'>
+        {% if user.is_authenticated %}
+        <p class="">{{ user }} | <a href="/accounts/logout/"> Logout </a></p>
+        {% else %}
+        <a href="/accounts/register/"> Register </a>
+        |
+        <a href="/accounts/login/"> Log in </a>
+        {% endif %}
+    </div>
+  </header>
+  <nav class="wide-100 dark-bg flex space-between pad-5">
+    <input type="text" v-model="search" placeholder="search" class="wide-70 input-default dark-bg text-white lt-placeholder"/>
+    <button class="btn wide-30" @click="createModalAction" >New Cocktail</button>
+  </nav>
 <!------------------------MENU ITEMS---------------------->
   <div class="wide-50 min-400">
-    <h2 class="text-center">Your Drink Menu</h2>
-    <input type="text" v-model="search" placeholder="FILTER COCKTAILS" class="form-input w-50 default-shadow"/>
-    <div v-for="cocktail in filteredCocktails">
-      <div v-bind:id="cocktail.id" class="menu-item default-shadow">
-        <p>[[ cocktail.name ]]</p>
-        <div>
-          <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn menu-butt">EDIT</button></a>
-          <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
-          <button @click="cocktailSummary(cocktail.id)" class="btn menu-butt">SEE RECIPE</button>
+    <div v-if="showCreateModal" class="modal-bg">
+      <div  class="wide-40 min-400 center-auto round-corners pad-10 blue-bg flex default-shadow">
+        <form class="wide-100 flex flex-wrap flex-start align-center">
+          <p class="wide-100 bold">Create a Cocktail</p>
+          <div class="vert-padding-3 wide-100">
+            <label for="new-cocktail-name" class="label-default">Name:</label>
+            <input class="input-default" v-model="newCocktail.name" id="new-cocktail-name" placeholder="cocktial name">
+          </div>
+          <div class="vert-padding-3 wide-100">
+            <label class="label-default" for="new-cocktail-target">Target Pour Cost:</label>
+            <input class="input-default"v-model="newCocktail.target" type="new-cocktail-target" type="number" min="1" max="100" placeholder="target percent of menu price">
+          </div>
+          <button @click="submitNewCocktail" class="btn-alt">Submit</button>
+          <button @click="createModalAction" class="btn">Exit</button>
+        </form>
+      </div>
+    </div>
+    <p class="text-center bold txt-1h vert-padding-3">Your Drink Menu</p>
+
+    <div v-for="cocktail in filteredCocktails" >
+      <div v-bind:id="cocktail.id" @click="modalAction(cocktail.id)"class="menu-item hover-blue-dark wide-100 flex-wrap default-shadow">
+        <div class="wide-100 flex">
+          <p class="bold">[[ cocktail.name ]]</p>
+        </div>
+        <!-- hidden items  -->
+        <div v-if="showModal==cocktail.id">
+            <p>Liquors</p>
+            <ul class='ingredient-ul'>
+              <li v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
+            </ul>
+            <p>Mixers</p>
+            <ul class='ingredient-ul'>
+              <li v-for="portion in cocktail.portions">
+                [[ portion.amount ]] [[portion.unit]] of [[ portion.name ]]</li>
+            </ul>
+            <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn menu-butt">EDIT</button></a>
+            <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
+            <!-- <button @click="showModal=-1" class="btn">CLOSE</button> -->
         </div>
       </div>
       <!-- DELETE CONFIRMATION MODAL -->
@@ -50,22 +81,8 @@ console.log(cocktails)
           <button @click="showDeleteModal=-1" class="btn menu-butt">NO! PEASE DON'T!</button>
         </div>
       </div>
-      <!-- MORE INFO MODAL -->
-      <div v-if="showModal==cocktail.id" class="modal-bg">
-        <div class="modal-container">
-          <p class='bold'>[[ cocktail.name ]]</p>
-          <p>Liquors</p>
-          <ul class='ingredient-ul'>
-            <li v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
-          </ul>
-          <p>Mixers</p>
-          <ul class='ingredient-ul'>
-            <li v-for="portion in cocktail.portions">
-              [[ portion.amount ]] [[portion.unit]] of [[ portion.name ]]</li>
-          </ul>
-          <button @click="showModal=-1" class="btn">CLOSE</button>
-        </div>
-      </div>
+      <!------NEW COCKTAIL MODAL------->
+
     </div>
   </div>
   <!---------------------------MENU STATS/FIGURE?--------------------->
@@ -109,8 +126,10 @@ let app = new Vue({
   el: '#homeapp',
   data: {
     cocktails: [],
+    deletedCocktails: [],
     showModal: -1,
     showDeleteModal: -1,
+    showCreateModal: false,
     search: "",
     modal_info:{
       id:"",
@@ -128,10 +147,15 @@ let app = new Vue({
         cost:"",
         name:""
       }
+    },
+    newCocktail: {
+      name: "",
+      target: 0,
     }
   },
   methods: {
     deleteCocktail: function(id) {
+      this.deletedCocktails.push(id)
       instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
       .then(function(response) {
       }).then(function(data){
@@ -142,23 +166,41 @@ let app = new Vue({
 
       console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
     },
-    cocktailSummary: function(id) {
-      this.showModal = id
-      for(let cocktail of this.cocktails){
-        if(cocktail.id == id) {
-          this.modal_info = cocktail
-          this.modal_shots = cocktail.shots
-          this.modal_portions = cocktail.portions
-        }
+    modalAction: function(id) {
+      if(this.showModal === id){
+        this.showModal = -1
       }
+      else {
+        this.showModal = id
+      }
+    },
+    createModalAction: function(){
+      if(this.showCreateModal){
+        this.showCreateModal = false
+      }
+      else{
+        this.showCreateModal = true
+      }
+    },
+    submitNewCocktail: function(){
+      instance.post('/api/cocktail/',{
+        name: this.newCocktail.name,
+        target_profit: this.newCocktail.target,
+      })
+      .then(res=>{
+        window.location = `/cocktails/${res.data.id}/`
+      })
+      .catch(res=>{
+        console.log(res)
+      })
     }
   },
   computed: {
     filteredCocktails: function(){
-      console.log(cocktails)
-      return cocktails.filter((cocktail)=>{
-        return cocktail.name.toUpperCase().match(this.search.toUpperCase())
+      let filter_deleted = cocktails.filter((cocktail)=>{
+        return !this.deletedCocktails.includes(cocktail.id) && cocktail.name.toUpperCase().match(this.search.toUpperCase())
       })
+      return filter_deleted
     }
   }
 })
