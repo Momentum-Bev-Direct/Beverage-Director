@@ -214,6 +214,7 @@ Drink Builder
       },
       addVolume: function () {
         this.volume += 0.25
+        
       },
       subtractVolume: function () {
         this.volume -= 0.25
@@ -400,7 +401,6 @@ Drink Builder
               runningPrice += parseFloat(allPortions[i].amountCost)
             }
           }
-          
           this.totalPrice = runningPrice
         })
       },
@@ -421,8 +421,6 @@ Drink Builder
               runningVolume += parseFloat(allPortions[i].amount)
             }
           }
-          console.log('allshots:', allShots)
-          console.log("allPortions:", allPortions)
           this.totalVolume = runningVolume
         })
       },
@@ -586,7 +584,6 @@ Drink Builder
             runningPrice += parseFloat(allPortions[i].amountCost)
           }
         }
-        console.log(runningPrice)
         this.totalPrice = runningPrice
       })
     }
