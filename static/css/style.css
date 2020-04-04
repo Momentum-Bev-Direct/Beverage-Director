@@ -19,7 +19,7 @@
 }
 
 body {
-    font-family: var(--font_body)
+    font-family: var(--font_body);
 }
 
 form {
@@ -37,7 +37,7 @@ form li {
 
 .header {
     color: white;
-    background-color: red;
+    background-color:var(--stroke_dark);
     width: 100%;
     padding:.5rem;
     font-family:var(--font_headline);
@@ -51,7 +51,7 @@ form li {
 }
 
 .header a:hover {
-    color: var(--highlight_green)
+    color: var(--highlight_green);
 }
 
 .header-links{
@@ -112,7 +112,7 @@ form li {
     padding: .5rem;
     background-color: var(--button_std);
     font-family: var(--font_body);
-    color:white
+    color:white;
 }
 
 .ingredient-list {
@@ -173,7 +173,7 @@ form li {
     border: 5px dotted red;
     padding: 1rem;
     margin: 1.5rem;
-    background-color: var(--menu-item-bg);
+    background-color: var(--highlight_blue);
     font-family: var(--font_cursive_1);
     background-blend-mode: color;
     border-radius: 10px;
@@ -217,7 +217,7 @@ form li {
     border: 1px solid red;
     border-radius: 10px;
     font-family: var(--font_body);
-    color:white
+    color:white;
 }
 /* REPLACE THE FOLLOWING AT SOME POINT: */
 .modal-mask {
@@ -282,7 +282,7 @@ form li {
 
 .btn {
     background-color: var(--button_std);
-    color:white;
+    color:var(--stroke_dark);
     padding: .3rem;
     border-radius: 5px;
 }
@@ -296,14 +296,14 @@ form li {
     color:white;
     padding: .3rem;
     border-radius: 5px;
-    float:right
+    float:right;
 }
 
 .menu-item {
     display: flex;
     width: 100%;
     min-width: 400px;
-    background-color: var(--highlight_pink);
+    background-color: rgb(196, 212, 225);
     border-radius: 5px;
     padding: 10px;
     margin-top: 10px;
@@ -350,24 +350,49 @@ form li {
 }
 
 .fa-angle-double-left, .fa-angle-double-right {
-    color: var(--button_alt);
+    color: var(--menu-item-bg);
     font-size: 4rem;
     text-shadow: -1px 1px 3px black;
 }
 
-.fa-angle-double-left:hover, .fa-angle-double-right:hover {
-    color: var(--stroke_dark);
+.fa-angle-double-left:hover, .fa-angle-double-right:hover{
+    color: var(--stroke_lighter);
 }
 
-.fa-times {
-    color: var(--stroke_purple);
+.fa-window-close {
+    color: var(--button_std);
     font-size: 2rem;
+    float: right;
 }
 
-.fa-times:hover {
-    color: var(--button_std)
+.fa-window-close:hover {
+    color: var(--stroke_lighter);
 }
 
+.fa-plus-circle{
+    color:var(--stroke_dark);
+    background-color: var(--button_alt);
+    padding: .3rem;
+    border-radius: 5px;
+    box-shadow: -1px 1px 3px rgba(0, 0, 0);
+    margin-top: 2rem;
+    margin-bottom: .25rem;
+}
+.fa-plus-circle:hover {
+    color:var(--stroke_lighter);
+}
+.far{
+    color:var(--stroke_dark);
+    background-color: var(--button_std);
+    padding: .3rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+    box-shadow: -1px 1px 3px rgba(0, 0, 0);
+    float: right;
+}
+.fa-trash-alt:hover{
+    color:var(--stroke_lighter);
+}
 .menu-input {
     height: 100%;
     width: 20%;
@@ -387,7 +412,7 @@ form li {
     background-color: var(--highlight_blue);
     font-size: 1rem;
     width: 60px;
-    text-align: center;
+    text-align: left;
     border: 1px solid var(--stroke_lighter);
     outline: none;
 }
@@ -430,19 +455,19 @@ form li {
     color:white;
 }
 .pnk-bg {
-    background-color: var(--highlight_pink)
+    background-color: var(--highlight_pink);
 }
 .green-bg {
-    background-color: var(--button_alt)
+    background-color: var(--button_alt);
 }
 .text-dark {
-    color: var(--stroke_dark)
+    color: var(--stroke_dark);
 }
 .light-stroke {
     color: var(--stroke_lighter);
 }
 .bold-blue-bg {
-    background-color: var(--menu-item-bg)
+    background-color: var(--menu-item-bg);
 }
 .white-bg{
     background-color: white;
@@ -475,25 +500,25 @@ form li {
     width: 70%;
 }
 .wide-50 {
-    width: 50%
+    width: 50%;
 }
 .wide-40 {
-    width: 40%
+    width: 40%;
 }
 .wide-30 {
-    width: 30%
+    width: 30%;
 }
 .wide-20 {
     width: 20%
 }
 .wide-10 {
-    width: 10%
+    width: 10%;
 }
 .min-400 {
     min-width: 400px;
 }
 .height-100 {
-    height: 100%
+    height: 100%;
 }
 
 /* --------Alignment-------- */

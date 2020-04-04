@@ -12,59 +12,28 @@ Drink Builder
   const spirits = {{ spirits| safe }}
 
 </script>
+<!---------------------------------BEGIN HTML --------------------------->
+<header class='header container space-between align-center'>
+  <p class='wide-10 logo height-100'>Logo</p>
+  <a class="wide-80 flex-col height-100" href="/"><p class='site-title'>BevDev</p></a>
+  <div class='header-links text-white text-right wide-10 flex-col height-100'>
+      {% if user.is_authenticated %}
+      <div>
+        <p class="top-right">Loged in as: {{ user }} | <br> <a href="/accounts/logout/"> Logout </a></p>
+      </div>
+      {% else %}
+      <a href="/accounts/register/"> Register </a>
+      |
+      <a href="/accounts/login/"> Log in </a>
+      {% endif %}
+  </div>
+</header>
 <!------------------------------- HTML --------------------------------->
 <div class='container flex-wrap flex-col' id='drink-edit'>
   <div class='top-bar'>
-    <p class='logo'>Logo</p>
     <h2 class='cocktail-name'>[[cocktail.name]]</h2>
     <div id="drink-edit">
-<!---------------------------MODAL CODE--------------------------------------->
-      <button @click='modalAction()' class='btn' type=button> ADD INGREDIENT</button>
-      <div v-if="modal" class=modal-bg>
-        <div class="modal-container modal-lg just-cent align-base">
-          <select class="wide-70 input-default white-bg" v-model="toAdd">
-            <option value="shot">Pick from Database</option>
-            <option value="portion">Custom</option>
-          </select>
-          <i @click='modalAction()' class="fas fa-times"></i>
 
-          <!-- <button  type="button" class="btn wide-20"> Close</button> -->
-          <!-- Shot logic -->
-          <div v-if="toAdd=='shot'">
-            <select class="wide-100 input-default white-bg" v-model="categorySelection">
-              <option value="All" selected>All Categories</option>
-              <option value="Brandy & Cognac">Brandy & Cognac</option>
-              <option value="Bourbon">Bourbon</option>
-              <option value="Canadian Whiskey">Canadian Whiskey</option>
-              <option value="Cordials & Liqueurs">Cordials & Liqueurs</option>
-              <option value="Gin">Gin</option>
-              <option value="Irish Whiskey">Irish Whiskey</option>
-              <option value="NC Products">NC Products</option>
-              <option value="Other">Other</option>
-              <option value="Rum">Rum</option>
-              <option value="Rye">Rye</option>
-              <option value="Scotch">Scotch</option>
-              <option value="Tequila & Mezcal">Tequila & Mezcal</option>
-              <option value="Vodka">Vodka</option>
-              <option value="Whiskey - Other">Whiskey - Other</option>
-            </select>
-            <input v-model="spiritSearch" type="text" placeholder="filter by name" class="input-default wide-100 white-bg"/>
-            <select class="input-default wide-100 text-left pad-5 white-bg" v-model="newSpirit" id="" size="12" required>
-              <option class="vert-margin-3" v-for="spirit in filteredSpirits" v-bind:value="spirit.id"class="wide-100 white-bg">[[ spirit.brandname ]]: $ [[ spirit.cost ]] per oz </option>
-            </select>
-            <button @click='createNewShot' type="button" class="btn green-bg">Add</button>
-          </div>
-          <!-- Portion logic  -->
-          <div v-if="toAdd=='portion'">
-            <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient" type="text" placeholder="Name of ingredient"/>
-            <label class="wide-30" for="portion-unit-cost">Price per unit: $</label><input class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit" type="number"/>
-            <input class="wide-100 input-default white-bg"v-model="newPortion.unit" type="text" placeholder="unit" title="ounces, grams, ml, etc."/>
-            <label class="wide-30" for="portion-starting-amt">Amount:</label><input class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount" type="number"/>
-            <button @click="createNewPortion"class="btn green-bg">SUBMIT</button>
-          </div>
-        </div>
-      </div>
-<!--------------------------END MODAL CODE--------------------------------------->
     </div>
   </div>
   <div class='cost-bar default-shadow'>
@@ -84,7 +53,53 @@ Drink Builder
       <p>$[[ menuPrice ]]</p>
     </div>
   </div>
+  <!---------------------------MODAL CODE--------------------------------------->
+  <i @click='modalAction()' class="fas fa-plus-circle"> Add Ingredient</i>
+  <div v-if="modal" class=modal-bg>
+    <div class="modal-container modal-lg just-cent align-base">
+      <select class="wide-70 input-default white-bg" v-model="toAdd">
+        <option value="shot">Select from ABC Stock</option>
+        <option value="portion">Custom</option>
+      </select>
+      <i @click='modalAction()' class="fas fa-window-close"></i>
 
+      <!-- <button  type="button" class="btn wide-20"> Close</button> -->
+      <!-- Shot logic -->
+      <div v-if="toAdd=='shot'">
+        <select class="wide-100 input-default white-bg" v-model="categorySelection">
+          <option value="All" selected>Filter by Category</option>
+          <option value="Brandy & Cognac">Brandy & Cognac</option>
+          <option value="Bourbon">Bourbon</option>
+          <option value="Canadian Whiskey">Canadian Whiskey</option>
+          <option value="Cordials & Liqueurs">Cordials & Liqueurs</option>
+          <option value="Gin">Gin</option>
+          <option value="Irish Whiskey">Irish Whiskey</option>
+          <option value="NC Products">NC Products</option>
+          <option value="Other">Other</option>
+          <option value="Rum">Rum</option>
+          <option value="Rye">Rye</option>
+          <option value="Scotch">Scotch</option>
+          <option value="Tequila & Mezcal">Tequila & Mezcal</option>
+          <option value="Vodka">Vodka</option>
+          <option value="Whiskey - Other">Whiskey - Other</option>
+        </select>
+        <input v-model="spiritSearch" type="text" placeholder="Start Typing to Filter by Brand" class="input-default wide-100 white-bg"/>
+        <select class="input-default wide-100 text-left pad-5 white-bg" v-model="newSpirit" id="" size="12" required>
+          <option class="vert-margin-3" v-for="spirit in filteredSpirits" v-bind:value="spirit.id"class="wide-100 white-bg">[[ spirit.brandname ]]: $ [[ spirit.cost ]] per oz </option>
+        </select>
+        <i @click='createNewShot' class="fas fa-plus-circle"> Add</i>
+      </div>
+      <!-- Portion logic  -->
+      <div v-if="toAdd=='portion'">
+        <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient" type="text" placeholder="Name of ingredient"/>
+        <label class="wide-30" for="portion-unit-cost">Price per unit: $</label><input class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit" type="number"/>
+        <input class="wide-100 input-default white-bg"v-model="newPortion.unit" type="text" placeholder="unit" title="ounces, grams, ml, etc."/>
+        <label class="wide-30" for="portion-starting-amt">Amount:</label><input class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount" type="number"/>
+        <button @click="createNewPortion"class="btn green-bg">SUBMIT</button>
+      </div>
+    </div>
+  </div>
+  <!--------------------------END MODAL CODE--------------------------------------->
   <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
     <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" ref="shotSet"></shot-line>
   </div>
@@ -99,8 +114,8 @@ Drink Builder
   <div v-for="portion in filterDeletedNewPortions"  class="menu-item default-shadow">
     <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" ref="portionSet"></portion-line>
   </div>
-
-  <button @click="submitPage"class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button>
+  <i @click="submitPage" class="far fa-save green-bg fa-4x save-button" data-fa-transform="right-8"></i>
+  <!-- <button @click="submitPage"class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button> -->
 </div>
 
 <script>
@@ -156,8 +171,8 @@ const ShotLine = {
           <p class="bold">Shot Volume: [[ volume ]] oz</p>
           </div>
           <p class="wide-100 text-center">Cost of pour: $ <span class="ingredient-cost">[[ pourCost ]]</span></p>
-          <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="btn center-butt default-shadow">DELETE</button>
-        </div>
+          <i v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="btn default-shadow fas fa-trash-alt" data-fa-transform="grow-7 right-6"></i>
+          </div>
         <div class="menu-input text-center">
           <i @click="addVolume" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
           <p class="light-stroke">MORE</p>
