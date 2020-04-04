@@ -119,18 +119,21 @@ Drink Builder
   </div>
   <!--------------------------END MODAL CODE--------------------------------------->
   <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
-    <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" ref="shotSet"></shot-line>
+    <shot-line v-bind:shot="shot" v-on:pricechange="updateCost"
+    v-on:volumechange="updateVolume" ref="shotSet"></shot-line>
   </div>
   <div v-if="newShots.length > 0">
     <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="menu-item default-shadow">
-      <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" ref="shotSet"></shot-line>
+      <shot-line v-bind:shot="shot" v-on:pricechange="updateCost"
+      v-on:volumechange="updateVolume" ref="shotSet"></shot-line>
     </div>
   </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
-    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" ref="portionSet"></portion-line>
+    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" 
+    v-on:volumechange="updateVolume"ref="portionSet"></portion-line>
   </div>
   <div v-for="portion in filterDeletedNewPortions" class="menu-item default-shadow">
-    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" ref="portionSet"></portion-line>
+    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"ref="portionSet"></portion-line>
   </div>
   <div><i @click="submitPage" class="far fa-save green-bg fa-2x" data-fa-transform="right-8"> Save Cocktail</i></div>
   <!-- <button @click="submitPage"class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button> -->
@@ -224,6 +227,7 @@ Drink Builder
         this.$nextTick(() => {
           this.pourCost = (parseFloat(newVolume) * parseFloat(this.costPerUnit)).toFixed(2)
           this.$emit('pricechange')
+          this.$emit('volumechange')
           console.log("watcher detected vol change")
         })
       },
@@ -306,6 +310,7 @@ Drink Builder
         this.$nextTick(() => {
           this.amountCost = (newAmount * this.costPerUnit).toFixed(2)
           this.$emit('pricechange')
+          this.$emit('volumechange')
         })
       },
       amountCost: function (newCost, oldCost) {
