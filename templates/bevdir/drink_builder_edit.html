@@ -47,20 +47,20 @@ Drink Builder
     </div>
   </div>
   <div class='cost-sell-box default-shadow'>
-    <div class='total-cost-box'>
-      <p>Total Volume</p>
+    <div class='txt-1h text-center'>
+      <p class='bold'>Total Volume</p>
       <p>[[ displayTotalVolume ]] oz</p>
     </div>
-    <div class='total-cost-box'>
-      <p>Cost of Goods</p>
+    <div class='txt-1h text-center'>
+      <p class='bold'>Cost of Goods</p>
       <p>$ [[ displayCost ]]</p>
     </div>
-    <div class='menu-price-box'>
-      <p>Menu Price</p>
+    <div class='txt-1h text-center'>
+      <p class='bold'>Menu Price</p>
       <p>$[[ menuPrice ]]</p>
     </div>
-    <div class='menu-price-box'>
-      <p>Net Profit</p>
+    <div class='txt-1h text-center'>
+      <p class='bold'>Net Profit</p>
       <p>$[[ netProfit ]]</p>
     </div>
   </div>
@@ -217,6 +217,7 @@ Drink Builder
         
       },
       subtractVolume: function () {
+        if (this.volume === 0) return
         this.volume -= 0.25
       },
       addToDeleted: function (id) {
@@ -295,6 +296,7 @@ Drink Builder
         this.amount += 0.25
       },
       subtractAmount: function () {
+        if (this.amount === 0) return
         this.amount -= 0.25
       },
       addToDeleted: function (id) {
