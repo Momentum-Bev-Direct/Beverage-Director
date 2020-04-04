@@ -46,13 +46,20 @@ form {
     width: 80%;
     margin: 1rem auto;
 }
-
 form li {
     list-style: none;
 }
 
+.icon {
+    width: 9rem;
+    height: 9rem;
+    transition: 0.7s cubic-bezier(1, -7, 0, 5);
+    clip-path: polygon(15% 15%, 88% 15%, 77% 88%, 25% 88%);
+}
 
-
+.icon:hover {
+    clip-path: polygon(12% 10%, 91% 10%, 80% 95%, 21% 95%);
+}
 
 .header {
     color: white;
