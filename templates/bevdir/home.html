@@ -44,12 +44,12 @@ BevDev Home
           <p class="wide-100 bold">Create a Cocktail</p>
           <div class="vert-padding-3 wide-100">
             <label for="new-cocktail-name" class="label-default">Name:</label>
-            <input class="input-default" v-model="newCocktail.name" id="new-cocktail-name" placeholder="cocktial name">
+            <input class="input-default" v-model="newCocktail.name" id="new-cocktail-name" placeholder="cocktail name" required>
           </div>
           <div class="vert-padding-3 wide-100">
-            <label class="label-default" for="new-cocktail-target">Target Pour Cost:</label>
+            <label class="label-default" for="new-cocktail-target">Target Pour Cost %:</label>
             <input class="input-default" v-model="newCocktail.target" type="new-cocktail-target" type="number" min="1"
-              max="100" placeholder="target percent of menu price">
+              max="100" oninput="validity.valid||(value='')" placeholder="target percent of menu price" required>
           </div>
           <button @click="submitNewCocktail" class="btn-alt">Submit</button>
           <button @click="createModalAction" class="btn">Exit</button>
@@ -241,7 +241,7 @@ BevDev Home
       },
       newCocktail: {
         name: "",
-        target: 0,
+        target: 18,
       }
     },
     methods: {

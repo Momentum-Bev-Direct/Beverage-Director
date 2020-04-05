@@ -105,17 +105,17 @@ Drink Builder
       <!-- Portion logic  -->
       <div v-if="toAdd=='portion'">
         <form>
-        <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient"
-          type="text" placeholder="Name of ingredient" required />
-        <label class="wide-30" for="portion-unit-cost">Price/oz: </label>
-        <input
-          class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit"
-          type="number" min="0" step=".01" required/>
-        <!-- <input class="wide-100 input-default white-bg" v-model="newPortion.unit" type="text" placeholder="unit"
-          title="ounces, grams, ml, etc." /> -->
-        <label class="wide-30" for="portion-starting-amt">Volume(oz):</label><input class="wide-70 input-default white-bg"
-          id="portion-starting-amt" v-model="newPortion.startingAmount" type="number" min="0" step=".25"/>
-        <button @click="createNewPortion" class="btn green-bg">SUBMIT</button>
+          <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient"
+            type="text" placeholder="Name of ingredient" required />
+          <label class="wide-30" for="portion-unit-cost">Price/oz: </label>
+          <input
+            class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit"
+            type="number" min="0" step=".01" required/>
+          <!-- <input class="wide-100 input-default white-bg" v-model="newPortion.unit" type="text" placeholder="unit"
+            title="ounces, grams, ml, etc." /> -->
+          <label class="wide-30" for="portion-starting-amt">Volume(oz):</label><input class="wide-70 input-default white-bg"
+            id="portion-starting-amt" v-model="newPortion.startingAmount" type="number" min="0" step=".25" required/>
+          <button @click="createNewPortion" class="btn green-bg">SUBMIT</button>
         </form>
       </div>
     </div>
