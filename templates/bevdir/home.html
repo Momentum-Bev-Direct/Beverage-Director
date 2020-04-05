@@ -35,9 +35,9 @@ BevDev Home
       class="wide-70 input-default dark-bg text-white lt-placeholder" />
     <button class="btn wide-30" @click="createModalAction">New Cocktail</button>
   </nav>
-  <!------------------------MENU ITEMS---------------------->
+
   <!------NEW COCKTAIL MODAL------->
-  <div class="wide-50 min-400">
+  <div class="wide-50 half-page">
     <div v-if="showCreateModal" class="modal-bg">
       <div class="wide-40 min-400 center-auto round-corners pad-10 blue-bg flex default-shadow">
         <form class="wide-100 flex flex-wrap flex-start align-center">
@@ -56,29 +56,34 @@ BevDev Home
         </form>
       </div>
     </div>
+  <!------------------------MENU ITEMS---------------------->
     <p class="text-center bold txt-1h vert-padding-3">Your Drink Menu</p>
-
     <div v-for="cocktail in filteredCocktails">
       <div v-bind:id="cocktail.id" @click="modalAction(cocktail.id)"
         class="menu-item hover-blue-dark wide-100 flex-wrap default-shadow">
-        <div class="wide-100 flex">
-          <p class="bold">[[ cocktail.name ]]</p>
+        <p class="bold wide-80">[[ cocktail.name ]]</p>
+        <div class="wide-20"v-if="showModal==cocktail.id">
+          <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn">EDIT</button></a>
+          <button v-if="showModal==cocktail.id" @click="showDeleteModal=(cocktail.id)" class="btn">DELETE</button>
         </div>
-        <!-- hidden items  -->
-        <div v-if="showModal==cocktail.id">
-          <p>Liquors</p>
-          <ul class='ingredient-ul'>
-            <li v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
-          </ul>
-          <p>Mixers</p>
-          <ul class='ingredient-ul'>
-            <li v-for="portion in cocktail.portions">
-              [[ portion.amount ]] [[portion.unit]] of [[ portion.name ]]</li>
-          </ul>
-          <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn menu-butt">EDIT</button></a>
-          <button @click="showDeleteModal=(cocktail.id)" class="btn menu-butt">DELETE</button>
-          <!-- <button @click="showModal=-1" class="btn">CLOSE</button> -->
-        </div>
+          <!-- hidden items  -->
+          <div class="wide-100 flex vert-padding-10" v-if="showModal==cocktail.id">
+            <div class="wide-50 height-100">
+              <p class="txt-h bold">Spirits</p>
+              <ul class='ingredient-ul'>
+                <li class="txt-h"v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
+              </ul>
+            </div>
+            <div class="wide-50 height-100 ">
+              <p class="txt-h bold">Mixers</p>
+              <ul class='ingredient-ul'>
+                <li class="txt-h" v-for="portion in cocktail.portions">
+                  [[ portion.amount ]] oz of [[ portion.name ]]</li>
+              </ul>
+            </div>
+
+            <!-- <button @click="showModal=-1" class="btn">CLOSE</button> -->
+          </div>
       </div>
       <!-- DELETE CONFIRMATION MODAL -->
       <div v-if="showDeleteModal==cocktail.id" class="modal-bg">
@@ -90,189 +95,208 @@ BevDev Home
       </div>
     </div>
   </div>
-  <div class="wide-50">
-    <menu-graph></menu-graph>
+  <div class="wide-50 half-page">
+    <menu-graph v-bind:labels="labels" v-bind:totaldata="totaldata" v-bind:menudata="menudata"></menu-graph>
   </div>
 </div>
-  <!---------------------------MENU STATS/FIGURE?--------------------->
-  <footer></footer>
-  {% endif %}
-  <!----------------------END HTML/START AXIOS CONFIG ------------------------->
-  <script>
+<!---------------------------MENU STATS/FIGURE?--------------------->
+<footer></footer>
+{% endif %}
+<!----------------------END HTML/START AXIOS CONFIG ------------------------->
+<script>
 
-    let menuGraph = {
-      delimiters: ['[[', ']]'],
-      props: {
-
-      },
-      data: function () {
-        return {
-
-        }
-      },
-      template: `
-        <div class="wide-100">
-          <canvas id="my-menu-stats" width="400" height="400"></canvas>
+  let menuGraph = {
+    delimiters: ['[[', ']]'],
+    props: {
+      'labels':Array,
+      'totaldata': Array,
+      'menudata': Array,
+    },
+    data: function () {
+      return {
+        labels: "",
+        totaldata: "",
+        menudata:"",
+      }
+    },
+    template: `
+        <div class="wide-100 figure">
+          <canvas class="figure" id="my-menu-stats" width="400" height="400"></canvas>
         </div>
       `
-      ,
-      mounted() {
+    ,
+    mounted() {
+      let pink = 'rgba(246, 2, 130, 1)'
+      this.$nextTick(() => {
         let canvas = document.getElementById('my-menu-stats').getContext('2d')
-
         let menuStatsChart = new Chart(canvas, {
           type: 'horizontalBar',
           data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: this.labels,
             datasets: [{
-              label: '# of Votes',
-              data: [12, 19, 3, 5, 2, 3],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-              ],
-              borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-              ],
-              borderWidth: 1
-            }]
+              label: 'Cost of Goods',
+              data: this.totaldata,
+              backgroundColor: 'rgba(83, 83, 95, 1)',
+              borderWidth: 1,
+              },{
+              label: 'Menu Price',
+              data: this.menudata,
+              backgroundColor: 'rgba(167, 231, 231, 1)',
+              borderWidth: 1,
+              }
+            ]
           },
           options: {
-            responsive: false,
+            legend: {
+              labels:{
+                fontFamily:"'Scada', sans-serif"
+              },
+            },
+            responsive: true,
             scales: {
               yAxes: [{
+                stacked: true,
                 ticks: {
                   beginAtZero: true
                 }
+              }],
+              xAxes: [{
+
               }]
             }
           }
         })
-      }
+      })
     }
+  }
 
 
 
-    // --------------------AXIOS CONFIG --------------------------
-    function getCookie(name) {
-      var cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].trim();
-          // Does this cookie string begin with the name we want?
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
+  // --------------------AXIOS CONFIG --------------------------
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
         }
       }
-      return cookieValue;
     }
+    return cookieValue;
+  }
 
-    const instance = axios.create({
-      headers: {
-        'X-CSRFToken': getCookie("csrftoken"),
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    })
+  const instance = axios.create({
+    headers: {
+      'X-CSRFToken': getCookie("csrftoken"),
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  })
 
-    //  ----------------------------------VUE INSTANCE-----------------------------
-    let app = new Vue({
-      delimiters: ['[[', ']]'],
-      el: '#homeapp',
-      components: {
-        'menu-graph': menuGraph
-      },
-      data: {
-        cocktails: [],
-        deletedCocktails: [],
-        showModal: -1,
-        showDeleteModal: -1,
-        showCreateModal: false,
-        search: "",
-        modal_info: {
+  //  ----------------------------------VUE INSTANCE-----------------------------
+  let app = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#homeapp',
+    components: {
+      'menu-graph': menuGraph
+    },
+    data: {
+      cocktails: cocktails,
+      labels: [],
+      totaldata:[],
+      menudata:[],
+      backgroundColorTotal:[],
+      backgroundColorMenu:[],
+      deletedCocktails:[],
+      showModal: -1,
+      showDeleteModal: -1,
+      showCreateModal: false,
+      search: "",
+      modal_info: {
+        id: "",
+        name: "",
+        target: "",
+        shots: {
           id: "",
-          name: "",
-          target: "",
-          shots: {
-            id: "",
-            volume: "",
-            cost: "",
-            brandname: ""
-          },
-          portions: {
-            id: "",
-            amount: "",
-            cost: "",
-            name: ""
-          }
+          volume: "",
+          cost: "",
+          brandname: ""
         },
-        newCocktail: {
-          name: "",
-          target: 0,
+        portions: {
+          id: "",
+          amount: "",
+          unit:"",
+          cost: "",
+          name: ""
         }
       },
-      methods: {
-        deleteCocktail: function (id) {
-          this.deletedCocktails.push(id)
-          instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
-            .then(function (response) {
-            }).then(function (data) {
-              console.log("data is ok", data)
-            }).catch(function (ex) {
-              console.log('parsing failed', ex)
-            })
-
-          console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
-        },
-        modalAction: function (id) {
-          if (this.showModal === id) {
-            this.showModal = -1
-          }
-          else {
-            this.showModal = id
-          }
-        },
-        createModalAction: function () {
-          if (this.showCreateModal) {
-            this.showCreateModal = false
-          }
-          else {
-            this.showCreateModal = true
-          }
-        },
-        submitNewCocktail: function () {
-          instance.post('/api/cocktail/', {
-            name: this.newCocktail.name,
-            target_profit: this.newCocktail.target,
-          })
-            .then(res => {
-              window.location = `/cocktails/${res.data.id}/`
-            })
-            .catch(res => {
-              console.log(res)
-            })
-        }
-      },
-      computed: {
-        filteredCocktails: function () {
-          let filter_deleted = cocktails.filter((cocktail) => {
-            return !this.deletedCocktails.includes(cocktail.id) && cocktail.name.toUpperCase().match(this.search.toUpperCase())
-          })
-          return filter_deleted
-        }
+      newCocktail: {
+        name: "",
+        target: 0,
       }
-    })
-  </script>
+    },
+    methods: {
+      deleteCocktail: function (id) {
+        this.deletedCocktails.push(id)
+        instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
+          .then(function (response) {
+          }).then(function (data) {
+            console.log("data is ok", data)
+          }).catch(function (ex) {
+            console.log('parsing failed', ex)
+          })
 
-  {% endblock %}
+        console.log(`Haha, youre trying to delete cocktail ${id} but I didnt listen`)
+      },
+      modalAction: function (id) {
+        if (this.showModal === id) {
+          this.showModal = -1
+        }
+        else {
+          this.showModal = id
+        }
+      },
+      createModalAction: function () {
+        if (this.showCreateModal) {
+          this.showCreateModal = false
+        }
+        else {
+          this.showCreateModal = true
+        }
+      },
+      submitNewCocktail: function () {
+        instance.post('/api/cocktail/', {
+          name: this.newCocktail.name,
+          target_profit: this.newCocktail.target,
+        })
+          .then(res => {
+            window.location = `/cocktails/${res.data.id}/`
+          })
+          .catch(res => {
+            console.log(res)
+          })
+      }
+    },
+    computed: {
+      filteredCocktails: function () {
+        let filter_deleted = cocktails.filter((cocktail) => {
+          return !this.deletedCocktails.includes(cocktail.id) && cocktail.name.toUpperCase().match(this.search.toUpperCase())
+        })
+        return filter_deleted
+      }
+    },
+    mounted(){
+      for (let i = 0; i < this.cocktails.length; i++) {
+        this.labels.push(cocktails[i].name)
+        this.totaldata.push(cocktails[i].total)
+        this.menudata.push(cocktails[i].menu)
+      }
+    }
+  })
+</script>
+
+{% endblock %}
