@@ -5,12 +5,6 @@ BevDev Home
 
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vee-validate@<3.0.0/dist/vee-validate.js"></script>
-<script src="path/to/vue.js"></script>
-<script src="path/to/vee-validate.js"></script>
-<script>
-  Vue.use(VeeValidate)
-</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <script type='text/javascript'>
   const cocktails = {{ cocktails| safe }}
@@ -54,9 +48,8 @@ BevDev Home
           </div>
           <div class="vert-padding-3 wide-100">
             <label class="label-default" for="new-cocktail-target">Target Pour Cost %:</label>
-            <input class="input-default" v-validate="'min_value:1'" name="percentage" namev-model="newCocktail.target" type="new-cocktail-target" type="number" min="1"
-              max="100" placeholder="target percent of menu price" required>
-              <span>[[ errors.first('percentage') ]]</span>
+            <input class="input-default" v-model="newCocktail.target" type="new-cocktail-target" type="number" min="1"
+              max="100" oninput="validity.valid||(value='')" placeholder="target percent of menu price" required>
           </div>
           <button @click="submitNewCocktail" class="btn-alt">Submit</button>
           <button @click="createModalAction" class="btn">Exit</button>
@@ -248,7 +241,7 @@ BevDev Home
       },
       newCocktail: {
         name: "",
-        target: 0,
+        target: 18,
       }
     },
     methods: {
