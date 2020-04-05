@@ -12,8 +12,8 @@ from bs4 import BeautifulSoup
 class CocktailViewSet(viewsets.ModelViewSet):
     queryset = Cocktail.objects.all()
     serializer_class = CocktailSerializer
-    def get_queryset(self):
-        user = self.request.user
+    def perform_create(self, serializer):
+      return serializer.save(user=self.request.user)
 
 
 class SpiritViewSet(viewsets.ModelViewSet):
