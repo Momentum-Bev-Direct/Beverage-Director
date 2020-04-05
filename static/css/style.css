@@ -1,17 +1,16 @@
 :root{
-    --menu-item-bg: #1ef1fa;
+    --menu-item-bg: #00eaf2;
     --button_std: #f60282;
     --button_alt: #07fbb6;
     --stroke_purple: #6b15f1;
     --stroke_dark: #070708;
     --stroke_lighter: #53535f;
     --highlight_blue: #cdebeb;
-    --highlight_blue_darken:  #a7e7e7;
+    --highlight_blue_darken:  #9dfafe;
     --highlight_pink: #e8e2e5;
     --highlight_green: #cce8e0;
     --font_headline: 'Monoton', cursive;
     --font_body: 'Scada', sans-serif;
-
 }
 
 * {
@@ -36,7 +35,11 @@ form li {
 
 /* ---------------END GLOBALS ----------------*/
 /* ++++++++++++++++++++++++++++++++++++++++++ */
-
+.site-title{
+    font-family:var(--font_headline);
+    font-size: 4rem;
+    text-shadow: 3px 3px 10px var(--stroke_purple);
+}
 .header {
     color: white;
     background-color:var(--stroke_dark);
@@ -45,7 +48,9 @@ form li {
     font-family:var(--font_headline);
     font-size: 3rem;
     text-align: center;
-
+}
+.nav{
+    border-top: 1px solid var(--stroke_purple);
 }
 .header a{
     text-decoration: none;
@@ -53,7 +58,7 @@ form li {
 }
 
 .header a:hover {
-    color: var(--highlight_green);
+    color: var(--highlight_blue);
 }
 
 
@@ -311,7 +316,7 @@ form li {
     display: flex;
     width: 100%;
     min-width: 400px;
-    background-color: var(--highlight_blue);
+    background-color: var(--menu-item-bg);
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
@@ -350,13 +355,13 @@ form li {
 
 
 .fa-angle-double-left, .fa-angle-double-right {
-    color: var(--menu-item-bg);
+    color: var(--stroke_lighter);
     font-size: 4rem;
     text-shadow: -1px 1px 3px black;
 }
 
 .fa-angle-double-left:hover, .fa-angle-double-right:hover{
-    color: var(--stroke_lighter);
+    color: var(--stroke_dark);
 }
 
 .fa-window-close {
@@ -371,7 +376,7 @@ form li {
 
 .fa-plus-circle{
     color:var(--stroke_dark);
-    background-color: var(--button_alt);
+    /* background-color: var(--button_alt); */
     padding: .3rem;
     border-radius: 5px;
     box-shadow: -1px 1px 3px rgba(0, 0, 0);
@@ -383,10 +388,8 @@ form li {
     color:var(--stroke_dark);
     background-color: var(--button_std);
     padding: .3rem;
-    margin-top: 1rem;
     border-radius: 5px;
     box-shadow: -1px 1px 3px rgba(0, 0, 0);
-    align-content: center;
 }
 .fa-trash-alt:hover, .far:hover{
     color:var(--stroke_lighter);
@@ -584,6 +587,9 @@ form li {
 }
 .space-between {
     justify-content: space-between;
+}
+.space-evenly {
+    justify-content: space-evenly;
 }
 .center-butt {
     width: 40%;

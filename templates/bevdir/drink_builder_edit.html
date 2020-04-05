@@ -13,37 +13,34 @@ Drink Builder
 
 </script>
 <!---------------------------------BEGIN HTML --------------------------->
-<header class='header container space-between align-center'>
-  <!-- <p class='wide-10 logo height-100'>Logo</p> -->
-  <i class="fas fa-cocktail"></i>
-  <a class="wide-80 flex-col height-100" href="/">
-    <p class='site-title'>BevDev</p>
-  </a>
-  <div class='header-links text-white text-right wide-10 flex-col height-100'>
-    {% if user.is_authenticated %}
-    <div>
-      <p class="top-right">Logged in as: {{ user }} | <br> <a href="/accounts/logout/"> Logout </a></p>
+<div class='container flex-wrap flex-col wide-100' id='drink-edit'>
+  <header class='header container wide-100 space-between align-center'>
+    <!-- <p class='wide-20 logo height-100'>Logo</p> -->
+    <a class="wide-60 flex-col height-100" href="/">
+      <p class='site-title text-left'>BevDev</p>
+    </a>
+    <div class='header-links text-white align-center flex-end wide-20 flex height-100 text-right'>
+      {% if user.is_authenticated %}
+      <p class="">{{ user }} | <a href="/accounts/logout/"> Logout </a></p>
+      {% else %}
+      <a href="/accounts/register/"> Register </a>
+      |
+      <a href="/accounts/login/"> Log in </a>
+      {% endif %}
     </div>
-    {% else %}
-    <a href="/accounts/register/"> Register </a>
-    |
-    <a href="/accounts/login/"> Log in </a>
-    {% endif %}
-  </div>
-</header>
-<!------------------------------- HTML --------------------------------->
-<div class='container flex-wrap flex-col' id='drink-edit'>
-  <div class='top-bar'>
-    <h2 class='cocktail-name'>[[cocktail.name]]</h2>
-    <div id="drink-edit">
-
-    </div>
-  </div>
-  <div class='cost-bar default-shadow'>
-    <p class='target-cost'>Target Pour Percentage:</p>
-    <div class="input-contain">
-      <input id="target-percent" class="input-default" v-model="targetMargin" type="number" min="1" max="100"><label
-        for="target-percent">%</label>
+  </header>
+  <nav class="wide-100 dark-bg nav flex space-between pad-5">
+    <a href="/"><button class="btn">Home Page</button></a>
+    <i @click='modalAction()' class="fas btn fa-plus-circle"> Add Ingredient</i>
+    <div><i @click="submitPage" class="far fa-save fa-2x btn" data-fa-transform="right-8"> Save Cocktail</i></div>
+  </nav>
+  <!------------------------------- HTML --------------------------------->
+  <div class="cost-bar default-shadow space-evenly">
+    <h2 class="txt-1h bold pad-5">[[cocktail.name]]</h2>
+    <div class="flex">
+      <p class="txt-1h bold pad-5">Target Cost:</p>
+      <input id="target-percent" class="input-default wide-20 vert-margin-3" v-model="targetMargin" type="number" min="1"
+        max="100"><label class="txt-1h bold pad-5" for="target-percent">%</label>
     </div>
   </div>
   <div class='cost-sell-box default-shadow'>
@@ -65,15 +62,14 @@ Drink Builder
     </div>
   </div>
   <!---------------------------MODAL CODE--------------------------------------->
-  <div class="add-ingredient-button"><i @click='modalAction()' class="fas fa-plus-circle"> Add Ingredient</i></div>
+  <!-- <div class="add-ingredient-button"><i @click='modalAction()' class="fas fa-plus-circle"> Add Ingredient</i></div> -->
   <div v-if="modal" class=modal-bg>
     <div class="modal-container modal-lg just-cent align-base">
       <select class="wide-70 input-default white-bg" v-model="toAdd">
         <option value="shot">Select from ABC Stock</option>
         <option value="portion">Custom</option>
       </select>
-      <i @click='modalAction()' class="fas fa-window-close"></i>
-
+      <i @click='modalAction()' class="far fa-window-close"></i>
       <!-- <button  type="button" class="btn wide-20"> Close</button> -->
       <!-- Shot logic -->
       <div v-if="toAdd=='shot'">
@@ -108,13 +104,13 @@ Drink Builder
           <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient"
             type="text" placeholder="Name of ingredient" required />
           <label class="wide-30" for="portion-unit-cost">Price/oz: </label>
-          <input
-            class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit"
-            type="number" min="0" step=".01" required/>
+          <input class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit"
+            type="number" min="0" step=".01" required />
           <!-- <input class="wide-100 input-default white-bg" v-model="newPortion.unit" type="text" placeholder="unit"
-            title="ounces, grams, ml, etc." /> -->
-          <label class="wide-30" for="portion-starting-amt">Volume(oz):</label><input class="wide-70 input-default white-bg"
-            id="portion-starting-amt" v-model="newPortion.startingAmount" type="number" min="0" step=".25" required/>
+          title="ounces, grams, ml, etc." /> -->
+          <label class="wide-30" for="portion-starting-amt">Volume(oz):</label><input
+            class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount"
+            type="number" min="0" step=".25" />
           <button @click="createNewPortion" class="btn green-bg">SUBMIT</button>
         </form>
       </div>
@@ -122,23 +118,24 @@ Drink Builder
   </div>
   <!--------------------------END MODAL CODE--------------------------------------->
   <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
-    <shot-line v-bind:shot="shot" v-on:pricechange="updateCost"
-    v-on:volumechange="updateVolume" ref="shotSet"></shot-line>
+    <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" v-on:volumechange="updateVolume" ref="shotSet">
+    </shot-line>
   </div>
   <div v-if="newShots.length > 0">
     <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="menu-item default-shadow">
-      <shot-line v-bind:shot="shot" v-on:pricechange="updateCost"
-      v-on:volumechange="updateVolume" ref="shotSet"></shot-line>
+      <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" v-on:volumechange="updateVolume" ref="shotSet">
+      </shot-line>
     </div>
   </div>
   <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
-    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" 
-    v-on:volumechange="updateVolume"ref="portionSet"></portion-line>
+    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"
+      ref="portionSet"></portion-line>
   </div>
   <div v-for="portion in filterDeletedNewPortions" class="menu-item default-shadow">
-    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"ref="portionSet"></portion-line>
+    <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"
+      ref="portionSet"></portion-line>
   </div>
-  <div><i @click="submitPage" class="far fa-save green-bg fa-2x" data-fa-transform="right-8"> Save Cocktail</i></div>
+  <!-- <div><i @click="submitPage" class="far fa-save green-bg fa-2x" data-fa-transform="right-8"> Save Cocktail</i></div> -->
   <!-- <button @click="submitPage"class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button> -->
 </div>
 
@@ -217,7 +214,7 @@ Drink Builder
       },
       addVolume: function () {
         this.volume += 0.25
-        
+
       },
       subtractVolume: function () {
         if (this.volume <= 0) return

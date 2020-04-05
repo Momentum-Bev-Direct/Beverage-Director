@@ -30,7 +30,7 @@ BevDev Home
       {% endif %}
     </div>
   </header>
-  <nav class="wide-100 dark-bg flex space-between pad-5">
+  <nav class="wide-100 dark-bg nav flex space-between pad-5">
     <input type="text" v-model="search" placeholder="search"
       class="wide-70 input-default dark-bg text-white lt-placeholder" />
     <button class="btn wide-30" @click="createModalAction">New Cocktail</button>
@@ -136,12 +136,15 @@ BevDev Home
             datasets: [{
               label: 'Cost of Goods',
               data: this.totaldata,
-              backgroundColor: 'rgba(83, 83, 95, 1)',
+              backgroundColor: 'rgba(75, 83, 95, 1)',
+              // backgroundColor: 'rgba(167, 231, 231, 1)',
+              // backgroundColor: 'rgba(107, 21, 241, .6)',
               borderWidth: 1,
               },{
               label: 'Menu Price',
               data: this.menudata,
-              backgroundColor: 'rgba(167, 231, 231, 1)',
+              // backgroundColor: 'rgba(167, 231, 231, .6)',
+              backgroundColor: 'rgba(107, 21, 241, .8)',
               borderWidth: 1,
               }
             ]
