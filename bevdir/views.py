@@ -57,9 +57,11 @@ def homepage(request):
 
     for cocktail in cocktails:
         cocktail_dict = {}
-        cocktail_dict["id"]=cocktail.pk
+        cocktail_dict["id"]= cocktail.pk
         cocktail_dict["name"]= cocktail.name
         cocktail_dict["target"]= cocktail.target_profit
+        cocktail_dict["total"]= cocktail.total_cost
+        cocktail_dict["menu"]= cocktail.recommended_price
 
         cocktail_dict["shots"]= {
             str(shot.pk):{"volume":shot.volume, "cost": shot.cost, "brandname": shot.spirit.brandname} for shot in cocktail.shots.all()
