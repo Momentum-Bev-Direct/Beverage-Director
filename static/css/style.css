@@ -403,9 +403,7 @@ form li {
 
 .input-default{
     padding: 3px;
-    margin: 5px;
     border-radius: 5px;
-    background-color: var(--highlight_blue);
     font-size: 1rem;
     width: 60px;
     text-align: left;
