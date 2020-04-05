@@ -6,7 +6,7 @@
     --stroke_dark: #070708;
     --stroke_lighter: #53535f;
     --highlight_blue: #cdebeb;
-    --highlight_blue_darken:  #a7e7e7;;
+    --highlight_blue_darken:  #a7e7e7;
     --highlight_pink: #e8e2e5;
     --highlight_green: #cce8e0;
     --font_headline: 'Monoton', cursive;
@@ -509,7 +509,7 @@ form li {
 }
 
 .txt-h {
-    font-size: .5rem
+    font-size: .7rem
 }
 .txt-1 {
     font-size: 1rem;
@@ -652,7 +652,14 @@ form li {
 @media only screen and (max-width: 800px){
     .container {
         width: 100%;
-        margin: 5px;
+    }
+    .figure {
+        width: 100%
+    }
+    .half-page {
+        width: 100%;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 
 }

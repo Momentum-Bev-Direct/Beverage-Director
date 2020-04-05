@@ -192,22 +192,19 @@ class Cocktail(models.Model):
 
     @property
     def total_cost(self):
-        """
-        cost per ounce=mxb_price/(size*33.814)
-        cost per ounce* user input of volume = volume
-        =total cost
-        """
         total = 0
         for shot in self.shots.all():
             total += shot.cost
-        return total
+        for portion in self.portions.all():
+            total += portion.cost
+        return round(total,2)
 
     @property
     def recommended_price(self):
         """
         product of target_profit and total_cost
         """
-        rec_price = self.total_cost/self.target_profit
+        rec_price = round(self.total_cost/(self.target_profit/100),2)
         return rec_price
 
 
