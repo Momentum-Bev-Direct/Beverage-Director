@@ -1,5 +1,7 @@
 from django.db import models
 from users.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
+
 
 CATEGORIES = [
     {
@@ -185,7 +187,7 @@ class Cocktail(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    target_profit = models.IntegerField(default=0)
+    target_profit = models.IntegerField(default=20, validators=[MaxValueValidator(100), MinValueValidator(1)])
 
     def __str__(self):
         return f'{self.name}'
