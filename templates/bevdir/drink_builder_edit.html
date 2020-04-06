@@ -13,22 +13,7 @@ Drink Builder
 
 </script>
 <!---------------------------------BEGIN HTML --------------------------->
-<div class='container flex-wrap flex-col wide-100' id='drink-edit'>
-  <header class='header container wide-100 space-between align-center'>
-    <!-- <p class='wide-20 logo height-100'>Logo</p> -->
-    <a class="wide-60 flex-col height-100" href="/">
-      <p class='site-title text-left'>BevDev</p>
-    </a>
-    <div class='header-links text-white align-center flex-end wide-20 flex height-100 text-right'>
-      {% if user.is_authenticated %}
-      <p class="">{{ user }} | <a href="/accounts/logout/"> Logout </a></p>
-      {% else %}
-      <a href="/accounts/register/"> Register </a>
-      |
-      <a href="/accounts/login/"> Log in </a>
-      {% endif %}
-    </div>
-  </header>
+
   <nav class="wide-100 dark-bg nav flex space-between pad-5">
     <a href="/"><button class="btn">Home Page</button></a>
     <i @click='modalAction()' class="fas btn fa-plus-circle"> Add Ingredient</i>
@@ -100,7 +85,6 @@ Drink Builder
       </div>
       <!-- Portion logic  -->
       <div v-if="toAdd=='portion'">
-        <form>
           <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient"
             type="text" placeholder="Name of ingredient" required />
           <label class="wide-30" for="portion-unit-cost">Price/oz: </label>
@@ -112,7 +96,8 @@ Drink Builder
             class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount"
             type="number" min="0" step=".25" />
           <button @click="createNewPortion" class="btn green-bg">SUBMIT</button>
-        </form>
+
+        <!-- </form> -->
       </div>
     </div>
   </div>

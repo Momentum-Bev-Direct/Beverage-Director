@@ -225,6 +225,10 @@ form li {
     font-family: var(--font_body);
     color:white;
 }
+
+.splash-pic {
+    object-fit: contain;
+}
 /* REPLACE THE FOLLOWING AT SOME POINT: */
 .modal-mask {
     position: fixed;

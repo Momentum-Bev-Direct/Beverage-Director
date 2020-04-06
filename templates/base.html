@@ -19,6 +19,22 @@
 </head>
 
 <body>
+    <div class='container flex-wrap flex-col wide-100' id='drink-edit'>
+        <header class='header container wide-100 space-between align-center'>
+          <!-- <p class='wide-20 logo height-100'>Logo</p> -->
+          <a class="wide-60 flex-col height-100" href="/">
+            <p class='site-title text-left'>BevDev</p>
+          </a>
+          <div class='header-links text-white align-center flex-end wide-20 flex height-100 text-right'>
+            {% if user.is_authenticated %}
+            <p class="">{{ user }} | <a href="/accounts/logout/"> Logout </a></p>
+            {% else %}
+            <a href="/accounts/register/"> Register </a>
+            |
+            <a href="/accounts/login/"> Log in </a>
+            {% endif %}
+          </div>
+        </header>
     {% block content %}
     {% endblock content %}
 </body>
