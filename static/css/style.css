@@ -122,7 +122,7 @@ form li {
 }
 
 .ingredient-list {
-    background-color: red;
+    background-color:var(--stroke_lighter);
 }
 .dollars-in{
     color:green;
@@ -138,8 +138,10 @@ form li {
     border-top-right-radius: 5px;
     justify-content: center;
     align-items: baseline;
-    background-color: var(--button_alt);
+    background-color: var(--menu-item-bg);
     font-family: var(--font_body);
+    margin-top: 1rem;
+    margin-bottom:.2rem;
 }
 
 .target-cost {
@@ -159,7 +161,7 @@ form li {
     display: flex;
     justify-content: space-evenly;
     border-top: .25px solid var(--stroke_lighter);
-    background-color: rgb(226, 238, 229);
+    background-color:var(--stroke_lighter);
     padding: 1rem;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -176,13 +178,13 @@ form li {
 .ingredient-box {
     display: flex;
     flex-direction: column;
-    border: 5px dotted red;
     padding: 1rem;
     margin: 1.5rem;
-    background-color: var(--highlight_blue);
+    background-color: var(--stroke_purple);
     font-family: var(--font_body);
     background-blend-mode: color;
     border-radius: 10px;
+
 }
 .ingredient-title-line {
     display: flex;
@@ -374,16 +376,16 @@ form li {
     color: var(--stroke_dark);
 }
 
-.fa-plus-circle{
+/* .fa-plus-circle{
     color:var(--stroke_dark);
-    /* background-color: var(--button_alt); */
+    background-color: var(--button_alt);
     padding: .3rem;
     border-radius: 5px;
     box-shadow: -1px 1px 3px rgba(0, 0, 0);
 }
 .fa-plus-circle:hover {
     color:var(--stroke_lighter);
-}
+} */
 /* .far{
     color:var(--stroke_dark);
     background-color: var(--button_std);
