@@ -100,7 +100,6 @@ Drink Builder
       </div>
       <!-- Portion logic  -->
       <div v-if="toAdd=='portion'">
-        <form>
           <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient"
             type="text" placeholder="Name of Ingredient" required />
           <label class="wide-30" for="portion-unit-cost">Price/oz: </label>
@@ -112,7 +111,6 @@ Drink Builder
             class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount"
             type="number" min="0" step=".25" />
           <button @click="createNewPortion" class="btn-alt green-bg">SUBMIT</button>
-        </form>
       </div>
     </div>
   </div>
