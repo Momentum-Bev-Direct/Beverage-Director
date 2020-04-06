@@ -31,9 +31,9 @@ BevDev Home
     </div>
   </header>
   <nav class="wide-100 dark-bg nav flex space-between pad-5">
-    <input type="text" v-model="search" placeholder="search"
+    <input type="text" v-model="search" placeholder="Search"
       class="wide-70 input-default dark-bg text-white lt-placeholder" />
-    <button class="btn wide-30" @click="createModalAction">New Cocktail</button>
+    <button class="btn wide-30 txt-1" @click="createModalAction"> <i class="fas fa-cocktail"> </i> NEW COCKTAIL</button>
   </nav>
 
   <!------NEW COCKTAIL MODAL------->
@@ -43,47 +43,47 @@ BevDev Home
         <form class="wide-100 flex flex-wrap flex-start align-center">
           <p class="wide-100 bold">Create a Cocktail</p>
           <div class="vert-padding-3 wide-100">
-            <label for="new-cocktail-name" class="label-default">Name:</label>
-            <input class="input-default" v-model="newCocktail.name" id="new-cocktail-name" placeholder="cocktail name" required>
+            <label for="new-cocktail-name" class="label-default txt-1">Name:</label>
+            <input class="input-default" v-model="newCocktail.name" id="new-cocktail-name" placeholder="Cocktail Name"
+              required>
           </div>
           <div class="vert-padding-3 wide-100">
-            <label class="label-default" for="new-cocktail-target">Target Pour Cost %:</label>
+            <label class="label-default txt-1" for="new-cocktail-target">Target Cost %:</label>
             <input class="input-default" v-model="newCocktail.target" type="new-cocktail-target" type="number" min="1"
               max="100" oninput="validity.valid||(value='')" placeholder="target percent of menu price" required>
           </div>
-          <button @click="submitNewCocktail" class="btn-alt">Submit</button>
-          <button @click="createModalAction" class="btn">Exit</button>
+          <button @click="submitNewCocktail" class="btn-alt">SUBMIT</button>
+          <i @click="createModalAction" class="far fa-window-close flex flex-end-self"></i>
         </form>
       </div>
     </div>
-  <!------------------------MENU ITEMS---------------------->
+    <!------------------------MENU ITEMS---------------------->
     <p class="text-center bold txt-1h vert-padding-3">Your Drink Menu</p>
     <div v-for="cocktail in filteredCocktails">
       <div v-bind:id="cocktail.id" @click="modalAction(cocktail.id)"
         class="menu-item hover-blue-dark wide-100 flex-wrap default-shadow">
         <p class="bold wide-80">[[ cocktail.name ]]</p>
-        <div class="wide-20"v-if="showModal==cocktail.id">
-          <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn">EDIT</button></a>
-          <button v-if="showModal==cocktail.id" @click="showDeleteModal=(cocktail.id)" class="btn">DELETE</button>
+        <div class="wide-25" v-if="showModal==cocktail.id">
+          <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn"><i class="fas fa-edit"></i> EDIT</button></a>
+          <button v-if="showModal==cocktail.id" @click="showDeleteModal=(cocktail.id)" class="btn"><i class="fas fa-trash-alt"></i> DELETE</button>
         </div>
-          <!-- hidden items  -->
-          <div class="wide-100 flex vert-padding-10" v-if="showModal==cocktail.id">
-            <div class="wide-50 height-100">
-              <p class="txt-h bold">Spirits</p>
-              <ul class='ingredient-ul'>
-                <li class="txt-h"v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
-              </ul>
-            </div>
-            <div class="wide-50 height-100 ">
-              <p class="txt-h bold">Mixers</p>
-              <ul class='ingredient-ul'>
-                <li class="txt-h" v-for="portion in cocktail.portions">
-                  [[ portion.amount ]] oz of [[ portion.name ]]</li>
-              </ul>
-            </div>
-
-            <!-- <button @click="showModal=-1" class="btn">CLOSE</button> -->
+        <!-- hidden items  -->
+        <div class="wide-100 flex vert-padding-10" v-if="showModal==cocktail.id">
+          <div class="wide-50 height-100">
+            <p class="txt-h bold">Spirits</p>
+            <ul class='ingredient-ul'>
+              <li class="txt-h" v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
+            </ul>
           </div>
+          <div class="wide-50 height-100 ">
+            <p class="txt-h bold">Mixers</p>
+            <ul class='ingredient-ul'>
+              <li class="txt-h" v-for="portion in cocktail.portions">
+                [[ portion.amount ]] oz of [[ portion.name ]]</li>
+            </ul>
+          </div>
+
+        </div>
       </div>
       <!-- DELETE CONFIRMATION MODAL -->
       <div v-if="showDeleteModal==cocktail.id" class="modal-bg">
@@ -108,7 +108,7 @@ BevDev Home
   let menuGraph = {
     delimiters: ['[[', ']]'],
     props: {
-      'labels':Array,
+      'labels': Array,
       'totaldata': Array,
       'menudata': Array,
     },
@@ -116,7 +116,7 @@ BevDev Home
       return {
         labels: "",
         totaldata: "",
-        menudata:"",
+        menudata: "",
       }
     },
     template: `
@@ -140,19 +140,19 @@ BevDev Home
               // backgroundColor: 'rgba(167, 231, 231, 1)',
               // backgroundColor: 'rgba(107, 21, 241, .6)',
               borderWidth: 1,
-              },{
+            }, {
               label: 'Menu Price',
               data: this.menudata,
               // backgroundColor: 'rgba(167, 231, 231, .6)',
               backgroundColor: 'rgba(107, 21, 241, .8)',
               borderWidth: 1,
-              }
+            }
             ]
           },
           options: {
             legend: {
-              labels:{
-                fontFamily:"'Scada', sans-serif"
+              labels: {
+                fontFamily: "'Scada', sans-serif"
               },
             },
             responsive: true,
@@ -165,10 +165,10 @@ BevDev Home
               }],
               xAxes: [{
                 ticks: {
-                    // Include a dollar sign in the ticks
-                    callback: function(value, index, values) {
-                        return '$' + value;
-                    }
+                  // Include a dollar sign in the ticks
+                  callback: function (value, index, values) {
+                    return '$' + value;
+                  }
                 }
               }]
             }
@@ -215,11 +215,11 @@ BevDev Home
     data: {
       cocktails: cocktails,
       labels: [],
-      totaldata:[],
-      menudata:[],
-      backgroundColorTotal:[],
-      backgroundColorMenu:[],
-      deletedCocktails:[],
+      totaldata: [],
+      menudata: [],
+      backgroundColorTotal: [],
+      backgroundColorMenu: [],
+      deletedCocktails: [],
       showModal: -1,
       showDeleteModal: -1,
       showCreateModal: false,
@@ -237,7 +237,7 @@ BevDev Home
         portions: {
           id: "",
           amount: "",
-          unit:"",
+          unit: "",
           cost: "",
           name: ""
         }
@@ -297,7 +297,7 @@ BevDev Home
         return filter_deleted
       }
     },
-    mounted(){
+    mounted() {
       for (let i = 0; i < this.cocktails.length; i++) {
         this.labels.push(cocktails[i].name)
         this.totaldata.push(cocktails[i].total)

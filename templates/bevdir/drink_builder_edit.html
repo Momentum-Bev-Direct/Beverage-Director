@@ -29,14 +29,14 @@ Drink Builder
       {% endif %}
     </div>
   </header>
-  <nav class="wide-100 dark-bg nav flex space-between pad-5">
-    <a href="/"><button class="btn">Home Page</button></a>
-    <i @click='modalAction()' class="fas btn fa-plus-circle"> Add Ingredient</i>
-    <div><i @click="submitPage" class="far fa-save fa-2x btn" data-fa-transform="right-8"> Save Cocktail</i></div>
+  <nav class="wide-100 dark-bg nav flex pad-5">
+    <a href="/"><button class="btn flex-start"><i class="fas fa-home"></i>HOME PAGE</button></a>
+    <button @click='modalAction()' class= "btn-alt flex-end "><i class="fas fa-plus-circle"></i> ADD INGREDIENT</button>
+    <button @click="submitPage" class="btn-alt txt-1 flex-end " ><i class="far fa-save "></i> SAVE COCKTAIL</button>
   </nav>
   <!------------------------------- HTML --------------------------------->
   <div class="cost-bar default-shadow space-evenly">
-    <h2 class="txt-1h bold pad-5">[[cocktail.name]]</h2>
+    <h2 class="txt-2 bold pad-5">[[cocktail.name]]</h2>
     <div class="flex">
       <p class="txt-1h bold pad-5">Target Cost:</p>
       <input id="target-percent" class="input-default wide-20 vert-margin-3" v-model="targetMargin" type="number" min="1"
@@ -96,13 +96,13 @@ Drink Builder
           <option class="vert-margin-3" v-for="spirit in filteredSpirits" v-bind:value="spirit.id"
             class="wide-100 white-bg">[[ spirit.brandname ]]: $ [[ spirit.cost ]] per oz </option>
         </select>
-        <i @click='createNewShot' class="fas fa-plus-circle"> Add</i>
+        <button @click="createNewShot" class="btn-alt green-bg">SUBMIT</button>
       </div>
       <!-- Portion logic  -->
       <div v-if="toAdd=='portion'">
         <form>
           <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient"
-            type="text" placeholder="Name of ingredient" required />
+            type="text" placeholder="Name of Ingredient" required />
           <label class="wide-30" for="portion-unit-cost">Price/oz: </label>
           <input class="wide-70 input-default white-bg" id="portion-unit-cost" v-model="newPortion.costPerUnit"
             type="number" min="0" step=".01" required />
@@ -111,32 +111,33 @@ Drink Builder
           <label class="wide-30" for="portion-starting-amt">Volume(oz):</label><input
             class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount"
             type="number" min="0" step=".25" />
-          <button @click="createNewPortion" class="btn green-bg">SUBMIT</button>
+          <button @click="createNewPortion" class="btn-alt green-bg">SUBMIT</button>
         </form>
       </div>
     </div>
   </div>
   <!--------------------------END MODAL CODE--------------------------------------->
-  <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="menu-item default-shadow">
+  <div class= "ingredient-list"><div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="ingredient-box vert-margin-10 default-shadow">
     <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" v-on:volumechange="updateVolume" ref="shotSet">
     </shot-line>
   </div>
   <div v-if="newShots.length > 0">
-    <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="menu-item default-shadow">
+    <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="ingredient-box vert-margin-10 default-shadow">
       <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" v-on:volumechange="updateVolume" ref="shotSet">
       </shot-line>
     </div>
   </div>
-  <div v-for="portion in filterDeletedPortions" class="menu-item default-shadow">
+  <div v-for="portion in filterDeletedPortions" class="ingredient-box vert-margin-10 default-shadow">
     <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"
       ref="portionSet"></portion-line>
   </div>
-  <div v-for="portion in filterDeletedNewPortions" class="menu-item default-shadow">
+  <div v-for="portion in filterDeletedNewPortions" class="ingredient-box vert-margin-10 default-shadow">
     <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"
       ref="portionSet"></portion-line>
   </div>
   <!-- <div><i @click="submitPage" class="far fa-save green-bg fa-2x" data-fa-transform="right-8"> Save Cocktail</i></div> -->
   <!-- <button @click="submitPage"class='btn green-bg default-shadow vert-margin-10 text-dark' type="button">SAVE</button> -->
+</div>
 </div>
 
 <script>
@@ -192,7 +193,7 @@ Drink Builder
           <p class="bold">Pour Volume: [[ volume ]] oz</p>
           </div>
           <p class="wide-100 text-center">Cost of pour: $ <span class="ingredient-cost">[[ pourCost ]]</span></p>
-          <div> <i v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="btn default-shadow fas fa-trash-alt" data-fa-transform="grow-7 right-6"></i></div>
+          <button v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="btn default-shadow"> <i class="fas fa-trash-alt" data-fa-transform="grow-8 right-6"></i> DELETE</button>
           </div>
         <div class="menu-input text-center">
           <i @click="addVolume" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
@@ -586,7 +587,7 @@ Drink Builder
             runningPrice += parseFloat(allPortions[i].amountCost)
           }
         }
-        this.totalPrice = runningPrice
+       this.totalPrice = runningPrice
       })
     }
   })
