@@ -102,6 +102,8 @@ BevDev Home
     <p>Average Pour Cost: [[ averageTargetCost]]% </p>
     <p>Average Menu Price: $[[ averagePrice]] </p>
     <p>Average Net Profit: $[[averageNetProfit]] </p>
+    <p>Average Cost of Goods: $[[averageCostOfGoods]]</p>
+    <p>Average Profit Margin: [[averageProfitMargin]]%</p>
   </div> 
 </div>
 <!---------------------------MENU STATS/FIGURE?--------------------->
@@ -336,6 +338,22 @@ BevDev Home
 
         }
         return (total / this.cocktails.length).toFixed(2)
+      }, 
+      averageCostOfGoods: function () {
+        total = 0
+        let filterDeleted = this.getFilteredCocktails()
+        for (cocktail in filterDeleted) {
+          total += this.cocktails[cocktail].total
+        }
+        return (total / this.cocktails.length).toFixed(2)
+      },
+      averageProfitMargin: function () {
+        total = 0 
+        let filterDeleted = this.getFilteredCocktails()
+        for (cocktail in filterDeleted) {
+          total += ((this.cocktails[cocktail].menu - this.cocktails[cocktail].total) / this.cocktails[cocktail].menu) * 100
+        }
+        return (total / this.cocktails.length).toFixed(0)
       }
     },
     mounted() {
