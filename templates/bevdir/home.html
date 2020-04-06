@@ -87,6 +87,16 @@ BevDev Home
   <div class="wide-50 pad-5 half-page bg-fill-gray">
     <menu-graph v-bind:labels="labels" v-bind:totaldata="totaldata" v-bind:menudata="menudata"></menu-graph>
   </div>
+  <div>
+    <p>Chart 1</p>
+    <p>Average Pour Cost: [[ averageTargetCost]]% </p>
+    <p>Average Profit Margin: [[averageProfitMargin]]%</p>
+    <p>Chart 2</p>
+    <p>Average Menu Price: $[[ averagePrice]] </p>
+    <p>Average Net Profit: $[[averageNetProfit]] </p>
+    <p>Average Cost of Goods: $[[averageCostOfGoods]]</p>
+   
+  </div> 
 </div>
 <!---------------------------MENU STATS/FIGURE?--------------------->
 <footer></footer>
@@ -276,6 +286,12 @@ BevDev Home
           .catch(res => {
             console.log(res)
           })
+      },
+      getFilteredCocktails: function() {
+        let filter_deleted = cocktails.filter((cocktail) => {
+          return !this.deletedCocktails.includes(cocktail.id) && cocktail.name.toUpperCase().match(this.search.toUpperCase())
+        })
+        return filter_deleted
       }
     },
     computed: {
@@ -284,6 +300,52 @@ BevDev Home
           return !this.deletedCocktails.includes(cocktail.id) && cocktail.name.toUpperCase().match(this.search.toUpperCase())
         })
         return filter_deleted
+      },
+      averageTargetCost: function () {
+        total = 0
+        let filterDeleted = this.getFilteredCocktails()
+        for (cocktail in filterDeleted) {
+          total += (this.cocktails[cocktail].target)
+
+        }
+        return (total / this.cocktails.length).toFixed(0)
+      },
+      averagePrice: function () {
+        total = 0
+        let filterDeleted = this.getFilteredCocktails()
+
+        for (cocktail in filterDeleted) {
+          total += this.cocktails[cocktail].menu
+          console.log(this.cocktails[cocktail])
+
+        }
+        return (total / this.cocktails.length).toFixed(2)
+      },
+      averageNetProfit: function () {
+        total = 0
+        let filterDeleted = this.getFilteredCocktails()
+        for (cocktail in filterDeleted) {
+          total += (this.cocktails[cocktail].menu - this.cocktails[cocktail].total)
+          console.log(this.cocktails[cocktail])
+
+        }
+        return (total / this.cocktails.length).toFixed(2)
+      }, 
+      averageCostOfGoods: function () {
+        total = 0
+        let filterDeleted = this.getFilteredCocktails()
+        for (cocktail in filterDeleted) {
+          total += this.cocktails[cocktail].total
+        }
+        return (total / this.cocktails.length).toFixed(2)
+      },
+      averageProfitMargin: function () {
+        total = 0 
+        let filterDeleted = this.getFilteredCocktails()
+        for (cocktail in filterDeleted) {
+          total += ((this.cocktails[cocktail].menu - this.cocktails[cocktail].total) / this.cocktails[cocktail].menu) * 100
+        }
+        return (total / this.cocktails.length).toFixed(0)
       }
     },
     mounted() {
