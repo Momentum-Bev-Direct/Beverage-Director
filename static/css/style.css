@@ -180,7 +180,7 @@ form li {
     padding: 1rem;
     margin: 1.5rem;
     background-color: var(--highlight_blue);
-    font-family: var(--font_cursive_1);
+    font-family: var(--font_body);
     background-blend-mode: color;
     border-radius: 10px;
 }
@@ -289,7 +289,7 @@ form li {
 .btn {
     font-family: var(--font_body);
     background-color: var(--button_std);
-    color:var(--highlight_pink);
+    color:var(--stroke_lighter);
     padding: .3rem;
     border-radius: 5px;
     border: none;
@@ -365,13 +365,13 @@ form li {
 }
 
 .fa-window-close {
-    color: var(--button_std);
-    font-size: 2rem;
-    float: right;
+    color: var(--stroke_lighter);
+    font-size: 1.5rem;
+    float:right;
 }
 
 .fa-window-close:hover {
-    color: var(--stroke_lighter);
+    color: var(--stroke_dark);
 }
 
 .fa-plus-circle{
@@ -384,12 +384,12 @@ form li {
 .fa-plus-circle:hover {
     color:var(--stroke_lighter);
 }
-.far{
+/* .far{
     color:var(--stroke_dark);
     background-color: var(--button_std);
     padding: .3rem;
     border-radius: 5px;
-    box-shadow: -1px 1px 3px rgba(0, 0, 0);
+    box-shadow: -1px 1px 3px rgba(0, 0, 0); */
 }
 .fa-trash-alt:hover, .far:hover{
     color:var(--stroke_lighter);
