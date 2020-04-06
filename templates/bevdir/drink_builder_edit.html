@@ -110,7 +110,7 @@ Drink Builder
         </shot-line>
       </div>
       <div v-if="newShots.length > 0">
-        <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="ingredient-box round-corners vert-margin-10 wide-100 pad-5">
+        <div v-for="shot in filterDeletedNewShots" v-bind:key="shot.id" class="ingredient-box round-corners vert-margin-10 wide-100 pad-5 default-shadow">
           <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" v-on:volumechange="updateVolume" ref="shotSet">
           </shot-line>
         </div>
@@ -118,11 +118,11 @@ Drink Builder
     </div>
     <div class="sub-ingredient">
       <p class="wide-100 text-center btm-border-gray">Mixers</p>
-      <div v-for="portion in filterDeletedPortions" class="ingredient-box round-corners vert-margin-10 wide-100 pad-5">
+      <div v-for="portion in filterDeletedPortions" class="ingredient-box round-corners vert-margin-10 wide-100 pad-5 default-shadow">
         <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"
           ref="portionSet"></portion-line>
       </div>
-      <div v-for="portion in filterDeletedNewPortions" class="ingredient-box round-corners vert-margin-10 wide-100 pad-5">
+      <div v-for="portion in filterDeletedNewPortions" class="ingredient-box round-corners vert-margin-10 wide-100 pad-5 default-shadow">
         <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"
           ref="portionSet"></portion-line>
       </div>

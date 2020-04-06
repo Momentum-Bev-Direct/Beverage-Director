@@ -59,7 +59,7 @@ i {
     text-align: center;
 }
 .nav{
-    border-top: 1px solid var(--stroke_purple);
+    /* border-top: 1px solid var(--stroke_purple); */
 }
 .header a{
     text-decoration: none;
@@ -132,7 +132,7 @@ i {
 
 .ingredient-list {
     margin: 5px;
-    background-color:var(--highlight_blue_darken);
+    background-color:var(--fill-gray);
     padding-bottom: 5px;
 }
 .dollars-in{
@@ -181,7 +181,7 @@ i {
 .ingredient-box {
     display: flex;
     flex-direction: column;
-    background-color: var(--fill-gray);
+    background-color: var(--menu-item-bg);
     font-family: var(--font_body);
 }
 
@@ -358,13 +358,13 @@ i {
 
 /* ----------------ICONS ------------------*/
 .fa-angle-double-left, .fa-angle-double-right {
-    color: var(--stroke_dark);
+    color: var(--button_std);
     font-size: 4rem;
     text-shadow: -1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .fa-angle-double-left:hover, .fa-angle-double-right:hover{
-    color: var(--button_alt);
+    color: var(--stroke_purple);
 }
 
 .fa-window-close {
