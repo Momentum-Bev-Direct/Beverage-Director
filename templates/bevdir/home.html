@@ -292,6 +292,12 @@ BevDev Home
           .catch(res => {
             console.log(res)
           })
+      },
+      getFilteredCocktails: function() {
+        let filter_deleted = cocktails.filter((cocktail) => {
+          return !this.deletedCocktails.includes(cocktail.id) && cocktail.name.toUpperCase().match(this.search.toUpperCase())
+        })
+        return filter_deleted
       }
     },
     computed: {
@@ -303,10 +309,8 @@ BevDev Home
       },
       averageTargetCost: function () {
         total = 0
-        let filter_deleted = cocktails.filter((cocktail) => {
-          return !this.deletedCocktails.includes(cocktail.id) && cocktail.name.toUpperCase().match(this.search.toUpperCase())
-        })
-        for (cocktail in filter_deleted) {
+        let filterDeleted = this.getFilteredCocktails()
+        for (cocktail in filterDeleted) {
           total += (this.cocktails[cocktail].target)
 
         }
@@ -314,10 +318,9 @@ BevDev Home
       },
       averagePrice: function () {
         total = 0
-        let filter_deleted = cocktails.filter((cocktail) => {
-          return !this.deletedCocktails.includes(cocktail.id) && cocktail.name.toUpperCase().match(this.search.toUpperCase())
-        })
-        for (cocktail in filter_deleted) {
+        let filterDeleted = this.getFilteredCocktails()
+
+        for (cocktail in filterDeleted) {
           total += this.cocktails[cocktail].menu
           console.log(this.cocktails[cocktail])
 
@@ -326,10 +329,8 @@ BevDev Home
       },
       averageNetProfit: function () {
         total = 0
-        let filter_deleted = cocktails.filter((cocktail) => {
-          return !this.deletedCocktails.includes(cocktail.id) && cocktail.name.toUpperCase().match(this.search.toUpperCase())
-        })
-        for (cocktail in filter_deleted) {
+        let filterDeleted = this.getFilteredCocktails()
+        for (cocktail in filterDeleted) {
           total += (this.cocktails[cocktail].menu - this.cocktails[cocktail].total)
           console.log(this.cocktails[cocktail])
 
