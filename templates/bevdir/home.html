@@ -19,7 +19,7 @@ BevDev Home
   <nav class="wide-100 dark-bg nav flex align-center space-between pad-3">
     <input type="text" v-model="search" placeholder="Search"
       class="wide-70 dark-bg text-white txt-1 border-none outline-none lt-placeholder pad-5" />
-    <div class="btn-alt wide-50 txt-1 text-center" @click="createModalAction"> <i class="fas fa-cocktail"> </i> NEW COCKTAIL</div>
+    <div class="btn-alt wide-50 txt-1 text-center pointer" @click="createModalAction"> <i class="fas fa-cocktail pointer"> </i> NEW COCKTAIL</div>
   </nav>
 
   <!------NEW COCKTAIL MODAL------->
@@ -54,7 +54,7 @@ BevDev Home
         <p class="bold wide-80">[[ cocktail.name ]]</p>
         <div class="wide-20 flex flex-end" v-if="showModal==cocktail.id">
           <a v-bind:href="`/cocktails/${cocktail.id}`"><i class="fas fa-edit"></i></a>
-          <i class="fas fa-trash-alt txt-1" v-if="showModal==cocktail.id" @click="showDeleteModal=(cocktail.id)"></i>
+          <i class="fas fa-trash-alt txt-1 pointer" v-if="showModal==cocktail.id" @click="showDeleteModal=(cocktail.id)"></i>
         </div>
         <!-- hidden items  -->
         <div class="wide-100 flex vert-padding-10" v-if="showModal==cocktail.id">
@@ -85,25 +85,80 @@ BevDev Home
     </div>
   </div>
   <div class="wide-50 pad-5 half-page bg-fill-gray">
-    <menu-graph v-bind:labels="labels" v-bind:totaldata="totaldata" v-bind:menudata="menudata"></menu-graph>
+    <div class="wide-100 text-center">
+      <input v-model="chartOption" id="select-bar" type="radio" value="bar" name="chart" checked><label class="pad-5"for="select-bar">Bar Chart</label>
+      <input v-model="chartOption" id="select-pie" type="radio" value="pie" name="chart"><label class="pad-5"for="select-pie">Pie Chart</label>
+    </div>
+    <menu-graph v-if="chartOption=='bar'"v-bind:labels="labels" v-bind:totaldata="totaldata" v-bind:menudata="menudata"></menu-graph>
+    <pie-charts
+      v-if="chartOption=='pie'"
+      v-bind:avgpourcost="averageTargetCost"
+      v-bind:avgprofitmargin="averageProfitMargin"
+      v-bind:avgmenuprice="averagePrice"
+      v-bind:avgnetprofit="averageNetProfit"
+      v-bind:avgcostofgoods="averageCostOfGoods">
+    </pie-charts>
   </div>
-  <div>
-    <p>Chart 1</p>
-    <p>Average Pour Cost: [[ averageTargetCost]]% </p>
-    <p>Average Profit Margin: [[averageProfitMargin]]%</p>
-    <p>Chart 2</p>
-    <p>Average Menu Price: $[[ averagePrice]] </p>
-    <p>Average Net Profit: $[[averageNetProfit]] </p>
-    <p>Average Cost of Goods: $[[averageCostOfGoods]]</p>
-   
-  </div> 
 </div>
 <!---------------------------MENU STATS/FIGURE?--------------------->
 <footer></footer>
 {% endif %}
 <!----------------------END HTML/START AXIOS CONFIG ------------------------->
 <script>
+  let pieCharts = {
+    delimiters: ['[[', ']]'],
+    props: {
+      'avgpourcost': Number,
+      'avgprofitmargin': Number,
+      'avgmenuprice': Number,
+      'avgnetprofit': Number,
+      'avgcostofgoods': Number,
+    },
+    data: function(){
+      return {
+        labels: ["Average Target", "Average Margin", "Cost of Goods", "Menu Price", "Net Profit"]
+      }
+    },
+    template:`
+    <div class="wide-100 figure">
+      <canvas class="figure-sm" id="pie-1" width="400" height="200"></canvas>
+      <canvas class="figure-sm" id="pie-2" width="400" height="200"></canvas>
+    </div>
+    `,
+    mounted(){
+      this.$nextTick(()=>{
+        let canvas1 = document.getElementById('pie-1').getContext('2d')
+        let piechart1 = new Chart(canvas1,{
+          type: 'doughnut',
+          data: {
+            datasets: [{
+              data: [ this.avgpourcost, this.avgprofitmargin ],
+              backgroundColor:['rgba(7, 251, 182, 1)','rgba(107, 21, 241, .8)'],
+            }],
+            labels:["Average Target [%]", "Average Margin [%]"],
+          },
 
+          options: {
+
+          }
+        })
+        let canvas2 = document.getElementById('pie-2').getContext('2d')
+        let piechart2 = new Chart(canvas2,{
+          type: 'doughnut',
+          data: {
+            datasets: [{
+              data: [this.avgcostofgoods, this.avgmenuprice, this.avgnetprofit],
+              backgroundColor:['rgba(75, 83, 95, 1)','rgba(0, 234, 242, 1)','rgba(246, 2, 130, 1)'],
+            }],
+            labels:["Cost of Goods [$]", "Menu Price [$]", "Net Profit [$]"],
+          },
+          options: {
+
+          }
+        })
+      })
+    }
+  }
   let menuGraph = {
     delimiters: ['[[', ']]'],
     props: {
@@ -122,8 +177,7 @@ BevDev Home
         <div class="wide-100 figure">
           <canvas class="figure" id="my-menu-stats" width="400" height="400"></canvas>
         </div>
-      `
-    ,
+      `,
     mounted() {
       let pink = 'rgba(246, 2, 130, 1)'
       this.$nextTick(() => {
@@ -209,10 +263,12 @@ BevDev Home
     delimiters: ['[[', ']]'],
     el: '#homeapp',
     components: {
-      'menu-graph': menuGraph
+      'menu-graph': menuGraph,
+      'pie-charts': pieCharts,
     },
     data: {
       cocktails: cocktails,
+      chartOption:"bar",
       labels: [],
       totaldata: [],
       menudata: [],
@@ -330,7 +386,7 @@ BevDev Home
 
         }
         return (total / this.cocktails.length).toFixed(2)
-      }, 
+      },
       averageCostOfGoods: function () {
         total = 0
         let filterDeleted = this.getFilteredCocktails()
@@ -340,7 +396,7 @@ BevDev Home
         return (total / this.cocktails.length).toFixed(2)
       },
       averageProfitMargin: function () {
-        total = 0 
+        total = 0
         let filterDeleted = this.getFilteredCocktails()
         for (cocktail in filterDeleted) {
           total += ((this.cocktails[cocktail].menu - this.cocktails[cocktail].total) / this.cocktails[cocktail].menu) * 100
