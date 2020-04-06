@@ -15,45 +15,34 @@ BevDev Home
 <!---------------------------BEGIN MAIN---------------->
 {% if user.is_authenticated %}
 <div id='homeapp' class="container wide-100 flex-wrap">
-  <header class='header container wide-100 space-between align-center'>
-    <!-- <p class='wide-20 logo height-100'>Logo</p> -->
-    <a class="wide-60 flex-col height-100" href="/">
-      <p class='site-title text-left'>BevDev</p>
-    </a>
-    <div class='header-links text-white align-center flex-end wide-20 flex height-100 text-right'>
-      {% if user.is_authenticated %}
-      <p class="">{{ user }} | <a href="/accounts/logout/"> Logout </a></p>
-      {% else %}
-      <a href="/accounts/register/"> Register </a>
-      |
-      <a href="/accounts/login/"> Log in </a>
-      {% endif %}
-    </div>
-  </header>
-  <nav class="wide-100 dark-bg nav flex space-between pad-5">
+
+  <nav class="wide-100 dark-bg nav flex align-center space-between pad-3">
     <input type="text" v-model="search" placeholder="Search"
-      class="wide-70 input-default dark-bg text-white lt-placeholder" />
-    <button class="btn wide-30 txt-1" @click="createModalAction"> <i class="fas fa-cocktail"> </i> NEW COCKTAIL</button>
+      class="wide-70 dark-bg text-white txt-1 border-none outline-none lt-placeholder pad-5" />
+    <div class="btn-alt wide-50 txt-1 text-center" @click="createModalAction"> <i class="fas fa-cocktail"> </i> NEW COCKTAIL</div>
   </nav>
 
   <!------NEW COCKTAIL MODAL------->
-  <div class="wide-50 half-page">
+  <div class="wide-50 half-page pad-5 bg-fill-gray">
     <div v-if="showCreateModal" class="modal-bg">
-      <div class="wide-40 min-400 center-auto round-corners pad-10 blue-bg flex default-shadow">
+      <div class="wide-40 min-400 center-auto bg-fill-gray round-corners default-shadow flex flex-wrap pad-10">
+        <div class="flex wide-100 space-between">
+        <p class="wide-90 txt-1h bold">Create a Cocktail</p>
+        <i @click="createModalAction" class="wide-10 text-right far fa-window-close"></i>
+        </div>
         <form class="wide-100 flex flex-wrap flex-start align-center">
-          <p class="wide-100 bold">Create a Cocktail</p>
-          <div class="vert-padding-3 wide-100">
-            <label for="new-cocktail-name" class="label-default txt-1">Name:</label>
+          <div class="wide-100 flex flex-wrap flex-start">
+            <label for="new-cocktail-name" class="label-default">Name:</label>
             <input class="input-default" v-model="newCocktail.name" id="new-cocktail-name" placeholder="Cocktail Name"
               required>
           </div>
-          <div class="vert-padding-3 wide-100">
-            <label class="label-default txt-1" for="new-cocktail-target">Target Cost %:</label>
+          <div class="wide-100 flex flex-wrap flex-start">
+            <label class="label-default" for="new-cocktail-target">Target Cost %:</label>
             <input class="input-default" v-model="newCocktail.target" type="new-cocktail-target" type="number" min="1"
               max="100" oninput="validity.valid||(value='')" placeholder="target percent of menu price" required>
           </div>
-          <button @click="submitNewCocktail" class="btn-alt">SUBMIT</button>
-          <i @click="createModalAction" class="far fa-window-close flex flex-end-self"></i>
+          <div @click="submitNewCocktail" class="btn-form text-center">SUBMIT</div>
+
         </form>
       </div>
     </div>
@@ -61,24 +50,24 @@ BevDev Home
     <p class="text-center bold txt-1h vert-padding-3">Your Drink Menu</p>
     <div v-for="cocktail in filteredCocktails">
       <div v-bind:id="cocktail.id" @click="modalAction(cocktail.id)"
-        class="menu-item hover-blue-dark wide-100 flex-wrap default-shadow">
+        class="menu-item hover-blue-dark wide-100 flex-wrap space-between default-shadow">
         <p class="bold wide-80">[[ cocktail.name ]]</p>
-        <div class="wide-25" v-if="showModal==cocktail.id">
-          <a v-bind:href="`/cocktails/${cocktail.id}`"><button class="btn"><i class="fas fa-edit"></i> EDIT</button></a>
-          <button v-if="showModal==cocktail.id" @click="showDeleteModal=(cocktail.id)" class="btn"><i class="fas fa-trash-alt"></i> DELETE</button>
+        <div class="wide-20 flex flex-end" v-if="showModal==cocktail.id">
+          <a v-bind:href="`/cocktails/${cocktail.id}`"><i class="fas fa-edit"></i></a>
+          <i class="fas fa-trash-alt txt-1" v-if="showModal==cocktail.id" @click="showDeleteModal=(cocktail.id)"></i>
         </div>
         <!-- hidden items  -->
         <div class="wide-100 flex vert-padding-10" v-if="showModal==cocktail.id">
           <div class="wide-50 height-100">
-            <p class="txt-h bold">Spirits</p>
+            <p class="txt-hh bold">Spirits</p>
             <ul class='ingredient-ul'>
-              <li class="txt-h" v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
+              <li class="txt-hh" v-for="shot in cocktail.shots">[[shot.volume]] oz of [[shot.brandname]]</li>
             </ul>
           </div>
           <div class="wide-50 height-100 ">
-            <p class="txt-h bold">Mixers</p>
+            <p class="txt-hh bold">Mixers</p>
             <ul class='ingredient-ul'>
-              <li class="txt-h" v-for="portion in cocktail.portions">
+              <li class="txt-hh" v-for="portion in cocktail.portions">
                 [[ portion.amount ]] oz of [[ portion.name ]]</li>
             </ul>
           </div>
@@ -88,14 +77,14 @@ BevDev Home
       <!-- DELETE CONFIRMATION MODAL -->
       <div v-if="showDeleteModal==cocktail.id" class="modal-bg">
         <div class="modal-container pnk-bg">
-          <p class="bold">Are you sure you want to delete [[ cocktail.name ]]?</p>
-          <button @click="deleteCocktail(cocktail.id)" class="btn danger-butt">YES, PLEASE DELETE.</button>
-          <button @click="showDeleteModal=-1" class="btn menu-butt">NO! PEASE DON'T!</button>
+          <p class="bold btm-border-gray">Are you sure you want to delete [[ cocktail.name ]]?</p>
+          <div @click="deleteCocktail(cocktail.id)" class="btn">YES, PLEASE DELETE.</div>
+          <div @click="showDeleteModal=-1" class="btn menu-butt">NO! PEASE DON'T!</div>
         </div>
       </div>
     </div>
   </div>
-  <div class="wide-50 half-page">
+  <div class="wide-50 pad-5 half-page bg-fill-gray">
     <menu-graph v-bind:labels="labels" v-bind:totaldata="totaldata" v-bind:menudata="menudata"></menu-graph>
   </div>
 </div>
