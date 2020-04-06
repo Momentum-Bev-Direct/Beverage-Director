@@ -100,7 +100,6 @@ Drink Builder
       </div>
       <!-- Portion logic  -->
       <div v-if="toAdd=='portion'">
-        <form>
           <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient"
             type="text" placeholder="Name of Ingredient" required />
           <label class="wide-30" for="portion-unit-cost">Price/oz: </label>
@@ -112,7 +111,6 @@ Drink Builder
             class="wide-70 input-default white-bg" id="portion-starting-amt" v-model="newPortion.startingAmount"
             type="number" min="0" step=".25" />
           <button @click="createNewPortion" class="btn-alt green-bg">SUBMIT</button>
-        </form>
       </div>
     </div>
   </div>
@@ -273,7 +271,7 @@ Drink Builder
         <p>Amount: [[ amount ]][[ portion.unit ]]</p>
         </div>
         <p class="wide-100 text-center">Ingredient Cost: $ <span class="ingredient-cost">[[ amountCost ]]</span></p>
-        <button v-on:click="addToDeleted(portion.id)" v-on:click="deletePortion(portion.id)" v-on:click="deletePortionValues()" class="btn center-butt default-shadow">DELETE</button>
+        <button v-on:click="addToDeleted(portion.id)" v-on:click="deletePortion(portion.id)" v-on:click="deletePortionValues()" class="btn default-shadow"> <i class="fas fa-trash-alt" data-fa-transform="grow-8 right-6">DELETE</button>
       </div>
       <div class="menu-input text-center">
         <i @click="addAmount" class="fas fa-angle-double-right" title="increase pour volume by 0.25 oz"></i>
