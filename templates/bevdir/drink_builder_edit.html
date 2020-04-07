@@ -505,16 +505,13 @@ Drink Builder
                 .catch(res => { console.log(res) })
             }
           }
-            
+          if (target.value !== undefined && target.value > 0) {
             instance.patch(`/api/cocktail/${this.cocktail.id}/`, { 
               target_profit: target.value
               })
               .then(res => { console.log(res) })
               .catch(res => { console.log(res) })
-          
-      
-          
-          
+          }
           // this.newShots = []
           // this.newPortions = []
         })
