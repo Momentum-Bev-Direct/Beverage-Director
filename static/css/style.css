@@ -546,6 +546,10 @@ img {
 .text-pink {
     color: var(--button_std)
 }
+
+.text-purple {
+    color: var(--stroke_purple)
+}
 .pnk-bg {
     background-color: var(--highlight_pink);
 }
