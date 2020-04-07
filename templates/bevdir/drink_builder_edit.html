@@ -14,22 +14,32 @@ Drink Builder
 </script>
 <!---------------------------------BEGIN HTML --------------------------->
 <div class='container flex-wrap flex-col wide-100' id='drink-edit'>
-  <nav class="wide-100 dark-bg nav align-center flex pad-5">
+  <nav class="wide-100 dark-bg nav align-center space-evenly flex pad-5">
     <a href="/" class="btn-alt"><i class="fas fa-home"></i> Home</a>
+    <div @click="submitPage" class="btn-alt txt-1 no-txt-shadow pointer" ><i class="far fa-save"></i> SAVE COCKTAIL</div>
   </nav>
-
   <!------------------------------- HTML --------------------------------->
   <div class= "ingredient-list default-shadow flex flex-wrap round-corners">
     <div class='cost-sell-box  wide-100 flex flex-wrap'>
-      <div class="cost-bar wide-100 default-shadow space-evenly">
-        <div @click='modalAction()' class= "btn-alt no-txt-shadow pointer"><i class="fas fa-plus-circle"></i> ADD INGREDIENT</div>
-        <input type="text" class="txt-2 bold pad-5 purple-bg purple-border text-white text-center text-shadow hover-flip" v-model="cocktail.name" ref="name" title='Click to edit'>
-        <div class="flex">
-          <p class="txt-1h bold pad-5">Pour Cost:</p>
-          <input id="target-percent" class="input-default wide-20 vert-margin-3" v-model="targetMargin" ref="pour" type="number" min="1"
-            max="100"><label class="txt-1h bold pad-5" for="target-percent">%</label>
+      <div class="cost-bar wide-100 default-shadow ">
+        <div v-if="editCocktail==false" class="flex space-evenly align-center pad-5 wide-100">
+          <p class="txt-1h bold text-center hor-margin-10">[[ newName ]]</p>
+
+          <p class="txt-1h bold text-center hor-margin-10">Pour Cost: [[ targetMargin ]] %</p>
+          <i v-on:click="editCocktail=true" class="fas fa-edit text-white pointer hor-margin-10"></i>
         </div>
-        <div @click="submitPage" class="btn-alt txt-1 no-txt-shadow pointer" ><i class="far fa-save"></i> SAVE COCKTAIL</div>
+
+        <div v-if="editCocktail" class="flex space-evenly align-center pad-5 wide-100">
+          <input type="text" class="input-purple wide-fit text-center text-shadow" v-model="newName" ref="name" title='Click to edit'>
+
+          <div class="flex pad-5 align-center space-evenly">
+            <p class="txt-1h bold hor-margin-10">Pour Cost:</p>
+            <input id="target-percent" class="input-purple text-center wide-fit text-shadow" v-model="targetMargin" ref="pour" type="number" min="1"
+              max="100"><label class="txt-1h bold hor-margin-10" for="target-percent">%</label>
+          </div>
+          <i v-on:click="editCocktail=false" class="far fa-window-close text-white"></i>
+        </div>
+
       </div>
       <div class='text-center wide-25'>
         <p class='bold'>Total Volume</p>
@@ -54,13 +64,8 @@ Drink Builder
       <div class="modal-container modal-lg just-cent align-base">
         <div class="wide-100 flex space-between align-base">
           <p class="text-2 bold pad-3">New Ingredient</p>
-          <i @click='modalAction()' class=" pointer far fa-window-close"></i>
+          <i @click='modalAction()' class="pointer far fa-window-close"></i>
         </div>
-        <select class="input-default drop-down" v-model="toAdd">
-          <option value="shot">Select from ABC Stock</option>
-          <option value="portion">Custom</option>
-        </select>
-
         <!-- Shot logic -->
         <div v-if="toAdd=='shot'">
           <select class="wide-100 input-default drop-down" v-model="categorySelection">
@@ -83,28 +88,36 @@ Drink Builder
           <input v-model="spiritSearch" type="text" placeholder="Start Typing to Filter by Brand"
             class="input-default wide-100 white-bg" />
           <select class="input-default wide-100 text-left pad-5 white-bg" v-model="newSpirit" id="" size="12" required>
-            <option class="vert-margin-3" v-for="spirit in filteredSpirits" v-bind:value="spirit.id"
+            <option class="vert-margin-5" v-for="spirit in filteredSpirits" v-bind:value="spirit.id"
               class="wide-100 white-bg">[[ spirit.brandname ]]: $ [[ spirit.cost ]] per oz </option>
           </select>
           <button @click="createNewShot" class=" pointer btn-form">SUBMIT</button>
         </div>
         <!-- Portion logic  -->
         <div v-if="toAdd=='portion'">
-            <input class="wide-100 input-default white-bg" id="portion-ingredient" v-model="newPortion.ingredient"
-              type="text" placeholder="Name of Ingredient" required />
-            <label class="label-default" for="portion-unit-cost">Price/oz: </label>
-            <input class="input-default" id="portion-unit-cost" v-model="newPortion.costPerUnit"
-              type="number" min="0" step=".01" required />
-            <label class="label-default" for="portion-starting-amt">Volume(oz):</label><input
-              class="input-default" id="portion-starting-amt" v-model="newPortion.startingAmount"
-              type="number" min="0" step=".25" />
-            <button @click="createNewPortion" class=" pointer btn-form">SUBMIT</button>
+          <div class="wide-100 flex flex-col">
+
+              <input class="input-default wide-100 white-bg input-invis" id="portion-ingredient" v-model="newPortion.ingredient"
+                type="text" placeholder="Name of Ingredient" required />
+
+              <label class="label-default" for="portion-unit-cost">Price/oz: </label>
+              <p class="input-default txt-hh white-bg text-gray text-center">$<input class="input-invis txt-1 wide-95 pad-sides" id="portion-unit-cost" v-model="newPortion.costPerUnit"
+                type="number" min="0" step=".01" required /></p>
+
+
+              <label class="label-default" for="portion-starting-amt">Volume(oz):</label>
+              <input class="input-default txt-1 pad-sides" id="portion-starting-amt" v-model="newPortion.startingAmount"
+                type="number" min="0" step=".01" />
+
+          </div>
+          <button @click="createNewPortion" class=" pointer btn-form">SUBMIT</button>
         </div>
+
       </div>
     </div>
     <!--------------------------END MODAL CODE--------------------------------------->
     <div class="sub-ingredient">
-      <p class="wide-100 text-center btm-border-gray">Spirits</p>
+      <p class="wide-100 text-center btm-border-gray">Spirits<i @click='modalAction("shot")' class="pointer fas fa-plus-circle hor-margin-10 hover-gray"></i></p>
       <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="ingredient-box round-corners vert-margin-10 wide-100 default-shadow pad-5">
         <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" v-on:volumechange="updateVolume" ref="shotSet">
         </shot-line>
@@ -116,8 +129,9 @@ Drink Builder
         </div>
       </div>
     </div>
+
     <div class="sub-ingredient">
-      <p class="wide-100 text-center btm-border-gray">Mixers</p>
+      <p class="wide-100 text-center btm-border-gray">Mixers / Other <i @click='modalAction("portion")' class="pointer fas fa-plus-circle hor-margin-10 hover-gray"></i></p>
       <div v-for="portion in filterDeletedPortions" class="ingredient-box round-corners vert-margin-10 wide-100 pad-5 default-shadow">
         <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"
           ref="portionSet"></portion-line>
@@ -126,6 +140,9 @@ Drink Builder
         <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"
           ref="portionSet"></portion-line>
       </div>
+    </div>
+    <div  class="wide-100 " v-if="savedMessage">
+      <p class="alert-good round-corners">COCKTAIL SAVED</p>
     </div>
   </div>
 </div>
@@ -332,7 +349,10 @@ Drink Builder
       cocktail: cocktail,
       spirits: spirits,
       name: cocktail.name,
+      newName: cocktail.name,
       targetMargin: cocktail.target,
+      editCocktail: false,
+      savedMessage: false,
       totalPrice: 0,
       totalVolume: 0,
       newShots: [],
@@ -371,12 +391,13 @@ Drink Builder
       }
     },
     methods: {
-      modalAction() {
+      modalAction(selection) {
         if (this.modal == false) {
           this.modal = true
         } else {
           this.modal = false
         }
+        this.toAdd = selection
       },
       updateCost: function () {
         this.totalPrice = 0
@@ -484,13 +505,16 @@ Drink Builder
             this.modal = false
           })
       },
+      showSaveMessage: function (){
+        this.savedMessage = true
+        setTimeout(()=>{ this.savedMessage = false }, 3000)
+      },
       submitPage: function () {
         this.$nextTick(() => {
           let allShots = this.$refs.shotSet
           let allPortions = this.$refs.portionSet
-          let target = this.$refs.pour
-          let newName = this.$refs.name
-          console.log(newName.value)
+          let target = this.targetMargin
+          let newName = this.newName
 
 
           if (allShots !== undefined) {
@@ -509,15 +533,14 @@ Drink Builder
             }
           }
           if (target.value !== undefined && target.value > 0) {
-            instance.patch(`/api/cocktail/${this.cocktail.id}/`, { 
+            instance.patch(`/api/cocktail/${this.cocktail.id}/`, {
               target_profit: target.value,
               name: newName.value,
               })
               .then(res => { console.log(res) })
               .catch(res => { console.log(res) })
           }
-          // this.newShots = []
-          // this.newPortions = []
+          this.showSaveMessage()
         })
       },
     },
