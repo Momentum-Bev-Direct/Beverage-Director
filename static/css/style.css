@@ -421,6 +421,17 @@ i {
     border: .5px solid var(--nav-butt);
     outline: none;
 }
+
+.nested-input {
+    width: 100%;
+    border: none;
+    font-size: 1rem;
+    text-align: left;
+    outline: none;
+}
+
+
+
 .drop-down {
     background-color: var(--stroke_lighter);
     color: var(--fill-gray)
@@ -531,6 +542,9 @@ i {
 }
 .blue-bg {
     background-color: var(--highlight_blue)
+}
+.white-bg {
+    background-color: white;
 }
 .green-bg {
     background-color: var(--button_alt);
