@@ -44,6 +44,12 @@ i {
     background-color: none;
 }
 
+img {
+    max-width: 100%;
+    filter: grayscale(100%);
+    border-radius: .5rem;
+}
+
 /* ---------------END GLOBALS ----------------*/
 /* ++++++++++++++++++++++++++++++++++++++++++ */
 .site-title{
@@ -80,6 +86,16 @@ i {
     font-size: 1.5rem;
     text-align: center;
     margin-top: 10px;
+}
+
+.welcome-image {
+    width: 80%;
+}
+.background-image {
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/d/db/Rum%2C_Manhattan%2C_Tequila_Old_Fashioned.jpg");
+    background-size: auto;
+    width: 80%;
+    height: 100%;
 }
 .container {
     display: flex;
@@ -556,6 +572,14 @@ i {
 .text-white {
     color: var(--fill-gray);
 }
+
+.text-pink {
+    color: var(--button_std)
+}
+
+.text-purple {
+    color: var(--stroke_purple)
+}
 .pnk-bg {
     background-color: var(--highlight_pink);
 }
@@ -709,6 +733,9 @@ i {
 }
 
 /* --------Alignment-------- */
+.block {
+    display: block
+}
 .flex {
     display: flex;
 }
@@ -762,6 +789,15 @@ i {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.vert-margin-20 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.vert-margin-30 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
 .vert-margin-5 {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -800,6 +836,7 @@ i {
 }
 /* ------------MEDIA QUERIES ------------------------ */
 @media only screen and (max-width: 800px){
+    
     .container {
         width: 100%;
     }
