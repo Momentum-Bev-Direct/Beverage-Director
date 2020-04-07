@@ -25,6 +25,7 @@
 body {
     font-family: var(--font_body);
     color: var(--stroke_dark);
+    background-color: var(--fill-gray);
 }
 
 form {
