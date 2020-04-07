@@ -88,10 +88,11 @@ def edit_cocktail(request, pk):
 
     cocktail_dict["portions"]= [{"id": portion.pk, "amount": portion.amount, "unit": portion.unit, "cost": portion.price_per_unit, "name": portion.misc_ingredient.name} for portion in cocktail.portions.all()]
 
-    spirits = Spirit.objects.all()
+    spirits = Spirit.objects.all().order_by("brandname")
     spirit_dict= []
     for spirit in spirits:
-        spirit_dict.append({"id": spirit.pk, "brandname": spirit.brandname, "cost": spirit.price_per_oz, "category": spirit.category})
+        if (spirit.size < 10):
+            spirit_dict.append({"id": spirit.pk, "brandname": f'{spirit.brandname} | {spirit.size} L bottle', "cost": spirit.price_per_oz, "category": spirit.category})
 
     context = {}
     context['cocktail']=json.dumps(cocktail_dict)

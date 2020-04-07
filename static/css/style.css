@@ -60,9 +60,7 @@ i {
     font-size: 3rem;
     text-align: center;
 }
-.nav{
-    /* border-top: 1px solid var(--stroke_purple); */
-}
+
 .header a{
     text-decoration: none;
     color:white;
@@ -419,16 +417,7 @@ i {
 }
 
 /* ----------FORM DEFAULTS-------------*/
-.input-default{
-    width: 100%;
-    padding: 3px;
-    margin-bottom: 5px;
-    border-radius: 3px;
-    font-size: 1rem;
-    text-align: left;
-    border: .5px solid var(--nav-butt);
-    outline: none;
-}
+
 .drop-down {
     background-color: var(--stroke_lighter);
     color: var(--fill-gray)
@@ -480,20 +469,37 @@ i {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
+.input-default{
+    width: 100%;
+    padding: 3px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    font-size: 1rem;
+    text-align: left;
+    border: .5px solid var(--nav-butt);
+    outline: none;
+}
 .input-purple {
     font-size: 1.5rem;
     background-color: var(--stroke_purple);
-    border: .5px solid var(--stroke_dark);
     border-radius: 5px;
+    border: none;
     animation:blinkingText 1.5s infinite;
 }
     @keyframes blinkingText{
-        0%{     color:var(--fill-gray); }
-        49%{    color:var(--fill-gray); }
-        60%{    color: transparent; }
-        99%{    color: transparent; }
-        100%{   color: var(--fill-gray);}
+        0%{     color:var(--fill-gray); text-shadow: -1px 1px 10px var(--stroke_dark);}
+        49%{    color:var(--fill-gray); text-shadow: -1px 1px 10px var(--stroke_dark)}
+        60%{    color: transparent; text-shadow: none;}
+        99%{    color: transparent; text-shadow: none;}
+        100%{   color: var(--fill-gray); text-shadow: -1px 1px 10px var(--stroke_dark)}
     }
+
+.input-invis {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-radius: 3px;
+}
 
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -572,6 +578,9 @@ i {
 .text-dark {
     color: var(--stroke_dark);
 }
+.text-gray {
+    color: var(--stroke_lighter);
+}
 .light-stroke {
     color: var(--stroke_lighter);
 }
@@ -646,6 +655,9 @@ i {
 /* -------WIDTH-------- */
 .wide-100 {
     width: 100%;
+}
+.wide-95 {
+    width: 95%;
 }
 .wide-90 {
     width: 90%;
@@ -749,6 +761,10 @@ i {
 .vert-margin-10 {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+.vert-margin-5 {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 .vert-padding-10 {
     padding-top: 10px;
