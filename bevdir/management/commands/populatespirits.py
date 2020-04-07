@@ -13,7 +13,7 @@ class Command(BaseCommand):
     for spirit in spirits:
         elements = spirit.find_all('div')
         try:
-            this_spirit = Spirit.objects.get(brandname=elements[2].get_text())
+            this_spirit = Spirit.objects.get(nc_code=elements[0].get_text())
             this_spirit.mxb = float(elements[7].get_text().replace('$', '').replace(',',''))
             this_spirit.save()
             print(this_spirit.brandname)
