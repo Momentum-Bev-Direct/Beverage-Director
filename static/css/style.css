@@ -5,6 +5,7 @@
     --stroke_purple: #6b15f1;
     --highlight_purple: #cfc5df;
     --stroke_dark: #1e1e20;
+    --half-stroke: #1e1e2078;
     --stroke_lighter: #53535f;
     --nav-butt: #b9b9b9;
     --fill-gray: #ececec;
@@ -397,7 +398,13 @@ i {
     color: var(--stroke_lighter);
 }
 
-
+.alert-good {
+    background-color: var(--stroke_lighter);
+    color: var(--fill-gray);
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 5px;
+}
 
 .menu-input {
     height: 100%;
@@ -495,6 +502,9 @@ i {
 }
 .round-corners {
     border-radius: 5px;
+}
+.hover-gray:hover {
+    color: var(--stroke_lighter)
 }
 
 .hover-pink:hover {
