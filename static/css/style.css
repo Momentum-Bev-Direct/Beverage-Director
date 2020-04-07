@@ -488,6 +488,10 @@ i {
 .default-text-shadow {
     text-shadow: -4px 4px 2px rgba(0, 0, 0, 0.616);
 }
+
+.text-shadow {
+    text-shadow: -1px 1px 10px var(--stroke_dark)
+}
 .round-corners {
     border-radius: 5px;
 }
@@ -498,6 +502,13 @@ i {
 .hover-invert:hover{
     background-color: var(--stroke_lighter);
     color: white;
+}
+
+.hover-flip:hover {
+    color: var(--stroke_dark);
+    background-color: var(--fill-gray);
+    text-shadow: none;
+
 }
 .hover-blue-dark:hover {
     background-color: var(--highlight_blue_darken)
@@ -524,6 +535,10 @@ i {
 .green-bg {
     background-color: var(--button_alt);
 }
+.purple-bg {
+    background-color: var(--stroke_purple) ;
+
+}
 .dark-bg {
     background-color: var(--stroke_lighter)
 }
@@ -548,7 +563,10 @@ i {
 .btm-border-gray {
     border-bottom: 1px solid var(--stroke_lighter)
 }
-
+.purple-border {
+    border-color: var(--stroke_purple);
+    border-style: solid;
+}
 .gray-border {
     border: 1px solid var(--nav-butt);
     border-radius: 5px;
