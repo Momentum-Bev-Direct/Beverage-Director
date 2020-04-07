@@ -23,7 +23,7 @@ Drink Builder
     <div class='cost-sell-box  wide-100 flex flex-wrap'>
       <div class="cost-bar wide-100 default-shadow space-evenly">
         <div @click='modalAction()' class= "btn-alt no-txt-shadow pointer"><i class="fas fa-plus-circle"></i> ADD INGREDIENT</div>
-        <input type="text" class="txt-2 bold pad-5 purple-bg purple-border text-white text-center text-shadow" v-model="cocktail.name" ref="name" title='Click to edit'>
+        <input type="text" class="txt-2 bold pad-5 purple-bg purple-border text-white text-center text-shadow hover-flip" v-model="cocktail.name" ref="name" title='Click to edit'>
         <div class="flex">
           <p class="txt-1h bold pad-5">Pour Cost:</p>
           <input id="target-percent" class="input-default wide-20 vert-margin-3" v-model="targetMargin" ref="pour" type="number" min="1"

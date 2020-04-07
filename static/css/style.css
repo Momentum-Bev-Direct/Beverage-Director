@@ -503,6 +503,13 @@ i {
     background-color: var(--stroke_lighter);
     color: white;
 }
+
+.hover-flip:hover {
+    color: var(--stroke_dark);
+    background-color: var(--fill-gray);
+    text-shadow: none;
+
+}
 .hover-blue-dark:hover {
     background-color: var(--highlight_blue_darken)
 }
