@@ -480,7 +480,20 @@ i {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
-
+.input-purple {
+    font-size: 1.5rem;
+    background-color: var(--stroke_purple);
+    border: .5px solid var(--stroke_dark);
+    border-radius: 5px;
+    animation:blinkingText 1.5s infinite;
+}
+    @keyframes blinkingText{
+        0%{     color:var(--fill-gray); }
+        49%{    color:var(--fill-gray); }
+        60%{    color: transparent; }
+        99%{    color: transparent; }
+        100%{   color: var(--fill-gray);}
+    }
 
 /* ----OVERWRITERS DON'T PUT ANYTHING BELOW THIS UNLESS IT'S AN OVERWRITER----- */
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */

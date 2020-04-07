@@ -23,21 +23,21 @@ Drink Builder
     <div class='cost-sell-box  wide-100 flex flex-wrap'>
       <div class="cost-bar wide-100 default-shadow ">
         <div v-if="editCocktail==false" class="flex space-evenly align-center pad-5 wide-100">
-          <p class="txt-1h bold text-center hor-margin-10">[[ cocktail.name ]]</p>
-          <i v-on:click="editCocktail=true" class="fas fa-edit no-txt-shadow text-white"></i>
-          <p class="txt-1h bold text-center hor-margin-10">Pour Cost: [[ cocktail.target ]] %</p>
+          <p class="txt-1h bold text-center hor-margin-10">[[ newName ]]</p>
 
+          <p class="txt-1h bold text-center hor-margin-10">Pour Cost: [[ targetMargin ]] %</p>
+          <i v-on:click="editCocktail=true" class="fas fa-edit text-white pointer hor-margin-10"></i>
         </div>
 
         <div v-if="editCocktail" class="flex space-evenly align-center pad-5 wide-100">
-          <input type="text" class="input-default wide-fit text-center txt-1h " v-model="cocktail.name" ref="name" title='Click to edit'>
-          <i v-on:click="editCocktail=false" class="far fa-window-close no-txt-shadow text-white"></i>
+          <input type="text" class="input-purple wide-fit text-center pad" v-model="newName" ref="name" title='Click to edit'>
+
           <div class="flex pad-5 align-center space-evenly">
             <p class="txt-1h bold hor-margin-10">Pour Cost:</p>
-            <input id="target-percent" class="input-default txt-1h text-center wide-fit" v-model="targetMargin" ref="pour" type="number" min="1"
+            <input id="target-percent" class="input-purple text-center wide-fit" v-model="targetMargin" ref="pour" type="number" min="1"
               max="100"><label class="txt-1h bold hor-margin-10" for="target-percent">%</label>
-
           </div>
+          <i v-on:click="editCocktail=false" class="far fa-window-close text-white"></i>
         </div>
 
       </div>
@@ -109,7 +109,7 @@ Drink Builder
     </div>
     <!--------------------------END MODAL CODE--------------------------------------->
     <div class="sub-ingredient">
-      <p class="wide-100 text-center btm-border-gray">Spirits<i @click='modalAction("shot")' class="fas fa-plus-circle hor-margin-10 hover-gray"></i></p>
+      <p class="wide-100 text-center btm-border-gray">Spirits<i @click='modalAction("shot")' class="pointer fas fa-plus-circle hor-margin-10 hover-gray"></i></p>
       <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="ingredient-box round-corners vert-margin-10 wide-100 default-shadow pad-5">
         <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" v-on:volumechange="updateVolume" ref="shotSet">
         </shot-line>
@@ -121,12 +121,9 @@ Drink Builder
         </div>
       </div>
     </div>
-    <!-- <select class="input-default drop-down" v-model="toAdd">
-      <option value="shot">Select from ABC Stock</option>
-      <option value="portion">Custom</option>
-    </select> -->
+
     <div class="sub-ingredient">
-      <p class="wide-100 text-center btm-border-gray">Mixers / Other <i @click='modalAction("portion")' class="fas fa-plus-circle hor-margin-10 hover-gray"></i></p>
+      <p class="wide-100 text-center btm-border-gray">Mixers / Other <i @click='modalAction("portion")' class="pointer fas fa-plus-circle hor-margin-10 hover-gray"></i></p>
       <div v-for="portion in filterDeletedPortions" class="ingredient-box round-corners vert-margin-10 wide-100 pad-5 default-shadow">
         <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"
           ref="portionSet"></portion-line>
@@ -344,6 +341,7 @@ Drink Builder
       cocktail: cocktail,
       spirits: spirits,
       name: cocktail.name,
+      newName: cocktail.name,
       targetMargin: cocktail.target,
       editCocktail: false,
       savedMessage: false,
@@ -507,9 +505,8 @@ Drink Builder
         this.$nextTick(() => {
           let allShots = this.$refs.shotSet
           let allPortions = this.$refs.portionSet
-          let target = this.$refs.pour
-          let newName = this.$refs.name
-          console.log(newName.value)
+          let target = this.targetMargin
+          let newName = this.newName
 
 
           if (allShots !== undefined) {
