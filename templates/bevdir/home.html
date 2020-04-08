@@ -307,7 +307,7 @@ BevDev Home
     methods: {
       deleteCocktail: function (id) {
         this.deletedCocktails.push(id)
-        instance.delete(`http://127.0.0.1:8000/api/cocktail/${id}`)
+        instance.delete(`/api/cocktail/${id}`)
           .then(function (response) {
           }).then(function (data) {
             console.log("data is ok", data)
