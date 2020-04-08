@@ -24,9 +24,9 @@ BevDev Home
   </nav>
 
   <!------NEW COCKTAIL MODAL------->
-  <div class="wide-50 half-page pad-5 bg-fill-gray">
+  <div class="wide-50 half-page pad-5 bg-fill-gray flex just-cent flex-wrap">
     <div v-if="showCreateModal" class="modal-bg">
-      <div class="wide-40 min-400 center-auto bg-fill-gray round-corners default-shadow flex flex-wrap pad-10">
+      <div class="wide-40 center-auto bg-fill-gray round-corners default-shadow flex flex-wrap pad-10">
         <div class="flex wide-100 space-between">
         <p class="wide-90 txt-1h bold">Create a Cocktail</p>
         <i @click="createModalAction" class="wide-10 text-right far fa-window-close"></i>
@@ -49,7 +49,7 @@ BevDev Home
     </div>
     <!------------------------MENU ITEMS---------------------->
     <p class="text-center bold txt-1h vert-padding-3">Your Drink Menu</p>
-    <div v-for="cocktail in filteredCocktails">
+    <div v-for="cocktail in filteredCocktails" class="wide-100">
       <div v-bind:id="cocktail.id" @click="modalAction(cocktail.id)"
       title="Click to see more details, edit, or delete your Cocktail"
       class="menu-item hover-blue-dark wide-100 flex-wrap space-between default-shadow">
