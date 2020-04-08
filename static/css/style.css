@@ -102,7 +102,7 @@ img {
     /* flex-wrap: wrap; */
     width: 80%;
     /* flex-direction: column; */
-    min-width: 400px;
+    /* min-width: 400px; */
     margin: 0 auto;
     border: 10px thin var(--highlight_blue);
 }
@@ -336,7 +336,7 @@ img {
 .menu-item {
     display: flex;
     width: 100%;
-    min-width: 400px;
+    /* min-width: 400px; */
     background-color: var(--menu-item-bg);
     border-radius: 5px;
     padding: 10px;
