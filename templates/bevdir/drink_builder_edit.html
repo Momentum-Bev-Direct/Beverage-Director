@@ -26,7 +26,7 @@ Drink Builder
           <p class="txt-1h bold text-center hor-margin-10">[[ newName ]]</p>
 
           <p class="txt-1h bold text-center hor-margin-10">Pour Cost: [[ targetMargin ]] %</p>
-          <i v-on:click="editCocktail=true" class="fas fa-edit text-white pointer hor-margin-10"></i>
+          <i title= "Change Name of Cocktail and it's Target Pour %"v-on:click="editCocktail=true" class="fas fa-edit text-white pointer hor-margin-10"></i>
         </div>
 
         <div v-if="editCocktail" class="flex space-evenly align-center pad-5 wide-100">
@@ -117,7 +117,7 @@ Drink Builder
     </div>
     <!--------------------------END MODAL CODE--------------------------------------->
     <div class="sub-ingredient">
-      <p class="wide-100 text-center btm-border-gray">Spirits<i @click='modalAction("shot")' class="pointer fas fa-plus-circle hor-margin-10 hover-gray"></i></p>
+      <p title="Add Spirit to your Cocktail" class="wide-100 text-center btm-border-gray">Spirits<i @click='modalAction("shot")' class="pointer fas fa-plus-circle hor-margin-10 hover-gray"></i></p>
       <div v-for="shot in filterDeletedShots" v-bind:key="shot.id" class="ingredient-box round-corners vert-margin-10 wide-100 default-shadow pad-5">
         <shot-line v-bind:shot="shot" v-on:pricechange="updateCost" v-on:volumechange="updateVolume" ref="shotSet">
         </shot-line>
@@ -131,7 +131,7 @@ Drink Builder
     </div>
 
     <div class="sub-ingredient">
-      <p class="wide-100 text-center btm-border-gray">Mixers / Other <i @click='modalAction("portion")' class="pointer fas fa-plus-circle hor-margin-10 hover-gray"></i></p>
+      <p title="Add Custom Ingredient to your Cocktail"class="wide-100 text-center btm-border-gray">Mixers / Other <i @click='modalAction("portion")' class="pointer fas fa-plus-circle hor-margin-10 hover-gray"></i></p>
       <div v-for="portion in filterDeletedPortions" class="ingredient-box round-corners vert-margin-10 wide-100 pad-5 default-shadow">
         <portion-line v-bind:portion="portion" v-on:pricechange="updateCost" v-on:volumechange="updateVolume"
           ref="portionSet"></portion-line>
@@ -199,7 +199,7 @@ Drink Builder
           <div class='wide-100 text-center'>
             <p >Pour Volume: [[ volume ]] oz</p>
             <p class="wide-100 text-center">Cost of pour: $ <span class="ingredient-cost">[[ pourCost ]]</span></p>
-            <p class="text-center"><i v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="pointer fas fa-trash-alt"></i></p>
+            <p title="Delete Ingredient from your Cocktail"class="text-center"><i v-on:click="addToDeleted(shot.id)" v-on:click="deleteShot(shot.id)" class="pointer fas fa-trash-alt"></i></p>
           </div>
         </div>
         <div class="wide-20 text-center">
