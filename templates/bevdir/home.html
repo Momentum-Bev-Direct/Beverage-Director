@@ -17,9 +17,10 @@ BevDev Home
 <div id='homeapp' class="container wide-100 flex-wrap">
 
   <nav class="wide-100 dark-bg nav flex align-center space-between pad-3">
-    <input type="text" v-model="search" placeholder="Search"
+    <input title="Search for a specific Cocktail Creation from your Menu"
+    type="text" v-model="search" placeholder="Search"
       class="wide-70 dark-bg text-white txt-1 border-none outline-none lt-placeholder pad-5" />
-    <div class="btn-alt wide-50 txt-1 text-center pointer" @click="createModalAction"> <i class="fas fa-cocktail pointer"> </i> NEW COCKTAIL</div>
+    <div title= "Name a Cocktail and Determine it's Target Pour %" class="btn-alt wide-50 txt-1 text-center pointer" @click="createModalAction"> <i class="fas fa-cocktail pointer"> </i> NEW COCKTAIL</div>
   </nav>
 
   <!------NEW COCKTAIL MODAL------->
@@ -41,7 +42,7 @@ BevDev Home
             <input class="input-default" v-model="newCocktail.target" type="new-cocktail-target" type="number" min="1"
               max="100" oninput="validity.valid||(value='')" placeholder="target percent of menu price" required>
           </div>
-          <div @click="submitNewCocktail" class="btn-form text-center">SUBMIT</div>
+          <div title= "Add to your Menu and Build your Cocktail" @click="submitNewCocktail" class="btn-form text-center">SUBMIT</div>
 
         </form>
       </div>
@@ -50,11 +51,12 @@ BevDev Home
     <p class="text-center bold txt-1h vert-padding-3">Your Drink Menu</p>
     <div v-for="cocktail in filteredCocktails">
       <div v-bind:id="cocktail.id" @click="modalAction(cocktail.id)"
-        class="menu-item hover-blue-dark wide-100 flex-wrap space-between default-shadow">
+      title="Click to see more details, edit, or delete your Cocktail"
+      class="menu-item hover-blue-dark wide-100 flex-wrap space-between default-shadow">
         <p class="bold wide-80">[[ cocktail.name ]]</p>
         <div class="wide-20 flex flex-end" v-if="showModal==cocktail.id">
-          <a v-bind:href="`/cocktails/${cocktail.id}`"><i class="fas fa-edit"></i></a>
-          <i class="fas fa-trash-alt txt-1 pointer" v-if="showModal==cocktail.id" @click="showDeleteModal=(cocktail.id)"></i>
+          <a title="Edit Cocktail Details" v-bind:href="`/cocktails/${cocktail.id}`"><i class="fas fa-edit"></i></a>
+          <i title="Delete Cocktail from your Menu" class="fas fa-trash-alt txt-1 pointer" v-if="showModal==cocktail.id" @click="showDeleteModal=(cocktail.id)"></i>
         </div>
         <!-- hidden items  -->
         <div class="wide-100 flex vert-padding-10" v-if="showModal==cocktail.id">
