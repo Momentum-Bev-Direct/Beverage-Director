@@ -772,6 +772,10 @@ img {
 .text-left {
     text-align: left;
 }
+.align-start {
+    align-items: flex-start;
+    align-content: flex-start;
+}
 .flex-start {
     justify-content: flex-start;
 }
